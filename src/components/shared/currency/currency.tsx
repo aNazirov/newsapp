@@ -4,8 +4,10 @@ import Swiper from 'react-native-web-swiper';
 import { useAppSelector } from '../../../store/hooks';
 import { headerStyles } from '../../../styles/header.styles';
 import { green, red } from '../../../styles/layout.styles';
+import { useTranslation } from 'react-i18next';
 
 export const Currency: React.FC = () => {
+  const { t } = useTranslation()
   const currencies = useAppSelector(state => state.global.currencies);
   if (!currencies.length) return null;
   return (
@@ -33,7 +35,7 @@ export const Currency: React.FC = () => {
               }}
             >
               <CurrencyIcon Ccy={currency.Ccy} />
-              <Text style={headerStyles.currencyRate}>{currency.Rate}</Text>
+              <Text style={headerStyles.currencyRate}>{Math.round(currency.Rate)} {t('сум')}</Text>
               {
                 currency.Diff < 0
                   ? <Image
@@ -54,7 +56,7 @@ export const Currency: React.FC = () => {
               <Text style={{
                 ...headerStyles.currencyDiff,
                 color: currency.Diff < 0 ? red : green,
-              }}>{currency.Diff}</Text>
+              }}>{Math.round(currency.Diff)}</Text>
             </View>
           );
         })

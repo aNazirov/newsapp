@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const red = '#F44B4B'
 export const green = '#00B600'
+export const blue = '#0A85FF'
 
 export const LayoutStyles = StyleSheet.create({
   layoutContainer: {

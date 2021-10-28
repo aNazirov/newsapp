@@ -18,6 +18,9 @@ export const loginFormOpenSet = (open: boolean) => (dispatch: any) => {
 export const userSet = (user: IUser) => (dispatch: any) => {
   dispatch(globalAction.setUser({ user }));
 };
+export const langSet = (lang: 'ru' | 'uz') => (dispatch: any) => {
+  dispatch(globalAction.setLang({ lang }));
+};
 export const currenciesSet = (currencies: ICurrency[]) => (dispatch: any) => {
   dispatch(globalAction.setCurrencies({ currencies }));
 };

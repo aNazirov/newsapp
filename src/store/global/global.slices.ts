@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {ICurrency, INotification, IUser, IWeather} from "../../interfaces";
+import { ICurrency, INotification, IUser, IWeather } from '../../interfaces';
 
 interface IState {
   token: string | null;
@@ -7,7 +7,8 @@ interface IState {
   weather: IWeather[];
   user: IUser | null;
   loginFormOpen: boolean;
-  notification: { message: string; success: boolean | null }
+  lang: 'ru' | 'uz';
+  notification: { message: string; success: boolean | null };
 }
 
 const initialState: IState = {
@@ -16,17 +17,18 @@ const initialState: IState = {
   weather: [],
   user: null,
   loginFormOpen: false,
+  lang: 'ru',
   notification: {
     message: '',
-    success: null
-  }
+    success: null,
+  },
 };
 
 export const { actions: globalAction, reducer: globalReducer } = createSlice({
   name: 'global',
   initialState,
   reducers: {
-    logIn: (state: IState, action: PayloadAction<{ token: string | null, user: IUser | null}>) => ({
+    logIn: (state: IState, action: PayloadAction<{ token: string | null, user: IUser | null }>) => ({
       ...state,
       token: action.payload.token,
       user: action.payload.user,
@@ -35,7 +37,7 @@ export const { actions: globalAction, reducer: globalReducer } = createSlice({
       ...state,
       token: null,
       expired_at: null,
-      user: null
+      user: null,
     }),
     setUser: (state, action: PayloadAction<{ user: IUser | null }>) => ({
       ...state,
@@ -56,6 +58,10 @@ export const { actions: globalAction, reducer: globalReducer } = createSlice({
     setNotification: (state, action: PayloadAction<INotification>) => ({
       ...state,
       notification: action.payload,
+    }),
+    setLang: (state, action: PayloadAction<{ lang: 'ru' | 'uz' }>) => ({
+      ...state,
+      lang: action.payload.lang,
     }),
   },
 });

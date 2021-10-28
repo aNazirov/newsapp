@@ -14,7 +14,11 @@ export const BasePost: React.FC<Props> = ({ post }) => {
     <View style={style.container}>
       <Image source={{uri: post.image}} style={style.image}/>
       <View style={style.head}>
-        <CategoryTitle category={post.category}/>
+        <View style={style.category}><CategoryTitle category={post.category}/></View>
+        {
+          post.user &&
+          <Text style={style.author}>{post.user.name}</Text>
+        }
         <Text style={style.date}>{post.created_at}</Text>
       </View>
       <Text style={style.title} ellipsizeMode='tail' numberOfLines={2}>{post.title}</Text>
@@ -52,11 +56,18 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  category: {
+    marginRight: 10,
+  },
+  author: {
+    fontSize: 13,
+    fontWeight: '400',
+    marginRight: 10,
+    color: 'rgba(0, 0, 0, .7)',
+  },
   date: {
     fontSize: 13,
     fontWeight: '400',
-    lineHeight: 15,
-    marginLeft: 10,
     color: 'rgba(0, 0, 0, .7)',
   },
   indicators: {
