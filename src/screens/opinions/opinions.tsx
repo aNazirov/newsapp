@@ -2,11 +2,12 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { getAuthorsPosts, postsNull } from '../../store/posts/posts.thunks';
-import { AxiosError } from 'axios';
 import { clearStore } from '../../helpers/helpers';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';
+import { toastShow } from '../../services/notifications.service';
+import { errorObject } from '../../_data/helpers';
 
 interface IFilter {
   fresh?: boolean;
@@ -34,7 +35,7 @@ export const Opinions: React.FC<Props> = ({ }) => {
     setLoading(true);
     return dispatch(getAuthorsPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => console.log(err))
+      .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -43,7 +44,7 @@ export const Opinions: React.FC<Props> = ({ }) => {
     setLoading(true);
     dispatch(getAuthorsPosts({ page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => console.log(err))
+      .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
   };
   return (

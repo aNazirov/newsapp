@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
-import { getSpecialPosts, postsNull } from '../../store/posts/posts.thunks';
+import { postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { defaultImage, errorObject } from '../../_data/helpers';
-import { useTranslation } from 'react-i18next';
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { getCategory } from '../../store/categories/categories.thunks';
 import { toastShow } from '../../services/notifications.service';
+import { errorObject } from '../../_data/helpers';
 
 interface IFilter {
   fresh?: boolean;
@@ -16,10 +16,13 @@ interface IFilter {
 
 interface Props {
   navigation: NavigationProp<any>;
+  route: RouteProp<any>;
 }
 
-export const SpecialReports: React.FC<Props> = ({ }) => {
-  const { t } = useTranslation()
+const follow = require('../../../assets/images/icons/follow.png')
+const followCheck = require('../../../assets/images/icons/followCheck.png')
+
+export const Categories: React.FC<Props> = ({ route }) => {
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
   const dispatch = useAppDispatch();
@@ -27,13 +30,15 @@ export const SpecialReports: React.FC<Props> = ({ }) => {
   const { lang } = useAppSelector(state => state.global);
   useEffect(() => {
     clearStore(dispatch);
-    dispatch(getSpecialPosts({ page: 1, ...filter }, lang));
-  }, [lang]);
+    dispatch(getCategory({ page: 1, ...filter }, route.params?.slug, lang));
+    return () => {}
+  }, [lang, route.params?.slug]);
   const { pageCount } = useAppSelector(state => state.posts);
+  const { category } = useAppSelector(state => state.categories);
   const getMore = () => {
     if (page.current > pageCount) return;
     setLoading(true);
-    return dispatch(getSpecialPosts({ page: page.current, ...filter }, lang))
+    return dispatch(getCategory({ page: page.current, ...filter }, route.params?.slug, lang))
       .then(() => page.current++)
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
@@ -42,7 +47,7 @@ export const SpecialReports: React.FC<Props> = ({ }) => {
     dispatch(postsNull());
     page.current = 1;
     setLoading(true);
-    dispatch(getSpecialPosts({ page: 1, ...filters }, lang))
+    dispatch(getCategory({ page: 1, ...filters }, route.params?.slug, lang))
       .then(() => page.current++)
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
@@ -53,20 +58,21 @@ export const SpecialReports: React.FC<Props> = ({ }) => {
         data={[1]}
         renderItem={() => {
           return (
-            <Fragment key={'special-list'}>
+            <Fragment key={`${route.params?.slug}-list`}>
               <View style={style.chapter}>
-                <Image source={{
-                  uri: defaultImage
-                }} style={style.image} />
-                <Text style={style.title}>{t('Спецрепортажи')}</Text>
-                <Text style={style.description}>Описание категории</Text>
+                <Image source={{uri: category?.image}} style={style.image} />
+                <Text style={style.title}>{category?.name}</Text>
+                <Text style={style.description}>{category?.description}</Text>
               </View>
-              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh'/>
+              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
               <Posts />
+              <TouchableOpacity style={style.follow}>
+                <Image source={follow} resizeMode='contain'/>
+              </TouchableOpacity>
             </Fragment>
           );
         }}
-        keyExtractor={(item, index) => index.toString() + 'special-list'}
+        keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
         onEndReached={getMore}
       />
       {
@@ -80,6 +86,7 @@ const style = StyleSheet.create({
   chapter: {
     padding: 15,
     backgroundColor: '#fff',
+    position: 'relative'
   },
   image: {
     width: 60,
@@ -97,4 +104,11 @@ const style = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 21,
   },
+  follow: {
+    width: 36,
+    height: 36,
+    position: 'absolute',
+    top: 15,
+    right: 15
+  }
 });

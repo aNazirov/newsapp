@@ -1,14 +1,16 @@
 import React from 'react';
 import { IPost } from '../../../interfaces';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Indicators } from '../indicators';
 import { CategoryTitle } from '../utils';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   post: IPost;
 }
 
 export const ExtraPost: React.FC<Props> = ({ post }) => {
+  const { navigate } = useNavigation<any>();
   return (
     <View style={style.container}>
       <View style={style.content}>
@@ -19,7 +21,15 @@ export const ExtraPost: React.FC<Props> = ({ post }) => {
           }
           {
             post.user  &&
+            <TouchableOpacity
+              onPress={() => {
+                navigate('Authors', {
+                  id: post.user.id,
+                });
+              }}
+            >
             <Text style={style.author}>{post.user.name}</Text>
+            </TouchableOpacity>
           }
           <Text style={style.date}>{post.created_at}</Text>
         </View>

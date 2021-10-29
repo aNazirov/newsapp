@@ -2,12 +2,13 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { getFeedPosts, postsNull } from '../../store/posts/posts.thunks';
-import { AxiosError } from 'axios';
 import { clearStore } from '../../helpers/helpers';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';
 import { Indicators } from '../../components/shared/indicators';
+import { toastShow } from '../../services/notifications.service';
+import { errorObject } from '../../_data/helpers';
 
 interface IFilter {
   fresh?: boolean;
@@ -18,9 +19,13 @@ interface Props {
   navigation: NavigationProp<any>;
 }
 
+const hide = require('../../../assets/images/icons/hide.png');
+const show = require('../../../assets/images/icons/show.png');
+
 export const Feed: React.FC<Props> = ({}) => {
   const { t } = useTranslation();
   const page = useRef(2);
+  const [open, setOpen] = useState(true);
   const [filter, setFilter] = useState<IFilter>({ popular: true });
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -35,7 +40,7 @@ export const Feed: React.FC<Props> = ({}) => {
     setLoading(true);
     return dispatch(getFeedPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => console.log(err))
+      .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -44,7 +49,7 @@ export const Feed: React.FC<Props> = ({}) => {
     setLoading(true);
     dispatch(getFeedPosts({ page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => console.log(err))
+      .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
   };
   return (
@@ -59,26 +64,41 @@ export const Feed: React.FC<Props> = ({}) => {
                   <Text style={style.title}>{hotPosts?.range}</Text>
                   <TouchableOpacity
                     style={{ ...style.more }}
-                    onPress={getMore}
+                    onPress={() => setOpen(prev => !prev)}
                   >
                     <Image
-                      source={require('../../../assets/images/icons/hide.png')}
+                      source={open ? hide : show}
                       style={style.icon}
                       resizeMode='contain'
                     />
-                    <Text style={{ ...style.moreTitle }}>{t('свернуть')}</Text>
+                    <Text style={{ ...style.moreTitle }}>{t(open ? 'свернуть' : 'показать')}</Text>
                   </TouchableOpacity>
                 </View>
-                {
-                  hotPosts?.hotPosts.map(post => {
-                    return (
-                      <>
-                        <View style={style.hotPosts} key={post.slug}>
-                          <Text style={style.time}>{post.created_at.split(', ')[1]}</Text>
-                          <Text style={style.description}>
-                            {post.title}
-                            {
-                              Platform.OS === 'ios' &&
+                <View style={{ display: open ? 'flex' : 'none' }}>
+                  {
+                    hotPosts?.hotPosts.map(post => {
+                      return (
+                        <Fragment key={post.slug}>
+                          <View style={style.hotPosts}>
+                            <Text style={style.time}>{post.created_at.split(', ')[1]}</Text>
+                            <Text style={style.description}>
+                              {post.title}
+                              {
+                                Platform.OS === 'ios' &&
+                                <Indicators
+                                  comments={post.comments_count}
+                                  views={post.views_count}
+                                  color='rgba(0, 0, 0, .7)'
+                                  light={false}
+                                  size={14}
+                                  fontSize={12}
+                                />
+                              }
+                            </Text>
+                          </View>
+                          {
+                            Platform.OS === 'android' &&
+                            <View style={style.androidIndicators}>
                               <Indicators
                                 comments={post.comments_count}
                                 views={post.views_count}
@@ -87,26 +107,13 @@ export const Feed: React.FC<Props> = ({}) => {
                                 size={14}
                                 fontSize={12}
                               />
-                            }
-                          </Text>
-                        </View>
-                        {
-                          Platform.OS === 'android' &&
-                          <View style={style.androidIndicators}>
-                            <Indicators
-                              comments={post.comments_count}
-                              views={post.views_count}
-                              color='rgba(0, 0, 0, .7)'
-                              light={false}
-                              size={14}
-                              fontSize={12}
-                            />
-                          </View>
-                        }
-                      </>
-                    );
-                  })
-                }
+                            </View>
+                          }
+                        </Fragment>
+                      );
+                    })
+                  }
+                </View>
               </View>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='popular' />
               <Posts />

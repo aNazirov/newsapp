@@ -4,8 +4,9 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getHotPosts, getMainPosts } from '../../store/posts/posts.thunks';
 import { HotPost, Posts } from '../../components/shared';
 import { clearStore } from '../../helpers/helpers';
-import { AxiosError } from 'axios';
 import { NavigationProp } from '@react-navigation/native';
+import { toastShow } from '../../services/notifications.service';
+import { errorObject } from '../../_data/helpers';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
@@ -29,7 +30,7 @@ export const Home: React.FC<Props> = ({ }) => {
     setLoading(true);
     return dispatch(getMainPosts({ page: page.current }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => console.log(err))
+      .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
   };
   return (

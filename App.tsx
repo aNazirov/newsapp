@@ -6,6 +6,7 @@ import { store } from './src/store';
 import './i18n';
 import { NavigationContainer } from '@react-navigation/native';
 import { DrawerNavigation } from './src/components/drawer';
+import Toast from 'react-native-toast-message'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
             <DrawerNavigation/>
           </View>
         </View>
+        <Toast ref={(ref) => Toast.setRef(ref)} />
       </Provider>
     </NavigationContainer>
   );

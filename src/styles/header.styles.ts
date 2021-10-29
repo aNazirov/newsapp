@@ -1,6 +1,26 @@
 import { Platform, StatusBar, StyleSheet } from 'react-native';
 
 export const headerStyles = StyleSheet.create({
+  inputContainer: {
+    flex: 1,
+    position: 'relative',
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 7,
+    fontSize: 8,
+    paddingVertical: 0,
+    paddingLeft: 40,
+    paddingRight: 12,
+  },
+  inputIcon: {
+    position: 'absolute',
+    width: 18,
+    height: 18,
+    zIndex: 10,
+    top: 4,
+    left: 6,
+  },
   layoutContainer: {
     display: 'flex',
     flexDirection: 'row',

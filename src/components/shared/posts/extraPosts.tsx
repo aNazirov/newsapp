@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { IPost } from '../../../interfaces';
 import { ExtraPost } from './extraPost';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   title: string,
@@ -9,9 +10,10 @@ interface Props {
 }
 
 export const ExtraPosts: React.FC<Props> = ({ posts, title }) => {
+  const { t } = useTranslation()
   return (
     <View style={style.container}>
-      <Text style={style.title}>{title}</Text>
+      <Text style={style.title}>{t(title)}</Text>
       {
         posts.map((post, i) => {
 

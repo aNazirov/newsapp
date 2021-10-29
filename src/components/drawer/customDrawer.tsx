@@ -106,7 +106,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
         </View>
         <TouchableOpacity style={style.event}>
           <Image source={require('../../../assets/images/icons/plus.png')} style={style.close} />
-          <Text style={style.eventTitle}>Cобытие</Text>
+          <Text style={style.eventTitle}>{t('Событие')}</Text>
         </TouchableOpacity>
         <View style={style.categories}>
           {
@@ -118,7 +118,11 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                     backgroundColor: activeRoute.name === category.name ? '#fff' : 'transparent',
                   }}
                   key={category.slug}
-                  onPress={() => navigation.navigate(category.name)}
+                  onPress={() => {
+                    navigation.navigate('Categories', {
+                      slug: category.slug,
+                    });
+                  }}
                 >
                   <Image source={{ uri: category.image }} style={style.navigationImage} resizeMode='cover' />
                   <Text style={style.navigationTitle}>{t(category.name)}</Text>

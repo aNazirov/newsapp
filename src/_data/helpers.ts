@@ -10,3 +10,4 @@ export const getActiveRouteState = function (route: any): any {
   const childActiveRoute = route.routes[route.index] as NavigationState;
   return getActiveRouteState(childActiveRoute);
 }
+export const errorObject: any = {type: 'error', title: 'Ошибка!', message: 'Что то пошло не так'}
