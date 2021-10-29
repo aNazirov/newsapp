@@ -17,6 +17,8 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { langSet } from '../../store/global/global.thunks';
 import { getActiveRouteState } from '../../_data/helpers';
 import { blue } from '../../styles/layout.styles';
+import { getMainCategories } from '../../store/categories/categories.thunks';
+import { AxiosError } from 'axios';
 
 const navigationTitles = [
   {
@@ -43,13 +45,17 @@ const navigationTitles = [
 
 
 export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const activeRoute = getActiveRouteState(navigation.getState());
   const { lang } = useAppSelector(state => state.global);
+  const { categories, hasMore } = useAppSelector(state => state.categories);
   const changeLang = (lang: 'ru' | 'uz') => () => {
     dispatch(langSet(lang));
-    i18n.changeLanguage(lang);
+  };
+  const getMore = () => {
+    dispatch(getMainCategories({ page: 2 }, lang))
+      .catch((e: AxiosError) => console.log(e));
   };
   return (
     <SafeAreaView>
@@ -102,6 +108,37 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           <Image source={require('../../../assets/images/icons/plus.png')} style={style.close} />
           <Text style={style.eventTitle}>Cобытие</Text>
         </TouchableOpacity>
+        <View style={style.categories}>
+          {
+            categories.map(category => {
+              return (
+                <TouchableOpacity
+                  style={{
+                    ...style.navigationContainer,
+                    backgroundColor: activeRoute.name === category.name ? '#fff' : 'transparent',
+                  }}
+                  key={category.slug}
+                  onPress={() => navigation.navigate(category.name)}
+                >
+                  <Image source={{ uri: category.image }} style={style.navigationImage} resizeMode='cover' />
+                  <Text style={style.navigationTitle}>{t(category.name)}</Text>
+                </TouchableOpacity>
+              );
+            })
+          }
+          <TouchableOpacity
+            style={{ ...style.more, display: hasMore ? 'flex' : 'none' }}
+            onPress={getMore}
+          >
+            <Image source={require('../../../assets/images/icons/chevronDown.png')} style={style.close} />
+            <Text style={{ ...style.title, color: '#000' }}>{t('Еще')}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={style.addInformation}>
+          <Text style={style.information}>{t('Реклама')}</Text>
+          <Text style={{ ...style.information, marginLeft: 25 }}>{t('Контакты')}</Text>
+        </View>
+        <Text style={{ ...style.information, fontWeight: '400' }}>{t('Присоединяйтесь')}:</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -142,6 +179,9 @@ const style = StyleSheet.create({
   navigation: {
     marginBottom: 10,
   },
+  categories: {
+    marginVertical: 25,
+  },
   navigationContainer: {
     display: 'flex',
     flexDirection: 'row',
@@ -173,5 +213,21 @@ const style = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     color: '#fff',
+  },
+  more: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  addInformation: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 25
+  },
+  information: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'rgba(0, 0, 0, .7)',
   },
 });

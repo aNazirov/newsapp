@@ -18,7 +18,7 @@ interface Props {
   navigation: NavigationProp<any>;
 }
 
-export const SpecialReports: React.FC<Props> = ({ navigation }) => {
+export const SpecialReports: React.FC<Props> = ({ }) => {
   const { t } = useTranslation()
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
@@ -28,7 +28,7 @@ export const SpecialReports: React.FC<Props> = ({ navigation }) => {
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getSpecialPosts({ page: 1, ...filter }, lang));
-  }, []);
+  }, [lang]);
   const { pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
     if (page.current > pageCount) return;
@@ -66,6 +66,7 @@ export const SpecialReports: React.FC<Props> = ({ navigation }) => {
             </Fragment>
           );
         }}
+        keyExtractor={(item, index) => index.toString() + 'special-list'}
         onEndReached={getMore}
       />
       {

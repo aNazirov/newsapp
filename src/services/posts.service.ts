@@ -7,7 +7,7 @@ export const getMainPostsService = (params: any, lang: string = 'ru') => {
       'Accept-Language': lang,
     },
   })
-    .then(res => res.data.result);
+    .then(res => res.data.result)
 };
 export const getFeedPostsService = (params: any, lang: string = 'ru') => {
   return api.get('/feed/posts', {

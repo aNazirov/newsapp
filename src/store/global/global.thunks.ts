@@ -11,6 +11,8 @@ import {getNotificationsCount} from "../notifications/notifications.thunks";
 import { followToCategoryService, getFirstData } from '../../services/global.services';
 import { categoriesSet } from '../categories/categories.thunks';
 import { commentsSet } from '../comments/comments.thunks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n from 'i18next';
 
 export const loginFormOpenSet = (open: boolean) => (dispatch: any) => {
   dispatch(globalAction.setLoginFormOpen({ loginFormOpen: open }));
@@ -18,8 +20,11 @@ export const loginFormOpenSet = (open: boolean) => (dispatch: any) => {
 export const userSet = (user: IUser) => (dispatch: any) => {
   dispatch(globalAction.setUser({ user }));
 };
-export const langSet = (lang: 'ru' | 'uz') => (dispatch: any) => {
+export const langSet = (lang: 'ru' | 'uz') => async (dispatch: any) => {
+  AsyncStorage.setItem('lang', lang)
+    .catch(err => console.log(err))
   dispatch(globalAction.setLang({ lang }));
+  i18n.changeLanguage(lang)
 };
 export const currenciesSet = (currencies: ICurrency[]) => (dispatch: any) => {
   dispatch(globalAction.setCurrencies({ currencies }));

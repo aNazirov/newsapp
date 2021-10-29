@@ -41,27 +41,27 @@ export const { actions: globalAction, reducer: globalReducer } = createSlice({
     }),
     setUser: (state, action: PayloadAction<{ user: IUser | null }>) => ({
       ...state,
-      user: action.payload.user,
+      ...action.payload,
     }),
     setLoginFormOpen: (state: IState, action: PayloadAction<{ loginFormOpen: boolean }>) => ({
       ...state,
-      loginFormOpen: action.payload.loginFormOpen,
+      ...action.payload,
     }),
     setCurrencies: (state: IState, action: PayloadAction<{ currencies: ICurrency[] }>) => ({
       ...state,
-      currencies: action.payload.currencies,
+      ...action.payload,
     }),
     setWeather: (state: IState, action: PayloadAction<{ weather: IWeather[] }>) => ({
       ...state,
-      weather: action.payload.weather,
+      ...action.payload,
     }),
     setNotification: (state, action: PayloadAction<INotification>) => ({
       ...state,
-      notification: action.payload,
+      ...action.payload,
     }),
     setLang: (state, action: PayloadAction<{ lang: 'ru' | 'uz' }>) => ({
       ...state,
-      lang: action.payload.lang,
+      ...action.payload,
     }),
   },
 });

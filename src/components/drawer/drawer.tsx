@@ -6,6 +6,7 @@ import { Opinions } from '../../screens/opinions';
 import { SpecialReports } from '../../screens/specialReports';
 import { Header } from '../header';
 import { LayoutStyles } from '../../styles/layout.styles';
+import { Feed } from '../../screens/feed';
 
 const Drawer = createDrawerNavigator();
 
@@ -28,10 +29,20 @@ export const DrawerNavigation: React.FC = () => {
       />
       <Drawer.Screen
         name="Opinions" component={Opinions}
+        options={{
+          header: (props) => <Header style={LayoutStyles.header} {...props} />,
+        }}
       />
       <Drawer.Screen
         name="SpecialReports"
         component={SpecialReports}
+        options={{
+          header: (props) => <Header style={LayoutStyles.header} {...props} />,
+        }}
+      />
+      <Drawer.Screen
+        name="Feed"
+        component={Feed}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}

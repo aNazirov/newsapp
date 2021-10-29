@@ -13,7 +13,7 @@ interface Props {
   navigation: NavigationProp<any>;
 }
 
-export const Home: React.FC<Props> = ({ navigation }) => {
+export const Home: React.FC<Props> = ({ }) => {
   const page = useRef(2);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export const Home: React.FC<Props> = ({ navigation }) => {
     clearStore(dispatch);
     dispatch(getMainPosts({ page: 1 }, lang));
     dispatch(getHotPosts({ page: 1 }, lang));
-  }, []);
+  }, [lang]);
   const { hotPosts, pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
     if (page.current > pageCount) return;
@@ -49,6 +49,7 @@ export const Home: React.FC<Props> = ({ navigation }) => {
             </Fragment>
           );
         }}
+        keyExtractor={(item, index) => index.toString() + 'home-list'}
         onEndReached={getMore}
         style={style.container}
       />
