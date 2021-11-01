@@ -11,6 +11,7 @@ import { Categories } from '../../screens/categories';
 import { Authors } from '../../screens/authors';
 import { Tags } from '../../screens/tags';
 import { Search } from '../../screens/search';
+import { Profile } from '../../screens/profile';
 
 const Drawer = createDrawerNavigator();
 
@@ -24,6 +25,7 @@ export const DrawerNavigation: React.FC = () => {
         },
         unmountOnBlur: true
       }}
+      initialRouteName='Profile'
     >
       <Drawer.Screen
         name="Home"
@@ -76,6 +78,13 @@ export const DrawerNavigation: React.FC = () => {
       <Drawer.Screen
         name="Tags"
         component={Tags}
+        options={{
+          header: (props) => <Header style={LayoutStyles.header} {...props} />,
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={Profile}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
