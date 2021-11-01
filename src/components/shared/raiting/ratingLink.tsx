@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { green, red } from '../../../styles/layout.styles';
+import { AppText } from '../appText';
 
 interface Props {
   rating: number;
@@ -12,7 +13,7 @@ export const RatingLink: React.FC<Props> = ({ rating }) => {
       <TouchableOpacity>
         <Image source={require('../../../../assets/images/icons/chevronDown.png')} style={style.icons} />
       </TouchableOpacity>
-      <Text style={{ ...style.rating, color: rating < 0 ? red : green}}>{rating}</Text>
+      <AppText style={{ ...style.rating, color: rating < 0 ? red : green}}>{rating}</AppText>
       <TouchableOpacity>
         <Image source={require('../../../../assets/images/icons/chevronUp.png')} style={style.icons} />
       </TouchableOpacity>
@@ -31,7 +32,7 @@ const style = StyleSheet.create({
   },
   rating: {
     fontSize: 13,
-    fontWeight: '500',
+    fontFamily: 'roboto-medium',
     marginHorizontal: 7,
     paddingHorizontal: 5,
   },

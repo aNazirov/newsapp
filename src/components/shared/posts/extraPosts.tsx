@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { IPost } from '../../../interfaces';
 import { ExtraPost } from './extraPost';
 import { useTranslation } from 'react-i18next';
+import { AppText } from '../appText';
 
 interface Props {
   title: string,
@@ -13,7 +14,7 @@ export const ExtraPosts: React.FC<Props> = ({ posts, title }) => {
   const { t } = useTranslation()
   return (
     <View style={style.container}>
-      <Text style={style.title}>{t(title)}</Text>
+      <AppText style={style.title}>{t(title)}</AppText>
       {
         posts.map((post, i) => {
 
@@ -42,7 +43,7 @@ const style = StyleSheet.create({
     color: '#0A84FF',
     fontSize: 14,
     lineHeight: 16,
-    fontWeight: '400',
+
   },
   hr: {
     flex: 1,

@@ -1,7 +1,8 @@
 import React from 'react';
 import { ICategory } from '../../../interfaces';
-import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { AppText } from '../appText';
 
 interface Props {
   category: ICategory;
@@ -19,7 +20,7 @@ export const CategoryTitle: React.FC<Props> = ({ category }) => {
       }}
     >
       <Image source={{ uri: category.image }} style={style.image} resizeMode='cover' />
-      <Text style={style.title}>{category.name}</Text>
+      <AppText style={style.title}>{category.name}</AppText>
     </TouchableOpacity>
   );
 };
@@ -36,7 +37,7 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 13,
-    fontWeight: '400',
+
     marginLeft: 10,
   },
 });

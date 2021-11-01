@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
@@ -8,6 +8,7 @@ import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { getAuthor } from '../../store/authors/authors.thunks';
+import { AppText } from '../../components/shared';
 
 interface IFilter {
   fresh?: boolean;
@@ -58,9 +59,9 @@ export const Authors: React.FC<Props> = ({ route }) => {
             <Fragment key={`${route.params?.slug}-list`}>
               <View style={style.chapter}>
                 <Image source={{uri: author?.avatar}} style={style.image} />
-                <Text style={style.title}>{author?.name}</Text>
-                <Text style={style.date}>{author?.created_at}</Text>
-                <Text style={style.description}>{author?.about_me}</Text>
+                <AppText style={style.title}>{author?.name}</AppText>
+                <AppText style={style.date}>{author?.created_at}</AppText>
+                <AppText style={style.description}>{author?.about_me}</AppText>
               </View>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='popular' />
               <Posts />
@@ -91,20 +92,20 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     lineHeight: 31,
     marginBottom: 5,
   },
   date: {
     fontSize: 13,
-    fontWeight: '400',
+
     lineHeight: 15,
     color: 'rgba(0, 0, 0, .7)',
     marginBottom: 10,
   },
   description: {
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 21,
   }
 });

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { getAuthorsPosts, postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
+import { AppText } from '../../components/shared';
 
 interface IFilter {
   fresh?: boolean;
@@ -56,8 +57,8 @@ export const Opinions: React.FC<Props> = ({ }) => {
             <Fragment key={'opinions-list'}>
               <View style={style.chapter}>
                 <Image source={require('../../../assets/images/opinions.png')} style={style.image} />
-                <Text style={style.title}>{t('Авторское мнение')}</Text>
-                <Text style={style.description}>Описание категории</Text>
+                <AppText style={style.title}>{t('Авторское мнение')}</AppText>
+                <AppText style={style.description}>Описание категории</AppText>
               </View>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
               <Posts />
@@ -87,12 +88,12 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     lineHeight: 31,
   },
   description: {
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 21,
   },
 });

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 import Swiper from 'react-native-web-swiper';
 import { useAppSelector } from '../../../store/hooks';
 import { headerStyles } from '../../../styles/header.styles';
 import { green, red } from '../../../styles/layout.styles';
 import { useTranslation } from 'react-i18next';
+import { AppText } from '../appText';
 
 export const Currency: React.FC = () => {
   const { t } = useTranslation()
@@ -35,7 +36,7 @@ export const Currency: React.FC = () => {
               }}
             >
               <CurrencyIcon Ccy={currency.Ccy} />
-              <Text style={headerStyles.currencyRate}>{Math.round(currency.Rate)} {t('сум')}</Text>
+              <AppText style={headerStyles.currencyRate}>{Math.round(currency.Rate)} {t('сум')}</AppText>
               {
                 currency.Diff < 0
                   ? <Image
@@ -53,10 +54,10 @@ export const Currency: React.FC = () => {
                     }
                   />
               }
-              <Text style={{
+              <AppText style={{
                 ...headerStyles.currencyDiff,
                 color: currency.Diff < 0 ? red : green,
-              }}>{Math.round(currency.Diff)}</Text>
+              }}>{Math.round(currency.Diff)}</AppText>
             </View>
           );
         })

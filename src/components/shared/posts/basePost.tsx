@@ -1,10 +1,11 @@
 import React from 'react';
 import { IPost } from '../../../interfaces';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { CategoryTitle } from '../utils';
 import { Indicators } from '../indicators';
 import { RatingLink } from '../raiting';
 import { useNavigation } from '@react-navigation/native';
+import { AppText } from '../appText';
 
 interface Props {
   post: IPost;
@@ -26,13 +27,13 @@ export const BasePost: React.FC<Props> = ({ post }) => {
               });
             }}
           >
-            <Text style={style.author}>{post.user.name}</Text>
+            <AppText style={style.author}>{post.user.name}</AppText>
           </TouchableOpacity>
         }
-        <Text style={style.date}>{post.created_at}</Text>
+        <AppText style={style.date}>{post.created_at}</AppText>
       </View>
-      <Text style={style.title} ellipsizeMode='tail' numberOfLines={2}>{post.title}</Text>
-      <Text style={style.description} ellipsizeMode='tail' numberOfLines={4}>{post.meta_description}</Text>
+      <AppText style={style.title} ellipsizeMode='tail' numberOfLines={2}>{post.title}</AppText>
+      <AppText style={style.description} ellipsizeMode='tail' numberOfLines={4}>{post.meta_description}</AppText>
       <View style={style.indicators}>
         <Indicators
           comments={post.comments_count}
@@ -71,13 +72,13 @@ const style = StyleSheet.create({
   },
   author: {
     fontSize: 13,
-    fontWeight: '400',
+
     marginRight: 10,
     color: 'rgba(0, 0, 0, .7)',
   },
   date: {
     fontSize: 13,
-    fontWeight: '400',
+
     color: 'rgba(0, 0, 0, .7)',
   },
   indicators: {
@@ -87,14 +88,14 @@ const style = StyleSheet.create({
   },
   title: {
     color: '#000',
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     fontSize: 16,
     lineHeight: 23,
     marginTop: 10
   },
   description: {
     color: '#000',
-    fontWeight: '400',
+
     fontSize: 14,
     lineHeight: 21,
     marginVertical: 10,

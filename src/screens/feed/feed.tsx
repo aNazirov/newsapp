@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { getFeedPosts, postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
@@ -9,6 +9,7 @@ import { NavigationProp } from '@react-navigation/native';
 import { Indicators } from '../../components/shared/indicators';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
+import { AppText } from '../../components/shared';
 
 interface IFilter {
   fresh?: boolean;
@@ -61,7 +62,7 @@ export const Feed: React.FC<Props> = ({}) => {
             <Fragment key={'feed-list'}>
               <View style={style.container}>
                 <View style={style.chapter}>
-                  <Text style={style.title}>{hotPosts?.range}</Text>
+                  <AppText style={style.title}>{hotPosts?.range}</AppText>
                   <TouchableOpacity
                     style={{ ...style.more }}
                     onPress={() => setOpen(prev => !prev)}
@@ -71,7 +72,7 @@ export const Feed: React.FC<Props> = ({}) => {
                       style={style.icon}
                       resizeMode='contain'
                     />
-                    <Text style={{ ...style.moreTitle }}>{t(open ? 'свернуть' : 'показать')}</Text>
+                    <AppText style={{ ...style.moreTitle }}>{t(open ? 'свернуть' : 'показать')}</AppText>
                   </TouchableOpacity>
                 </View>
                 <View style={{ display: open ? 'flex' : 'none' }}>
@@ -80,8 +81,8 @@ export const Feed: React.FC<Props> = ({}) => {
                       return (
                         <Fragment key={post.slug}>
                           <View style={style.hotPosts}>
-                            <Text style={style.time}>{post.created_at.split(', ')[1]}</Text>
-                            <Text style={style.description}>
+                            <AppText style={style.time}>{post.created_at.split(', ')[1]}</AppText>
+                            <AppText style={style.description}>
                               {post.title}
                               {
                                 Platform.OS === 'ios' &&
@@ -94,7 +95,7 @@ export const Feed: React.FC<Props> = ({}) => {
                                   fontSize={12}
                                 />
                               }
-                            </Text>
+                            </AppText>
                           </View>
                           {
                             Platform.OS === 'android' &&
@@ -149,7 +150,7 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     lineHeight: 31,
   },
   more: {
@@ -161,7 +162,7 @@ const style = StyleSheet.create({
   },
   moreTitle: {
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 24,
     color: 'rgba(0, 0, 0, .9)',
   },
@@ -176,14 +177,14 @@ const style = StyleSheet.create({
   },
   time: {
     fontSize: 13,
-    fontWeight: '400',
+
     width: '12%',
     lineHeight: 21,
     color: 'rgba(0, 0, 0, .7)',
   },
   description: {
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 21,
     color: '#000',
     width: '85%',

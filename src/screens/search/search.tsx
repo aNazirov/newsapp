@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, TextInput, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { getSearchPosts, postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
@@ -8,6 +8,7 @@ import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { useTranslation } from 'react-i18next';
+import { AppText } from '../../components/shared';
 
 interface IFilter {
   fresh?: boolean;
@@ -59,7 +60,7 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
           return (
             <Fragment key={`${route.params?.text}-list`}>
               <View style={style.chapter}>
-                <Text style={style.title}>{t('Поиск')}</Text>
+                <AppText style={style.title}>{t('Поиск')}</AppText>
                 <View>
                   <Image source={require('../../../assets/images/icons/searchL.png')} style={style.inputIcon} />
                   <TextInput
@@ -69,7 +70,7 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
                     value={text}
                   />
                 </View>
-                <Text style={style.description}>Результатов: примерно {postsCount}</Text>
+                <AppText style={style.description}>Результатов: примерно {postsCount}</AppText>
               </View>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
               <Posts />
@@ -111,13 +112,13 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     lineHeight: 32,
     marginBottom: 10,
   },
   description: {
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 21,
     marginTop: 10,
   },

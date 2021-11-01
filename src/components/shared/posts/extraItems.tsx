@@ -1,6 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { AppText } from '../appText';
 
 interface Props {
   title: string,
@@ -11,15 +12,15 @@ export const ExtraItems: React.FC<Props> = ({ items, title }) => {
   const { t } = useTranslation()
   return (
     <View style={style.container}>
-      <Text style={style.title}>{t(title)}</Text>
+      <AppText style={style.title}>{t(title)}</AppText>
       {
         items.map((item) => {
           return (
             <View style={style.itemContainer} key={item.id + item.slug}>
               <View style={style.content}>
-                <Text style={style.itemTitle} ellipsizeMode='tail' numberOfLines={2}>{item.title || item.name}</Text>
-                <Text style={style.description} ellipsizeMode='tail' numberOfLines={4}>{item.meta_description || item.about_me}</Text>
-                <Text style={style.date} ellipsizeMode='tail' numberOfLines={4}>{item.created_at}</Text>
+                <AppText style={style.itemTitle} ellipsizeMode='tail' numberOfLines={2}>{item.title || item.name}</AppText>
+                <AppText style={style.description} ellipsizeMode='tail' numberOfLines={4}>{item.meta_description || item.about_me}</AppText>
+                <AppText style={style.date} ellipsizeMode='tail' numberOfLines={4}>{item.created_at}</AppText>
               </View>
               <Image source={{ uri: item.image || item.avatar }} style={style.image} />
             </View>
@@ -40,7 +41,7 @@ const style = StyleSheet.create({
     color: '#0A84FF',
     fontSize: 14,
     lineHeight: 16,
-    fontWeight: '400',
+
   },
   hr: {
     flex: 1,
@@ -64,20 +65,20 @@ const style = StyleSheet.create({
   },
   date: {
     fontSize: 13,
-    fontWeight: '400',
+
     lineHeight: 15,
     color: 'rgba(0, 0, 0, .7)',
   },
   itemTitle: {
     color: '#000',
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     fontSize: 16,
     lineHeight: 23,
     marginTop: 10,
   },
   description: {
     color: '#000',
-    fontWeight: '400',
+
     fontSize: 14,
     lineHeight: 21,
     marginTop: 7,

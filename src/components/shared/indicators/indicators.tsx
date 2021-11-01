@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { AppText } from '../appText';
 
 interface Props {
   comments: number,
@@ -23,13 +24,13 @@ export const Indicators: React.FC<Props> = ({ color, comments = 0, light,views =
             ? <Image source={require('../../../../assets/images/icons/eyeL.png')} style={sizing} resizeMode='contain'/>
             : <Image source={require('../../../../assets/images/icons/eye.png')} style={sizing} resizeMode='contain'/>
         }
-        <Text style={{color, fontSize, marginLeft: 7, marginRight: 13}}>{comments}</Text>
+        <AppText style={{color, fontSize, marginLeft: 7, marginRight: 13}}>{views}</AppText>
         {
           light
             ? <Image source={require('../../../../assets/images/icons/messageL.png')} style={sizing} resizeMode='contain'/>
             : <Image source={require('../../../../assets/images/icons/message.png')} style={sizing} resizeMode='contain'/>
         }
-        <Text style={{color, fontSize, marginLeft: 7}}>{comments}</Text>
+        <AppText style={{color, fontSize, marginLeft: 7}}>{comments}</AppText>
       </View>
     </>
   );

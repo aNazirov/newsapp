@@ -6,7 +6,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
+
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -19,6 +19,7 @@ import { getActiveRouteState } from '../../_data/helpers';
 import { blue } from '../../styles/layout.styles';
 import { getMainCategories } from '../../store/categories/categories.thunks';
 import { AxiosError } from 'axios';
+import { AppText } from '../shared';
 
 const navigationTitles = [
   {
@@ -73,16 +74,16 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           </TouchableOpacity>
         </View>
         <View style={style.lang}>
-          <Text style={style.title}>{t('Язык')}:</Text>
+          <AppText style={style.title}>{t('Язык')}:</AppText>
           <TouchableOpacity
             onPress={changeLang('ru')}
           >
-            <Text style={{ ...style.langs, opacity: lang === 'ru' ? 1 : .5 }}>РУ</Text>
+            <AppText style={{ ...style.langs, opacity: lang === 'ru' ? 1 : .5 }}>РУ</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={changeLang('uz')}
           >
-            <Text style={{ ...style.langs, opacity: lang === 'uz' ? 1 : .5 }}>УЗ</Text>
+            <AppText style={{ ...style.langs, opacity: lang === 'uz' ? 1 : .5 }}>УЗ</AppText>
           </TouchableOpacity>
         </View>
         <View style={style.navigation}>
@@ -98,7 +99,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                   onPress={() => navigation.navigate(nav.name)}
                 >
                   <Image source={nav.image} style={style.navigationImage} resizeMode='cover' />
-                  <Text style={style.navigationTitle}>{t(nav.title)}</Text>
+                  <AppText style={style.navigationTitle}>{t(nav.title)}</AppText>
                 </TouchableOpacity>
               );
             })
@@ -106,7 +107,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
         </View>
         <TouchableOpacity style={style.event}>
           <Image source={require('../../../assets/images/icons/plus.png')} style={style.close} />
-          <Text style={style.eventTitle}>{t('Событие')}</Text>
+          <AppText style={style.eventTitle}>{t('Событие')}</AppText>
         </TouchableOpacity>
         <View style={style.categories}>
           {
@@ -125,7 +126,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                   }}
                 >
                   <Image source={{ uri: category.image }} style={style.navigationImage} resizeMode='cover' />
-                  <Text style={style.navigationTitle}>{t(category.name)}</Text>
+                  <AppText style={style.navigationTitle}>{t(category.name)}</AppText>
                 </TouchableOpacity>
               );
             })
@@ -135,14 +136,14 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
             onPress={getMore}
           >
             <Image source={require('../../../assets/images/icons/chevronDown.png')} style={style.close} />
-            <Text style={{ ...style.title, color: '#000' }}>{t('Еще')}</Text>
+            <AppText style={{ ...style.title, color: '#000' }}>{t('Еще')}</AppText>
           </TouchableOpacity>
         </View>
         <View style={style.addInformation}>
-          <Text style={style.information}>{t('Реклама')}</Text>
-          <Text style={{ ...style.information, marginLeft: 25 }}>{t('Контакты')}</Text>
+          <AppText style={style.information}>{t('Реклама')}</AppText>
+          <AppText style={{ ...style.information, marginLeft: 25 }}>{t('Контакты')}</AppText>
         </View>
-        <Text style={{ ...style.information, fontWeight: '400' }}>{t('Присоединяйтесь')}:</Text>
+        <AppText style={{ ...style.information, fontWeight: '400' }}>{t('Присоединяйтесь')}:</AppText>
       </ScrollView>
     </SafeAreaView>
   );
@@ -172,11 +173,11 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    fontWeight: '400',
+
   },
   langs: {
     fontSize: 14,
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     marginLeft: 13,
     color: '#000',
   },
@@ -202,20 +203,21 @@ const style = StyleSheet.create({
   },
   navigationTitle: {
     fontSize: 14,
-    fontWeight: '400',
+
     marginLeft: 10,
   },
   event: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     paddingVertical: 8,
     backgroundColor: blue,
     borderRadius: 7,
   },
   eventTitle: {
     fontSize: 14,
-    fontWeight: '400',
+
     color: '#fff',
   },
   more: {
@@ -231,7 +233,7 @@ const style = StyleSheet.create({
   },
   information: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'roboto-medium',
     color: 'rgba(0, 0, 0, .7)',
   },
 });

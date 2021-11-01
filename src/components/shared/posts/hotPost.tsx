@@ -1,8 +1,9 @@
 import React from 'react';
 import { IPost } from '../../../interfaces';
-import { View, StyleSheet, ImageBackground, Text } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Indicators } from '../indicators';
 import { LinearGradient } from 'expo-linear-gradient';
+import { AppText } from '../appText';
 
 interface Props {
   post: IPost;
@@ -13,9 +14,9 @@ export const HotPost: React.FC<Props> = ({ post }) => {
     <View style={style.container}>
       <ImageBackground source={{ uri: post.image }} resizeMode='cover' style={style.background}>
         <LinearGradient colors={['rgba(80, 80, 80, 0)', 'rgba(37, 37, 37, 0.5)', 'rgba(0, 0, 0, 0.5)']} style={style.gradient}>
-          <Text style={style.title}>{post.title}</Text>
+          <AppText style={style.title}>{post.title}</AppText>
           <View style={style.indicators}>
-            <Text style={{ marginRight: 13, color: 'rgba(250, 250, 250, .7)' }}>{post.created_at}</Text>
+            <AppText style={{ marginRight: 13, color: 'rgba(250, 250, 250, .7)' }}>{post.created_at}</AppText>
             <Indicators
               light={true}
               size={24}
@@ -39,7 +40,7 @@ const style = StyleSheet.create({
   },
   title: {
     color: '#fff',
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     fontSize: 16,
     lineHeight: 23,
     marginBottom: 15,
@@ -49,7 +50,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     fontSize: 13,
-    fontWeight: '400',
+
   },
   background: {
     flex: 1,

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
@@ -8,6 +8,7 @@ import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { getCategory } from '../../store/categories/categories.thunks';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
+import { AppText } from '../../components/shared';
 
 interface IFilter {
   fresh?: boolean;
@@ -61,8 +62,8 @@ export const Categories: React.FC<Props> = ({ route }) => {
             <Fragment key={`${route.params?.slug}-list`}>
               <View style={style.chapter}>
                 <Image source={{uri: category?.image}} style={style.image} />
-                <Text style={style.title}>{category?.name}</Text>
-                <Text style={style.description}>{category?.description}</Text>
+                <AppText style={style.title}>{category?.name}</AppText>
+                <AppText style={style.description}>{category?.description}</AppText>
               </View>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
               <Posts />
@@ -96,12 +97,12 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     lineHeight: 31,
   },
   description: {
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 21,
   },
   follow: {

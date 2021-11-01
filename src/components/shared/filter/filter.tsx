@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { AppText } from '../appText';
 
 interface IFilter {
   fresh?: boolean;
@@ -32,13 +33,13 @@ export const Filter: React.FC<Props> = ({ setFilter, getFilter, filter, first })
             onPress={filterSet(true)}
             style={{ ...style.button, backgroundColor: filter.fresh ? 'transparent' : '#fff' }}
           >
-            <Text style={style.title}>{t('Популярное')}</Text>
+            <AppText style={style.title}>{t('Популярное')}</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={filterSet(false)}
             style={{ ...style.button, marginLeft: 15, backgroundColor: filter.fresh ? '#fff' : 'transparent' }}
           >
-            <Text style={style.title}>{t('Свежее')}</Text>
+            <AppText style={style.title}>{t('Свежее')}</AppText>
           </TouchableOpacity>
         </>
       }
@@ -49,13 +50,13 @@ export const Filter: React.FC<Props> = ({ setFilter, getFilter, filter, first })
             onPress={filterSet(false)}
             style={{ ...style.button, marginLeft: 15, backgroundColor: filter.fresh ? '#fff' : 'transparent' }}
           >
-            <Text style={style.title}>{t('Свежее')}</Text>
+            <AppText style={style.title}>{t('Свежее')}</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={filterSet(true)}
             style={{ ...style.button, backgroundColor: filter.fresh ? 'transparent' : '#fff' }}
           >
-            <Text style={style.title}>{t('Популярное')}</Text>
+            <AppText style={style.title}>{t('Популярное')}</AppText>
           </TouchableOpacity>
         </>
       }
@@ -77,7 +78,7 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 24,
   },
 });

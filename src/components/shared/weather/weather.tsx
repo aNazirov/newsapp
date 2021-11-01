@@ -1,9 +1,10 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 import Swiper from 'react-native-web-swiper';
 import { useAppSelector } from '../../../store/hooks';
 import { headerStyles } from '../../../styles/header.styles';
 import { useTranslation } from 'react-i18next';
+import { AppText } from '../appText';
 
 export const Weather: React.FC = () => {
   const { t } = useTranslation()
@@ -33,7 +34,7 @@ export const Weather: React.FC = () => {
                 justifyContent: 'flex-end',
               }}
             >
-              <Text style={headerStyles.weatherCity}>{t(w.city)}</Text>
+              <AppText style={headerStyles.weatherCity}>{t(w.city)}</AppText>
               <Image
                 style={{
                   width: 18,
@@ -43,7 +44,7 @@ export const Weather: React.FC = () => {
                   uri: `https:${w.data.icon}`
                 }}
               />
-              <Text style={headerStyles.weatherTemp}>{w.data.temp}°</Text>
+              <AppText style={headerStyles.weatherTemp}>{w.data.temp}°</AppText>
             </View>
           );
         })

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, StyleSheet, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { getSpecialPosts, postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
@@ -8,6 +8,7 @@ import { defaultImage, errorObject } from '../../_data/helpers';
 import { useTranslation } from 'react-i18next';
 import { NavigationProp } from '@react-navigation/native';
 import { toastShow } from '../../services/notifications.service';
+import { AppText } from '../../components/shared';
 
 interface IFilter {
   fresh?: boolean;
@@ -58,8 +59,8 @@ export const SpecialReports: React.FC<Props> = ({ }) => {
                 <Image source={{
                   uri: defaultImage
                 }} style={style.image} />
-                <Text style={style.title}>{t('Спецрепортажи')}</Text>
-                <Text style={style.description}>Описание категории</Text>
+                <AppText style={style.title}>{t('Спецрепортажи')}</AppText>
+                <AppText style={style.description}>Описание категории</AppText>
               </View>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh'/>
               <Posts />
@@ -89,12 +90,12 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     lineHeight: 31,
   },
   description: {
     fontSize: 14,
-    fontWeight: '400',
+
     lineHeight: 21,
   },
 });

@@ -58,17 +58,17 @@ export const headerStyles = StyleSheet.create({
     alignItems: 'center',
   },
   weatherCity: {
-    fontWeight: '700',
+    fontFamily: 'roboto-bold',
     fontSize: 12,
     marginRight: 13
   },
   weatherTemp: {
-    fontWeight: '400',
+
     fontSize: 12,
     marginLeft: 10
   },
   currencyDiff:{
-    fontWeight: '400',
+
     fontSize: 12,
     marginLeft: 8
   },
@@ -77,13 +77,13 @@ export const headerStyles = StyleSheet.create({
     width: 10,
   },
   currencyRate: {
-    fontWeight: '400',
+
     fontSize: 12,
     marginRight: 13,
     marginLeft: 8,
   },
   currencyCcy: {
-    fontWeight: '400',
+
     fontSize: 12,
   }
 });
