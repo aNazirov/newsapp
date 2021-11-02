@@ -12,7 +12,7 @@ import {
 import { headerStyles } from '../../styles/header.styles';
 import { Weather, Currency } from '../shared';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getGlobalData, langSet } from '../../store/global/global.thunks';
+import { getGlobalData, langSet, loginFormOpenSet } from '../../store/global/global.thunks';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -94,8 +94,14 @@ export const Header: React.FC<Props> = ({ style }) => {
               </TouchableOpacity>
             }
           </View>
-          <Image style={{ ...headerStyles.icons, marginLeft: 22 }}
-                 source={require('../../../assets/images/icons/Vector.png')} />
+          <TouchableOpacity
+            onPress={() => dispatch(loginFormOpenSet(true))}
+          >
+            <Image
+              style={{ ...headerStyles.icons, marginLeft: 22 }}
+              source={require('../../../assets/images/icons/Vector.png')}
+            />
+          </TouchableOpacity>
         </View>
         <View style={{ ...headerStyles.infoContainer, ...style }}>
           <View style={{ height: 20, flex: 1.5 }}>

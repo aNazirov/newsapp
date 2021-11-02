@@ -25,7 +25,7 @@ export const DrawerNavigation: React.FC = () => {
         },
         unmountOnBlur: true
       }}
-      initialRouteName='Profile'
+      initialRouteName='Home'
     >
       <Drawer.Screen
         name="Home"

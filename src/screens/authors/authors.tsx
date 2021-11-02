@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
-import { postsNull } from '../../store/posts/posts.thunks';
+import { getMorePosts, postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
@@ -36,7 +36,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
   const getMore = () => {
     if (page.current > pageCount) return;
     setLoading(true);
-    return dispatch(getAuthor({ page: page.current, ...filter }, route.params?.id, lang))
+    return dispatch(getMorePosts('authors', route.params?.id, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
@@ -45,7 +45,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
     dispatch(postsNull());
     page.current = 1;
     setLoading(true);
-    dispatch(getAuthor({ page: 1, ...filters }, route.params?.id, lang))
+    dispatch(getMorePosts('authors', route.params?.id, { page: 1, ...filters }, lang))
       .then(() => page.current++)
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));

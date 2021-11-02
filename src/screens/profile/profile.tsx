@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { blue } from '../../styles/layout.styles';
 import { defaultImage, errorObject } from '../../_data/helpers';
@@ -59,8 +59,7 @@ export const Profile: React.FC = () => {
 
   const { t } = useTranslation();
   return (
-    <>
-
+    <ScrollView>
       <View style={style.container}>
         <Image source={{ uri: defaultImage }} style={style.avatar} />
         <AppText style={style.name}>Тит</AppText>
@@ -79,6 +78,7 @@ export const Profile: React.FC = () => {
             if (tab.name === 'Статьи' && user?.role.name !== 'Автор') return null;
             return (
               <TouchableOpacity
+                key={tab.id + tab.type}
                 onPress={() => handleChangeActiveTab(tab)}
               >
                 <AppText
@@ -119,7 +119,7 @@ export const Profile: React.FC = () => {
           <Comments />
         )
       }
-    </>
+    </ScrollView>
   );
 };
 

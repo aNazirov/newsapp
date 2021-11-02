@@ -42,6 +42,11 @@ const navigationTitles = [
     title: 'Спецрепортажи',
     name: 'SpecialReports',
   },
+  {
+    image: require('../../../assets/images/icons/special.png'),
+    title: 'Профиль',
+    name: 'Profile',
+  },
 ];
 
 

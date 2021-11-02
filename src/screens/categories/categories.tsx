@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
-import { postsNull } from '../../store/posts/posts.thunks';
+import { getMorePosts, postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
@@ -31,7 +31,9 @@ export const Categories: React.FC<Props> = ({ route }) => {
   const { lang } = useAppSelector(state => state.global);
   useEffect(() => {
     clearStore(dispatch);
-    dispatch(getCategory({ page: 1, ...filter }, route.params?.slug, lang));
+    dispatch(getCategory({ page: 1, ...filter }, route.params?.slug, lang))
+      .then(() => page.current = 2)
+      .catch(() => toastShow(errorObject))
     return () => {}
   }, [lang, route.params?.slug]);
   const { pageCount } = useAppSelector(state => state.posts);
@@ -39,7 +41,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
   const getMore = () => {
     if (page.current > pageCount) return;
     setLoading(true);
-    return dispatch(getCategory({ page: page.current, ...filter }, route.params?.slug, lang))
+    return dispatch(getMorePosts('categories', route.params?.slug, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
@@ -48,7 +50,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
     dispatch(postsNull());
     page.current = 1;
     setLoading(true);
-    dispatch(getCategory({ page: 1, ...filters }, route.params?.slug, lang))
+    dispatch(getMorePosts('categories', category?.slug, { page: 1, ...filters }, lang))
       .then(() => page.current++)
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));

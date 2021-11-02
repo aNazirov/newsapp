@@ -68,9 +68,7 @@ export const { actions: commentsAction, reducer: commentsReducer } = createSlice
       }
     },
     deleteComment: (state: IState, action: PayloadAction<{ id: number }>) => {
-      console.log(action.payload.id)
       const comments = state.comments.filter(comment => comment.id !== action.payload.id)
-      console.log(comments.length === state.comments.length)
       if (comments.length === state.comments.length) {
         return {
           ...state,

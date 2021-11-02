@@ -9,6 +9,7 @@ import Toast from 'react-native-toast-message'
 import * as Font from 'expo-font';
 import AppLoadingPlaceholder from 'expo/build/launch/AppLoadingPlaceholder';
 import './i18n';
+import { Auth } from './src/components/auth';
 
 async function loadApplication() {
   await Font.loadAsync({
@@ -40,6 +41,7 @@ export default function App() {
           </View>
         </View>
         <Toast ref={(ref) => Toast.setRef(ref)} />
+        <Auth/>
       </Provider>
     </NavigationContainer>
   );
