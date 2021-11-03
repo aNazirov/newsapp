@@ -10,6 +10,7 @@ import { Indicators } from '../../components/shared/indicators';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { AppText } from '../../components/shared';
+import { headerStyles } from '../../styles/header.styles';
 
 interface IFilter {
   fresh?: boolean;
@@ -54,52 +55,37 @@ export const Feed: React.FC<Props> = ({}) => {
       .finally(() => setLoading(false));
   };
   return (
-    <>
-      <FlatList
-        data={[1]}
-        renderItem={() => {
-          return (
-            <Fragment key={'feed-list'}>
-              <View style={style.container}>
-                <View style={style.chapter}>
-                  <AppText style={style.title}>{hotPosts?.range}</AppText>
-                  <TouchableOpacity
-                    style={{ ...style.more }}
-                    onPress={() => setOpen(prev => !prev)}
-                  >
-                    <Image
-                      source={open ? hide : show}
-                      style={style.icon}
-                      resizeMode='contain'
-                    />
-                    <AppText style={{ ...style.moreTitle }}>{t(open ? 'свернуть' : 'показать')}</AppText>
-                  </TouchableOpacity>
-                </View>
-                <View style={{ display: open ? 'flex' : 'none' }}>
-                  {
-                    hotPosts?.hotPosts.map(post => {
-                      return (
-                        <Fragment key={post.slug}>
-                          <View style={style.hotPosts}>
-                            <AppText style={style.time}>{post.created_at.split(', ')[1]}</AppText>
-                            <AppText style={style.description}>
-                              {post.title}
-                              {
-                                Platform.OS === 'ios' &&
-                                <Indicators
-                                  comments={post.comments_count}
-                                  views={post.views_count}
-                                  color='rgba(0, 0, 0, .7)'
-                                  light={false}
-                                  size={14}
-                                  fontSize={12}
-                                />
-                              }
-                            </AppText>
-                          </View>
-                          {
-                            Platform.OS === 'android' &&
-                            <View style={style.androidIndicators}>
+    <FlatList
+      data={[1]}
+      renderItem={() => {
+        return (
+          <Fragment key={'feed-list'}>
+            <View style={style.container}>
+              <View style={style.chapter}>
+                <AppText style={style.title}>{hotPosts?.range}</AppText>
+                <TouchableOpacity
+                  style={{ ...style.more }}
+                  onPress={() => setOpen(prev => !prev)}
+                >
+                  <Image
+                    source={open ? hide : show}
+                    style={{ ...headerStyles.icons, ...style.icon }}
+                    resizeMode='contain'
+                  />
+                  <AppText style={{ ...style.moreTitle }}>{t(open ? 'свернуть' : 'показать')}</AppText>
+                </TouchableOpacity>
+              </View>
+              <View style={{ display: open ? 'flex' : 'none' }}>
+                {
+                  hotPosts?.hotPosts.map(post => {
+                    return (
+                      <Fragment key={post.slug}>
+                        <View style={style.hotPosts}>
+                          <AppText style={style.time}>{post.created_at.split(', ')[1]}</AppText>
+                          <AppText style={style.description}>
+                            {post.title}
+                            {
+                              Platform.OS === 'ios' &&
                               <Indicators
                                 comments={post.comments_count}
                                 views={post.views_count}
@@ -108,27 +94,40 @@ export const Feed: React.FC<Props> = ({}) => {
                                 size={14}
                                 fontSize={12}
                               />
-                            </View>
-                          }
-                        </Fragment>
-                      );
-                    })
-                  }
-                </View>
+                            }
+                          </AppText>
+                        </View>
+                        {
+                          Platform.OS === 'android' &&
+                          <View style={style.androidIndicators}>
+                            <Indicators
+                              comments={post.comments_count}
+                              views={post.views_count}
+                              color='rgba(0, 0, 0, .7)'
+                              light={false}
+                              size={14}
+                              fontSize={12}
+                            />
+                          </View>
+                        }
+                      </Fragment>
+                    );
+                  })
+                }
               </View>
-              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='popular' />
-              <Posts />
-            </Fragment>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString() + 'feed-list'}
-        onEndReached={getMore}
-      />
-      {
-        loading &&
-        <ActivityIndicator size='large' color='#0000ff' />
-      }
-    </>
+            </View>
+            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='popular' />
+            <Posts />
+            {
+              loading &&
+              <ActivityIndicator size='large' color='#0000ff' />
+            }
+          </Fragment>
+        );
+      }}
+      keyExtractor={(item, index) => index.toString() + 'feed-list'}
+      onEndReached={getMore}
+    />
   );
 };
 const style = StyleSheet.create({
@@ -162,13 +161,10 @@ const style = StyleSheet.create({
   },
   moreTitle: {
     fontSize: 14,
-
     lineHeight: 24,
     color: 'rgba(0, 0, 0, .9)',
   },
   icon: {
-    width: 24,
-    height: 24,
     marginRight: 4,
   },
   hotPosts: {
@@ -177,14 +173,12 @@ const style = StyleSheet.create({
   },
   time: {
     fontSize: 13,
-
     width: '12%',
     lineHeight: 21,
     color: 'rgba(0, 0, 0, .7)',
   },
   description: {
     fontSize: 14,
-
     lineHeight: 21,
     color: '#000',
     width: '85%',

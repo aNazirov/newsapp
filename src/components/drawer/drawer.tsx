@@ -12,83 +12,89 @@ import { Authors } from '../../screens/authors';
 import { Tags } from '../../screens/tags';
 import { Search } from '../../screens/search';
 import { Profile } from '../../screens/profile';
+import { useAppSelector } from '../../store/hooks';
 
 const Drawer = createDrawerNavigator();
 
 export const DrawerNavigation: React.FC = () => {
+  const { token } = useAppSelector(state => state.global);
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawer {...props}/>}
+      drawerContent={(props) => <CustomDrawer {...props} />}
       screenOptions={{
         drawerStyle: {
           backgroundColor: '#f1f1f1',
         },
-        unmountOnBlur: true
+        unmountOnBlur: true,
       }}
       initialRouteName='Home'
     >
       <Drawer.Screen
-        name="Home"
+        name='Home'
         component={Home}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
       />
       <Drawer.Screen
-        name="Opinions" component={Opinions}
+        name='Opinions'
+        component={Opinions}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
       />
       <Drawer.Screen
-        name="SpecialReports"
+        name='SpecialReports'
         component={SpecialReports}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
       />
       <Drawer.Screen
-        name="Feed"
+        name='Feed'
         component={Feed}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
       />
       <Drawer.Screen
-        name="Search"
+        name='Search'
         component={Search}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
       />
       <Drawer.Screen
-        name="Categories"
+        name='Categories'
         component={Categories}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
       />
       <Drawer.Screen
-        name="Authors"
+        name='Authors'
         component={Authors}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
       />
       <Drawer.Screen
-        name="Tags"
+        name='Tags'
         component={Tags}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}
       />
-      <Drawer.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          header: (props) => <Header style={LayoutStyles.header} {...props} />,
-        }}
-      />
+      {
+        !!token &&
+        <Drawer.Screen
+          name='Profile'
+          component={Profile}
+          options={{
+            header: (props) => <Header style={LayoutStyles.header} {...props} />,
+          }}
+        />
+      }
     </Drawer.Navigator>
-  )
-}
+  );
+};

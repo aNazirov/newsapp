@@ -32,7 +32,7 @@ export const staticAuthenticate = (user: any, isLogin: boolean) => {
 export const getMe = (token: string) => {
   return api.get('/auth/me', {
     headers: {
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
     }
   })
     .then(res => res.data.result.user);

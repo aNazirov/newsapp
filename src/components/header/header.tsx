@@ -10,9 +10,9 @@ import {
   View,
 } from 'react-native';
 import { headerStyles } from '../../styles/header.styles';
-import { Weather, Currency } from '../shared';
+import { Weather, Currency, Profile, Sign } from '../shared';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getGlobalData, langSet, loginFormOpenSet } from '../../store/global/global.thunks';
+import { autoLogin, getGlobalData, langSet } from '../../store/global/global.thunks';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -31,8 +31,9 @@ export const Header: React.FC<Props> = ({ style }) => {
   const dispatch = useAppDispatch();
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
-  const { lang } = useAppSelector(state => state.global);
+  const { lang, token } = useAppSelector(state => state.global);
   useEffect(() => {
+    dispatch(autoLogin());
     AsyncStorage.getItem('lang')
       .then((result: any) => dispatch(langSet(result || 'ru')));
   }, []);
@@ -42,7 +43,8 @@ export const Header: React.FC<Props> = ({ style }) => {
 
   return (
     <SafeAreaView>
-      <View onTouchStart={() => {
+      <View onTouchStart={e => {
+        e.stopPropagation();
         LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
         setShow(false);
       }}>
@@ -85,7 +87,7 @@ export const Header: React.FC<Props> = ({ style }) => {
                   LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
                   setShow(!show);
                 }}
-                style={{ marginLeft: 'auto' }}
+                style={{ marginLeft: 'auto', marginRight: 15 }}
               >
                 <Image
                   style={{ ...headerStyles.icons }}
@@ -94,16 +96,15 @@ export const Header: React.FC<Props> = ({ style }) => {
               </TouchableOpacity>
             }
           </View>
-          <TouchableOpacity
-            onPress={() => dispatch(loginFormOpenSet(true))}
-          >
-            <Image
-              style={{ ...headerStyles.icons, marginLeft: 22 }}
-              source={require('../../../assets/images/icons/Vector.png')}
-            />
-          </TouchableOpacity>
+          <View>
+            {
+              !!token
+                ? <Profile />
+                : <Sign />
+            }
+          </View>
         </View>
-        <View style={{ ...headerStyles.infoContainer, ...style }}>
+        <View style={{ ...headerStyles.infoContainer, ...style, zIndex: -1 }}>
           <View style={{ height: 20, flex: 1.5 }}>
             <Currency />
           </View>

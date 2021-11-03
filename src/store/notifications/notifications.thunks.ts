@@ -1,6 +1,6 @@
 import {AppThunk} from "../index";
 import {notificationsAction} from "./notifications.slices";
-import {INotificationState} from "../../interfaces";
+import {INotification} from "../../interfaces";
 import {
   getAlertNotificationsService,
   getNotificationsCountService,
@@ -13,7 +13,7 @@ export const notificationsSet = (res: any): AppThunk => (dispatch: any) => {
     hasMore: res.has_more,
   }));
 };
-export const alertNotificationsSet = (alertNotifications: INotificationState[]): AppThunk => (dispatch: any) => {
+export const alertNotificationsSet = (alertNotifications: INotification[]): AppThunk => (dispatch: any) => {
     dispatch(notificationsAction.setAlertNotifications({ alertNotifications }));
   }
 ;
@@ -28,8 +28,8 @@ export const getNotifications = (params: any = {}, token: string = ''): AppThunk
   return getNotificationsService(params, token)
     .then(res => dispatch(notificationsSet(res)));
 };
-export const getAlertNotifications = (): AppThunk => async (dispatch: any) => {
-  return getAlertNotificationsService()
+export const getAlertNotifications = (token: string): AppThunk => async (dispatch: any) => {
+  return getAlertNotificationsService(token)
     .then(notifications => dispatch(alertNotificationsSet(notifications)));
 };
 export const getNotificationsCount = (token: string = ''): AppThunk => async (dispatch: any) => {

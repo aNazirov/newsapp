@@ -71,7 +71,7 @@ export interface IComment {
   user: IUser;
   post?: IPost;
 }
-export interface INotificationState {
+export interface INotification {
   id: number;
   notification: string;
   type: string;
@@ -92,8 +92,4 @@ export interface IWeather {
     icon: string;
     temp: number
   };
-}
-export interface INotification {
-  message: string;
-  success: boolean | null;
 }

@@ -1,14 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { blue } from '../../styles/layout.styles';
-import { defaultImage, errorObject } from '../../_data/helpers';
+import { errorObject } from '../../_data/helpers';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { toastShow } from '../../services/notifications.service';
 import { getMorePosts } from '../../store/posts/posts.thunks';
-import { getUserComments } from '../../store/comments/comments.thunks';
+import { commentsNull, getUserComments } from '../../store/comments/comments.thunks';
 import { Comments, Notifications } from '../../components/profile';
 import { AppText } from '../../components/shared';
+import { headerStyles } from '../../styles/header.styles';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { getNotifications, notificationsNull } from '../../store/notifications/notifications.thunks';
 
 interface ITab {
   id: number;
@@ -22,12 +25,19 @@ const Tabs = [
   { id: 2, name: 'Уведомления', type: 'notifications' },
 ];
 
-export const Profile: React.FC = () => {
+interface Props {
+  navigation: NavigationProp<any>;
+  route: RouteProp<any>;
+}
+
+export const Profile: React.FC<Props> = ({ route }) => {
+  const { t } = useTranslation();
   const page = useRef(2);
   const pageComments = useRef(2);
+  const pageNotifications = useRef(2);
   const dispatch = useAppDispatch();
-  const { user, lang } = useAppSelector(state => state.global);
-  const [currentType, setCurrentType] = useState(user?.role.name === 'Автор' ? 'articles' : 'comments');
+  const { user, lang, token } = useAppSelector(state => state.global);
+  const [currentType, setCurrentType] = useState(route.params?.notification ? 'notifications' : user?.role.name === 'Автор' ? 'articles' : 'comments');
   const [tabs, setTabs] = useState<ITab[]>(Tabs);
 
   const handleChangeActiveTab = (tab: ITab) => {
@@ -56,19 +66,33 @@ export const Profile: React.FC = () => {
       .catch(() => toastShow(errorObject));
 
   };
-
-  const { t } = useTranslation();
+  const getMoreNotifications = () => {
+    dispatch(getNotifications({ page: pageNotifications.current }, token!))
+      .then(() => {
+        pageNotifications.current++;
+      })
+      .catch(() => toastShow(errorObject));
+  };
+  useEffect(() => {
+    dispatch(commentsNull());
+    dispatch(notificationsNull());
+    dispatch(getUserComments({ page: 1 }, token!))
+      .catch(() => toastShow(errorObject));
+    dispatch(getNotifications({ page: 1 }, token!))
+      .catch(() => toastShow(errorObject));
+    if (user?.role.name === 'Автор') {
+      dispatch(getMorePosts('authors', user.id, { page: 1 }, lang));
+    }
+  }, []);
   return (
-    <ScrollView>
+    <ScrollView
+    >
       <View style={style.container}>
-        <Image source={{ uri: defaultImage }} style={style.avatar} />
-        <AppText style={style.name}>Тит</AppText>
-        <AppText style={style.aboutMe}>
-          Et maxime porro qui sit suscipit est. Fugiat iure ipsa voluptatum aliquid eaque animi.
-          Autem tenetur error et vero.
-        </AppText>
+        <Image source={{ uri: user?.avatar }} style={style.avatar} />
+        <AppText style={style.name}>{user?.name}</AppText>
+        <AppText style={style.aboutMe}>{user?.about_me}</AppText>
         <AppText style={{ ...style.edit, color: blue }}>{t('Изменить имя или описание')}</AppText>
-        <AppText style={{ ...style.edit, marginBottom: 15 }}>{t('На проекте с')}</AppText>
+        <AppText style={{ ...style.edit, marginBottom: 15 }}>{t('На проекте с')} {user?.created_at}</AppText>
         <TouchableOpacity style={style.settings}>
           <Image source={require('../../../assets/images/icons/settings.png')} />
         </TouchableOpacity>
@@ -81,16 +105,20 @@ export const Profile: React.FC = () => {
                 key={tab.id + tab.type}
                 onPress={() => handleChangeActiveTab(tab)}
               >
-                <AppText
-                  style={{
-                    ...style.tab,
-                    marginRight: 32,
-                    color: currentType === tab.type ? '#000' : 'rgba(0, 0, 0, .7)',
-                    borderBottomColor: currentType === tab.type ? blue : 'transparent',
-                  }}
-                >
-                  {t(tab.name)}
-                </AppText>
+                <View style={{
+                  borderBottomColor: currentType === tab.type ? blue : 'rgba(0, 0, 0, 0)',
+                  borderBottomWidth: 2,
+                  marginRight: 32,
+                }}>
+                  <AppText
+                    style={{
+                      ...style.tab,
+                      color: currentType === tab.type ? '#000' : 'rgba(0, 0, 0, .7)',
+                    }}
+                  >
+                    {t(tab.name)}
+                  </AppText>
+                </View>
               </TouchableOpacity>
             );
           })}
@@ -103,7 +131,10 @@ export const Profile: React.FC = () => {
               Если у вас есть интересная идея для статьи, не стесняйтесь и скорее начинайте писать
             </AppText>
             <TouchableOpacity style={style.event}>
-              <Image source={require('../../../assets/images/icons/plus.png')} style={style.eventIcon} />
+              <Image
+                source={require('../../../assets/images/icons/plus.png')}
+                style={{ ...headerStyles.icons, ...style.eventIcon }}
+              />
               <AppText style={style.eventTitle}>{t('Событие')}</AppText>
             </TouchableOpacity>
           </View>
@@ -149,7 +180,6 @@ const style = StyleSheet.create({
   },
   edit: {
     fontSize: 16,
-
     marginBottom: 10,
   },
   settings: {
@@ -166,7 +196,6 @@ const style = StyleSheet.create({
     fontFamily: 'roboto-medium',
     paddingHorizontal: 4,
     paddingBottom: 10,
-    borderBottomWidth: 2,
   },
   notFoundContainer: {
     alignItems: 'center',
@@ -196,8 +225,6 @@ const style = StyleSheet.create({
     color: '#fff',
   },
   eventIcon: {
-    width: 24,
-    height: 24,
     marginRight: 20,
   },
 });

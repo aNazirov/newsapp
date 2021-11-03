@@ -29,7 +29,8 @@ export const Tags: React.FC<Props> = ({ route }) => {
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getTag({ page: 1, ...filter }, route.params?.slug, lang));
-    return () => {}
+    return () => {
+    };
   }, [lang, route.params?.slug]);
   const { pageCount } = useAppSelector(state => state.posts);
   const { tag } = useAppSelector(state => state.tags);
@@ -51,36 +52,34 @@ export const Tags: React.FC<Props> = ({ route }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <>
-      <FlatList
-        data={[1]}
-        renderItem={() => {
-          return (
-            <Fragment key={`${route.params?.slug}-list`}>
-              <View style={style.chapter}>
-                <AppText style={style.title}>{tag?.name}</AppText>
-                <AppText style={style.description}>{tag?.meta_description}</AppText>
-              </View>
-              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
-              <Posts />
-            </Fragment>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
-        onEndReached={getMore}
-      />
-      {
-        loading &&
-        <ActivityIndicator size='large' color='#0000ff' />
-      }
-    </>
+    <FlatList
+      data={[1]}
+      renderItem={() => {
+        return (
+          <Fragment key={`${route.params?.slug}-list`}>
+            <View style={style.chapter}>
+              <AppText style={style.title}>{tag?.name}</AppText>
+              <AppText style={style.description}>{tag?.meta_description}</AppText>
+            </View>
+            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+            <Posts />
+            {
+              loading &&
+              <ActivityIndicator size='large' color='#0000ff' />
+            }
+          </Fragment>
+        );
+      }}
+      keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
+      onEndReached={getMore}
+    />
   );
 };
 const style = StyleSheet.create({
   chapter: {
     padding: 15,
     backgroundColor: '#fff',
-    position: 'relative'
+    position: 'relative',
   },
   image: {
     width: 60,
@@ -97,5 +96,5 @@ const style = StyleSheet.create({
     fontSize: 14,
 
     lineHeight: 21,
-  }
+  },
 });

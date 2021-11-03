@@ -29,7 +29,8 @@ export const Authors: React.FC<Props> = ({ route }) => {
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getAuthor({ page: 1, ...filter }, route.params?.id, lang));
-    return () => {}
+    return () => {
+    };
   }, [lang, route.params?.id]);
   const { pageCount } = useAppSelector(state => state.posts);
   const { author } = useAppSelector(state => state.authors);
@@ -51,38 +52,36 @@ export const Authors: React.FC<Props> = ({ route }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <>
-      <FlatList
-        data={[1]}
-        renderItem={() => {
-          return (
-            <Fragment key={`${route.params?.slug}-list`}>
-              <View style={style.chapter}>
-                <Image source={{uri: author?.avatar}} style={style.image} />
-                <AppText style={style.title}>{author?.name}</AppText>
-                <AppText style={style.date}>{author?.created_at}</AppText>
-                <AppText style={style.description}>{author?.about_me}</AppText>
-              </View>
-              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='popular' />
-              <Posts />
-            </Fragment>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
-        onEndReached={getMore}
-      />
-      {
-        loading &&
-        <ActivityIndicator size='large' color='#0000ff' />
-      }
-    </>
+    <FlatList
+      data={[1]}
+      renderItem={() => {
+        return (
+          <Fragment key={`${route.params?.slug}-list`}>
+            <View style={style.chapter}>
+              <Image source={{ uri: author?.avatar }} style={style.image} />
+              <AppText style={style.title}>{author?.name}</AppText>
+              <AppText style={style.date}>{author?.created_at}</AppText>
+              <AppText style={style.description}>{author?.about_me}</AppText>
+            </View>
+            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='popular' />
+            <Posts />
+            {
+              loading &&
+              <ActivityIndicator size='large' color='#0000ff' />
+            }
+          </Fragment>
+        );
+      }}
+      keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
+      onEndReached={getMore}
+    />
   );
 };
 const style = StyleSheet.create({
   chapter: {
     padding: 15,
     backgroundColor: '#fff',
-    position: 'relative'
+    position: 'relative',
   },
   image: {
     width: 60,
@@ -107,5 +106,5 @@ const style = StyleSheet.create({
     fontSize: 14,
 
     lineHeight: 21,
-  }
+  },
 });

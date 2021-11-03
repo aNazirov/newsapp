@@ -20,8 +20,8 @@ interface Props {
   route: RouteProp<any>;
 }
 
-const follow = require('../../../assets/images/icons/follow.png')
-const followCheck = require('../../../assets/images/icons/followCheck.png')
+const follow = require('../../../assets/images/icons/follow.png');
+const followCheck = require('../../../assets/images/icons/followCheck.png');
 
 export const Categories: React.FC<Props> = ({ route }) => {
   const page = useRef(2);
@@ -33,8 +33,9 @@ export const Categories: React.FC<Props> = ({ route }) => {
     clearStore(dispatch);
     dispatch(getCategory({ page: 1, ...filter }, route.params?.slug, lang))
       .then(() => page.current = 2)
-      .catch(() => toastShow(errorObject))
-    return () => {}
+      .catch(() => toastShow(errorObject));
+    return () => {
+    };
   }, [lang, route.params?.slug]);
   const { pageCount } = useAppSelector(state => state.posts);
   const { category } = useAppSelector(state => state.categories);
@@ -56,40 +57,38 @@ export const Categories: React.FC<Props> = ({ route }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <>
-      <FlatList
-        data={[1]}
-        renderItem={() => {
-          return (
-            <Fragment key={`${route.params?.slug}-list`}>
-              <View style={style.chapter}>
-                <Image source={{uri: category?.image}} style={style.image} />
-                <AppText style={style.title}>{category?.name}</AppText>
-                <AppText style={style.description}>{category?.description}</AppText>
-              </View>
-              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
-              <Posts />
-              <TouchableOpacity style={style.follow}>
-                <Image source={follow} resizeMode='contain'/>
-              </TouchableOpacity>
-            </Fragment>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
-        onEndReached={getMore}
-      />
-      {
-        loading &&
-        <ActivityIndicator size='large' color='#0000ff' />
-      }
-    </>
+    <FlatList
+      data={[1]}
+      renderItem={() => {
+        return (
+          <Fragment key={`${route.params?.slug}-list`}>
+            <View style={style.chapter}>
+              <Image source={{ uri: category?.image }} style={style.image} />
+              <AppText style={style.title}>{category?.name}</AppText>
+              <AppText style={style.description}>{category?.description}</AppText>
+            </View>
+            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+            <Posts />
+            <TouchableOpacity style={style.follow}>
+              <Image source={follow} resizeMode='contain' />
+            </TouchableOpacity>
+            {
+              loading &&
+              <ActivityIndicator size='large' color='#0000ff' />
+            }
+          </Fragment>
+        );
+      }}
+      keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
+      onEndReached={getMore}
+    />
   );
 };
 const style = StyleSheet.create({
   chapter: {
     padding: 15,
     backgroundColor: '#fff',
-    position: 'relative'
+    position: 'relative',
   },
   image: {
     width: 60,
@@ -112,6 +111,6 @@ const style = StyleSheet.create({
     height: 36,
     position: 'absolute',
     top: 15,
-    right: 15
-  }
+    right: 15,
+  },
 });

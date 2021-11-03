@@ -14,7 +14,7 @@ interface Props {
   navigation: NavigationProp<any>;
 }
 
-export const Home: React.FC<Props> = ({ }) => {
+export const Home: React.FC<Props> = ({}) => {
   const page = useRef(2);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -34,31 +34,29 @@ export const Home: React.FC<Props> = ({ }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <>
-      <FlatList
-        data={[1]}
-        renderItem={() => {
-          return (
-            <Fragment key={'home-list'}>
-              {
-                hotPosts?.hotPosts.map((post, i) => {
-                  if (i > 2) return null;
-                  return <HotPost key={post.id} post={post} />;
-                })
-              }
-              <Posts />
-            </Fragment>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString() + 'home-list'}
-        onEndReached={getMore}
-        style={style.container}
-      />
-      {
-        loading &&
-        <ActivityIndicator size='large' color='#0000ff' />
-      }
-    </>
+    <FlatList
+      data={[1]}
+      renderItem={() => {
+        return (
+          <Fragment key={'home-list'}>
+            {
+              hotPosts?.hotPosts.map((post, i) => {
+                if (i > 2) return null;
+                return <HotPost key={post.id} post={post} />;
+              })
+            }
+            <Posts />
+            {
+              loading &&
+              <ActivityIndicator size='large' color='#0000ff' />
+            }
+          </Fragment>
+        );
+      }}
+      keyExtractor={(item, index) => index.toString() + 'home-list'}
+      onEndReached={getMore}
+      style={style.container}
+    />
   );
 };
 

@@ -15,9 +15,10 @@ interface Props {
   control: Control;
   placeholder?: string;
   defaultValue?: string;
+  autoCapitalize?: 'none' | 'characters' | 'words' | 'sentences';
 }
 
-export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', style, error, placeholder = '' }) => {
+export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', style, error, placeholder = '', autoCapitalize = 'none' }) => {
   const { field } = useController({
     control,
     defaultValue,
@@ -31,6 +32,7 @@ export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', st
         onBlur={field.onBlur}
         onChangeText={field.onChange}
         value={field.value}
+        autoCapitalize={autoCapitalize}
       />
       {
         error?.message &&

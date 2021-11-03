@@ -9,6 +9,7 @@ import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { useTranslation } from 'react-i18next';
 import { AppText } from '../../components/shared';
+import { headerStyles } from '../../styles/header.styles';
 
 interface IFilter {
   fresh?: boolean;
@@ -53,38 +54,37 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <>
-      <FlatList
-        data={[1]}
-        renderItem={() => {
-          return (
-            <Fragment key={`${route.params?.text}-list`}>
-              <View style={style.chapter}>
-                <AppText style={style.title}>{t('Поиск')}</AppText>
-                <View>
-                  <Image source={require('../../../assets/images/icons/searchL.png')} style={style.inputIcon} />
-                  <TextInput
-                    style={style.input} defaultValue={route.params?.text}
-                    onChangeText={val => setText(val)}
-                    onSubmitEditing={() => navigation.setParams({ text })}
-                    value={text}
-                  />
-                </View>
-                <AppText style={style.description}>Результатов: примерно {postsCount}</AppText>
+    <FlatList
+      data={[1]}
+      renderItem={() => {
+        return (
+          <Fragment key={`${route.params?.text}-list`}>
+            <View style={style.chapter}>
+              <AppText style={style.title}>{t('Поиск')}</AppText>
+              <View>
+                <Image source={require('../../../assets/images/icons/searchL.png')}
+                       style={{ ...headerStyles.icons, ...style.inputIcon }} />
+                <TextInput
+                  style={style.input} defaultValue={route.params?.text}
+                  onChangeText={val => setText(val)}
+                  onSubmitEditing={() => navigation.setParams({ text })}
+                  value={text}
+                />
               </View>
-              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
-              <Posts />
-            </Fragment>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString() + `${route.params?.text}-list`}
-        onEndReached={getMore}
-      />
-      {
-        loading &&
-        <ActivityIndicator size='large' color='#0000ff' />
-      }
-    </>
+              <AppText style={style.description}>Результатов: примерно {postsCount}</AppText>
+            </View>
+            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+            <Posts />
+            {
+              loading &&
+              <ActivityIndicator size='large' color='#0000ff' />
+            }
+          </Fragment>
+        );
+      }}
+      keyExtractor={(item, index) => index.toString() + `${route.params?.text}-list`}
+      onEndReached={getMore}
+    />
   );
 };
 const style = StyleSheet.create({
@@ -104,8 +104,6 @@ const style = StyleSheet.create({
   },
   inputIcon: {
     position: 'absolute',
-    width: 24,
-    height: 24,
     zIndex: 10,
     top: 4,
     left: 6,

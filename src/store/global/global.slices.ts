@@ -8,7 +8,6 @@ interface IState {
   user: IUser | null;
   loginFormOpen: boolean;
   lang: 'ru' | 'uz';
-  notification: { message: string; success: boolean | null };
 }
 
 const initialState: IState = {
@@ -18,10 +17,6 @@ const initialState: IState = {
   user: null,
   loginFormOpen: false,
   lang: 'ru',
-  notification: {
-    message: '',
-    success: null,
-  },
 };
 
 export const { actions: globalAction, reducer: globalReducer } = createSlice({

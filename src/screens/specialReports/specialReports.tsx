@@ -19,8 +19,8 @@ interface Props {
   navigation: NavigationProp<any>;
 }
 
-export const SpecialReports: React.FC<Props> = ({ }) => {
-  const { t } = useTranslation()
+export const SpecialReports: React.FC<Props> = ({}) => {
+  const { t } = useTranslation();
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
   const dispatch = useAppDispatch();
@@ -49,32 +49,30 @@ export const SpecialReports: React.FC<Props> = ({ }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <>
-      <FlatList
-        data={[1]}
-        renderItem={() => {
-          return (
-            <Fragment key={'special-list'}>
-              <View style={style.chapter}>
-                <Image source={{
-                  uri: defaultImage
-                }} style={style.image} />
-                <AppText style={style.title}>{t('Спецрепортажи')}</AppText>
-                <AppText style={style.description}>Описание категории</AppText>
-              </View>
-              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh'/>
-              <Posts />
-            </Fragment>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString() + 'special-list'}
-        onEndReached={getMore}
-      />
-      {
-        loading &&
-        <ActivityIndicator size='large' color='#0000ff' />
-      }
-    </>
+    <FlatList
+      data={[1]}
+      renderItem={() => {
+        return (
+          <Fragment key={'special-list'}>
+            <View style={style.chapter}>
+              <Image source={{
+                uri: defaultImage,
+              }} style={style.image} />
+              <AppText style={style.title}>{t('Спецрепортажи')}</AppText>
+              <AppText style={style.description}>Описание категории</AppText>
+            </View>
+            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+            <Posts />
+            {
+              loading &&
+              <ActivityIndicator size='large' color='#0000ff' />
+            }
+          </Fragment>
+        );
+      }}
+      keyExtractor={(item, index) => index.toString() + 'special-list'}
+      onEndReached={getMore}
+    />
   );
 };
 const style = StyleSheet.create({

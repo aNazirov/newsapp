@@ -1,18 +1,19 @@
-import {globalAction} from "./global.slices";
-import {ICurrency, INotification, IUser} from "../../interfaces";
+import { globalAction } from './global.slices';
+import { ICurrency, IUser } from '../../interfaces';
 import {
   facebookAuthenticate,
   getMe,
   googleAuthenticate,
   staticAuthenticate,
-  telegramAuthenticate
-} from "../../services/auth.service";
-import {getNotificationsCount} from "../notifications/notifications.thunks";
+  telegramAuthenticate,
+} from '../../services/auth.service';
+import { getNotificationsCount } from '../notifications/notifications.thunks';
 import { followToCategoryService, getFirstData } from '../../services/global.services';
 import { categoriesSet } from '../categories/categories.thunks';
-import { commentsSet } from '../comments/comments.thunks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18next';
+import { toastShow } from '../../services/notifications.service';
+import { errorObject } from '../../_data/helpers';
 
 export const loginFormOpenSet = (open: boolean) => (dispatch: any) => {
   dispatch(globalAction.setLoginFormOpen({ loginFormOpen: open }));
@@ -22,9 +23,9 @@ export const userSet = (user: IUser) => (dispatch: any) => {
 };
 export const langSet = (lang: 'ru' | 'uz') => async (dispatch: any) => {
   AsyncStorage.setItem('lang', lang)
-    .catch(err => console.log(err))
+    .catch(() => toastShow(errorObject));
   dispatch(globalAction.setLang({ lang }));
-  i18n.changeLanguage(lang)
+  i18n.changeLanguage(lang);
 };
 export const currenciesSet = (currencies: ICurrency[]) => (dispatch: any) => {
   dispatch(globalAction.setCurrencies({ currencies }));
@@ -33,28 +34,34 @@ export const weatherSet = (weather: any) => (dispatch: any) => {
   dispatch(globalAction.setWeather({ weather }));
 };
 export const login = (res: any) => (dispatch: any) => {
-  // setCookie('token', res.token);
+  AsyncStorage.setItem('token', res.token)
+    .catch(() => toastShow(errorObject));
   dispatch(globalAction.logIn({ ...res }));
 };
-export const autoLogin = (token?: string) => async (dispatch: any) => {
-  if (token) {
-    return getMe(token)
-      .then(user => dispatch(globalAction.logIn({ token, user })))
-      .then(() => dispatch(getNotificationsCount(token)));
-  }
+export const autoLogin = () => async (dispatch: any) => {
+  return AsyncStorage.getItem('token')
+    .then(token => {
+      if (token) {
+        return getMe(token)
+          .then(user => dispatch(globalAction.logIn({ token, user })))
+          .then(() => dispatch(getNotificationsCount(token)))
+          .catch(() => {
+            toastShow({ ...errorObject, message: 'Ваш токен истек, войдите заного' })
+            dispatch(logout());
+          });
+      }
+      dispatch(logout());
+    });
 };
-export const logout = (res?: any) => (dispatch: any) => {
-  if (res) {
-    res.setHeader('Set-Cookie', 'token=deleted; path=/; Max-Age=-1');
-  } else {
-    // deleteCookie('token');
-  }
+export const logout = () => (dispatch: any) => {
+  AsyncStorage.removeItem('token')
+    .catch(() => toastShow(errorObject));
   dispatch(globalAction.logOut());
 };
 
-export const followToCategory = (id: number) => (dispatch: any) => {
-  return followToCategoryService(id)
-    .then(() => dispatch(autoLogin('token')));
+export const followToCategory = (id: number, token: string) => (dispatch: any) => {
+  return followToCategoryService(id, token)
+    .then(() => dispatch(autoLogin()));
 };
 export const loginViaGoogle = (token: string) => (dispatch: any) => {
   return googleAuthenticate(token)
@@ -72,15 +79,11 @@ export const loginStatic = (user: any, isLogin: boolean) => (dispatch: any) => {
   return staticAuthenticate(user, isLogin)
     .then((res: any) => dispatch(login(res)));
 };
-export const setNotification = (notification: INotification) => (dispatch: any) => {
-  dispatch(globalAction.setNotification(notification));
-};
-export const getGlobalData = (lang?: string) => (dispatch: any) =>  {
+export const getGlobalData = (lang?: string) => (dispatch: any) => {
   return getFirstData(lang || 'ru')
     .then(res => {
       dispatch(categoriesSet(res.categories));
-      dispatch(commentsSet(res.comments));
       dispatch(weatherSet(res.weather));
       dispatch(currenciesSet(res.currencies));
     });
-}
+};

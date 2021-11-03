@@ -180,7 +180,6 @@ const style = StyleSheet.create({
     paddingVertical: 9,
     fontFamily: 'roboto-regular',
     fontSize: 14,
-    lineHeight: 21,
     marginBottom: 15,
   },
   submit: {

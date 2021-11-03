@@ -42,11 +42,6 @@ const navigationTitles = [
     title: 'Спецрепортажи',
     name: 'SpecialReports',
   },
-  {
-    image: require('../../../assets/images/icons/special.png'),
-    title: 'Профиль',
-    name: 'Profile',
-  },
 ];
 
 
@@ -70,7 +65,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           <TouchableOpacity
             onPress={() => navigation.closeDrawer()}
           >
-            <Image source={require('../../../assets/images/icons/close.png')} style={style.close} />
+            <Image source={require('../../../assets/images/icons/close.png')} style={{ ...headerStyles.icons,...style.close }} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('Home')}
@@ -103,7 +98,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                   key={nav.title}
                   onPress={() => navigation.navigate(nav.name)}
                 >
-                  <Image source={nav.image} style={style.navigationImage} resizeMode='cover' />
+                  <Image source={nav.image} style={{ ...headerStyles.icons, ...style.navigationImage }} resizeMode='cover' />
                   <AppText style={style.navigationTitle}>{t(nav.title)}</AppText>
                 </TouchableOpacity>
               );
@@ -111,7 +106,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           }
         </View>
         <TouchableOpacity style={style.event}>
-          <Image source={require('../../../assets/images/icons/plus.png')} style={style.close} />
+          <Image source={require('../../../assets/images/icons/plus.png')} style={{ ...headerStyles.icons,...style.close }} />
           <AppText style={style.eventTitle}>{t('Событие')}</AppText>
         </TouchableOpacity>
         <View style={style.categories}>
@@ -130,7 +125,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                     });
                   }}
                 >
-                  <Image source={{ uri: category.image }} style={style.navigationImage} resizeMode='cover' />
+                  <Image source={{ uri: category.image }} style={{ ...headerStyles.icons, ...style.navigationImage }} resizeMode='cover' />
                   <AppText style={style.navigationTitle}>{t(category.name)}</AppText>
                 </TouchableOpacity>
               );
@@ -140,7 +135,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
             style={{ ...style.more, display: hasMore ? 'flex' : 'none' }}
             onPress={getMore}
           >
-            <Image source={require('../../../assets/images/icons/chevronDown.png')} style={style.close} />
+            <Image source={require('../../../assets/images/icons/chevronDown.png')} style={{ ...headerStyles.icons,...style.close }} />
             <AppText style={{ ...style.title, color: '#000' }}>{t('Еще')}</AppText>
           </TouchableOpacity>
         </View>
@@ -166,8 +161,6 @@ const style = StyleSheet.create({
     marginBottom: 20,
   },
   close: {
-    width: 24,
-    height: 24,
     marginRight: 20,
   },
   lang: {
@@ -202,13 +195,10 @@ const style = StyleSheet.create({
     marginBottom: 1,
   },
   navigationImage: {
-    width: 24,
-    height: 24,
     borderRadius: 7,
   },
   navigationTitle: {
     fontSize: 14,
-
     marginLeft: 10,
   },
   event: {

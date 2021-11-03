@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from './src/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { DrawerNavigation } from './src/components/drawer';
-import Toast from 'react-native-toast-message'
+import Toast from 'react-native-toast-message';
 import * as Font from 'expo-font';
 import AppLoadingPlaceholder from 'expo/build/launch/AppLoadingPlaceholder';
 import './i18n';
@@ -21,7 +21,6 @@ async function loadApplication() {
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-
   if (!isReady) {
     return (
       <AppLoadingPlaceholder
@@ -29,7 +28,7 @@ export default function App() {
         onError={err => console.log(err)}
         onFinish={() => setIsReady(true)}
       />
-    )
+    );
   }
 
   return (
@@ -37,11 +36,11 @@ export default function App() {
       <Provider store={store}>
         <View style={LayoutStyles.layoutContainer}>
           <View style={LayoutStyles.body}>
-            <DrawerNavigation/>
+            <DrawerNavigation />
           </View>
         </View>
         <Toast ref={(ref) => Toast.setRef(ref)} />
-        <Auth/>
+        <Auth />
       </Provider>
     </NavigationContainer>
   );

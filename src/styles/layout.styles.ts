@@ -10,7 +10,7 @@ export const LayoutStyles = StyleSheet.create({
     backgroundColor: '#E5E5E5',
   },
   header: {
-    paddingHorizontal: 18
+    paddingHorizontal: 18,
   },
   body: {
     flex: 1,

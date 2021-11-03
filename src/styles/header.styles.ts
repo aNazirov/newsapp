@@ -8,8 +8,8 @@ export const headerStyles = StyleSheet.create({
   input: {
     backgroundColor: '#fff',
     borderRadius: 7,
-    fontSize: 8,
-    paddingVertical: 0,
+    fontSize: 12,
+    height: 28,
     paddingLeft: 40,
     paddingRight: 12,
   },
@@ -26,7 +26,7 @@ export const headerStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop:  Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     paddingTop: 13,
     paddingBottom: 13,
     backgroundColor: '#ECF6FF',
@@ -60,19 +60,19 @@ export const headerStyles = StyleSheet.create({
   weatherCity: {
     fontFamily: 'roboto-bold',
     fontSize: 12,
-    marginRight: 13
+    marginRight: 13,
   },
   weatherTemp: {
 
     fontSize: 12,
-    marginLeft: 10
+    marginLeft: 10,
   },
-  currencyDiff:{
+  currencyDiff: {
 
     fontSize: 12,
-    marginLeft: 8
+    marginLeft: 8,
   },
-  currencyDiffIcons:{
+  currencyDiffIcons: {
     height: 8,
     width: 10,
   },
@@ -85,5 +85,5 @@ export const headerStyles = StyleSheet.create({
   currencyCcy: {
 
     fontSize: 12,
-  }
+  },
 });

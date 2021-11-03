@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {INotificationState} from "../../interfaces";
+import { INotification } from '../../interfaces';
 
 interface IState {
-  notifications: INotificationState[];
-  alertNotifications: INotificationState[];
+  notifications: INotification[];
+  alertNotifications: INotification[];
   notificationsCount: number;
   hasMore: boolean;
 }
@@ -24,18 +24,18 @@ export const { actions: notificationsAction, reducer: notificationsReducer } = c
       notifications: [],
       hasMore: false,
     }),
-    setNotifications: (state: IState, action: PayloadAction<{ notifications: INotificationState[], hasMore: boolean }>) => ({
+    setNotifications: (state: IState, action: PayloadAction<{ notifications: INotification[], hasMore: boolean }>) => ({
       ...state,
       notifications: [...state.notifications, ...action.payload.notifications],
       hasMore: action.payload.hasMore,
     }),
-    setAlertNotifications: (state: IState, action: PayloadAction<{ alertNotifications: INotificationState[] }>) => ({
+    setAlertNotifications: (state: IState, action: PayloadAction<{ alertNotifications: INotification[] }>) => ({
       ...state,
-      alertNotifications: action.payload.alertNotifications
+      alertNotifications: action.payload.alertNotifications,
     }),
     setNotificationsCount: (state: IState, action: PayloadAction<{ notificationsCount: number }>) => ({
       ...state,
-      ...action.payload
+      ...action.payload,
     }),
   },
 });

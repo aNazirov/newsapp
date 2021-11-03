@@ -19,7 +19,7 @@ interface Props {
   navigation: NavigationProp<any>;
 }
 
-export const Opinions: React.FC<Props> = ({ }) => {
+export const Opinions: React.FC<Props> = ({}) => {
   const { t } = useTranslation();
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
@@ -49,30 +49,28 @@ export const Opinions: React.FC<Props> = ({ }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <>
-      <FlatList
-        data={[1]}
-        renderItem={() => {
-          return (
-            <Fragment key={'opinions-list'}>
-              <View style={style.chapter}>
-                <Image source={require('../../../assets/images/opinions.png')} style={style.image} />
-                <AppText style={style.title}>{t('Авторское мнение')}</AppText>
-                <AppText style={style.description}>Описание категории</AppText>
-              </View>
-              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
-              <Posts />
-            </Fragment>
-          );
-        }}
-        keyExtractor={(item, index) => index.toString() + 'opinions-list'}
-        onEndReached={getMore}
-      />
-      {
-        loading &&
-        <ActivityIndicator size='large' color='#0000ff' />
-      }
-    </>
+    <FlatList
+      data={[1]}
+      renderItem={() => {
+        return (
+          <Fragment key={'opinions-list'}>
+            <View style={style.chapter}>
+              <Image source={require('../../../assets/images/opinions.png')} style={style.image} />
+              <AppText style={style.title}>{t('Авторское мнение')}</AppText>
+              <AppText style={style.description}>Описание категории</AppText>
+            </View>
+            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+            <Posts />
+            {
+              loading &&
+              <ActivityIndicator size='large' color='#0000ff' />
+            }
+          </Fragment>
+        );
+      }}
+      keyExtractor={(item, index) => index.toString() + 'opinions-list'}
+      onEndReached={getMore}
+    />
   );
 };
 const style = StyleSheet.create({

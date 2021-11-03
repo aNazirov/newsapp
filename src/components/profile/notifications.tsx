@@ -4,23 +4,55 @@ import { Image, StyleSheet, View } from 'react-native';
 import { AppText } from '../shared';
 
 export const Notifications: React.FC = () => {
-  const { user } = useAppSelector(state => state.global);
-
+  const { notifications } = useAppSelector(state => state.notifications);
   return (
-    <View style={style.container}>
-      <Image source={require('../../../assets/images/icons/notFound.png')} style={style.notFoundImage}/>
-      <AppText style={{ ...style.notFoundText, fontFamily: 'roboto-medium', marginBottom: 4 }}>Уведомлений нет</AppText>
-      <AppText style={style.notFoundText}>Начните писать и комментировать, и здесь станет не так пусто</AppText>
-    </View>
-  )
-}
+    <>
+      {
+        !!notifications.length
+          ? notifications.map(notification => {
+            return (
+              <View key={notification.id} style={{ ...style.container, flexDirection: 'row' }}>
+                {
+                  notification.foreign_user &&
+                  <Image source={{uri: notification.foreign_user.avatar}} style={{ width: 36, height: 36, borderRadius: 7, marginRight: 12 }}/>
+                }
+                <AppText
+                  ellipsizeMode='tail'
+                  numberOfLines={2}
+                  style={{maxWidth: '90%'}}
+                >
+                  <AppText style={{fontFamily: 'roboto-bold'}}>{notification.foreign_user.name} </AppText>
+                  {notification.notification}
+                  <AppText style={{fontFamily: 'roboto-bold'}}>{notification.post.title} </AppText>
+                  <AppText style={{color: 'rgba(0, 0, 0, .7)', fontSize: 12}}>{notification.created_at}</AppText>
+                </AppText>
+              </View>
+            )
+          })
+          : (
+            <View style={{ ...style.container, alignItems: 'center' }}>
+              <Image source={require('../../../assets/images/icons/notFound.png')} style={style.notFoundImage} />
+              <AppText style={{ ...style.notFoundText, fontFamily: 'roboto-medium', marginBottom: 4 }}>
+                Уведомлений нет
+              </AppText>
+              <AppText style={style.notFoundText}>
+                Начните писать и комментировать, и здесь станет не так пусто
+              </AppText>
+            </View>
+          )
+      }
+
+    </>
+
+  );
+};
 
 const style = StyleSheet.create({
   container: {
     padding: 15,
     backgroundColor: '#fff',
     borderRadius: 7,
-    alignItems: 'center'
+    height: 'auto',
   },
   notFoundImage: {
     width: 52,
@@ -28,7 +60,6 @@ const style = StyleSheet.create({
   },
   notFoundText: {
     fontSize: 16,
-
     textAlign: 'center',
-  }
-})
+  },
+});
