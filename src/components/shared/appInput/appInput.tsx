@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 import { Control, useController } from 'react-hook-form';
 import { AppText } from '../appText';
 import { red } from '../../../styles/layout.styles';
@@ -8,17 +8,17 @@ interface IError {
   message: string;
 }
 
-interface Props {
+interface Props extends TextInputProps{
   name: string;
   style: any;
   error: IError;
   control: Control;
   placeholder?: string;
-  defaultValue?: string;
+  defaultValue?: any;
   autoCapitalize?: 'none' | 'characters' | 'words' | 'sentences';
 }
 
-export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', style, error, placeholder = '', autoCapitalize = 'none' }) => {
+export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', style, error, placeholder = '', autoCapitalize = 'none', children, ...props }) => {
   const { field } = useController({
     control,
     defaultValue,
@@ -33,6 +33,7 @@ export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', st
         onChangeText={field.onChange}
         value={field.value}
         autoCapitalize={autoCapitalize}
+        {...props}
       />
       {
         error?.message &&

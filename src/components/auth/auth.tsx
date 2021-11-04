@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { loginFormOpenSet, loginStatic } from '../../store/global/global.thunks';
+import { Facebook } from './facebook';
+import { Google } from './google';
 
 interface ITab {
   id: number;
@@ -124,7 +126,7 @@ export const Auth: React.FC = () => {
                   key={field.name}
                   control={control}
                   name={field.name}
-                  placeholder={field.placeholder}
+                  placeholder={t(field.placeholder)}
                   style={style.textInput}
                   error={errors[field.name]}
                 />
@@ -138,6 +140,10 @@ export const Auth: React.FC = () => {
           </TouchableOpacity>
           <AppText style={{ ...style.text, color: blue }}>{t('Забыли пароль')}?</AppText>
           <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)' }}>{t('Войти через соц-сети')}</AppText>
+          <View style={{ flexDirection: 'row' }}>
+            <Facebook/>
+            <Google/>
+          </View>
           <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'justify' }}>
             {t('Нажимая “Войти” вы соглашаетесь с политикой конфиденциальности')}
           </AppText>
@@ -199,4 +205,4 @@ const style = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 15,
   },
-})
+});

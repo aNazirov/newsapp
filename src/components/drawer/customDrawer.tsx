@@ -14,7 +14,7 @@ import { headerStyles } from '../../styles/header.styles';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { langSet } from '../../store/global/global.thunks';
+import { eventFormOpenSet, langSet } from '../../store/global/global.thunks';
 import { getActiveRouteState } from '../../_data/helpers';
 import { blue } from '../../styles/layout.styles';
 import { getMainCategories } from '../../store/categories/categories.thunks';
@@ -105,7 +105,10 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
             })
           }
         </View>
-        <TouchableOpacity style={style.event}>
+        <TouchableOpacity
+          style={style.event}
+          onPress={() => dispatch(eventFormOpenSet(true))}
+        >
           <Image source={require('../../../assets/images/icons/plus.png')} style={{ ...headerStyles.icons,...style.close }} />
           <AppText style={style.eventTitle}>{t('Событие')}</AppText>
         </TouchableOpacity>

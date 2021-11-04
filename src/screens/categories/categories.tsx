@@ -9,6 +9,7 @@ import { getCategory } from '../../store/categories/categories.thunks';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { AppText } from '../../components/shared';
+import { followToCategory, loginFormOpenSet } from '../../store/global/global.thunks';
 
 interface IFilter {
   fresh?: boolean;
@@ -28,7 +29,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const { lang } = useAppSelector(state => state.global);
+  const { lang, user, token } = useAppSelector(state => state.global);
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getCategory({ page: 1, ...filter }, route.params?.slug, lang))
@@ -56,6 +57,13 @@ export const Categories: React.FC<Props> = ({ route }) => {
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
   };
+  const followHandle = () => {
+    if (!user || !token) return dispatch(loginFormOpenSet(true))
+    const message = user?.follows?.includes(category!.id) ? 'Отписка прошла успешно' : 'Подписка прошла успешно'
+    dispatch(followToCategory(category!.id, token))
+      .then(() => toastShow({ type: 'success', title: 'Успешно', message }))
+      .catch(() => toastShow(errorObject))
+  };
   return (
     <FlatList
       data={[1]}
@@ -69,9 +77,15 @@ export const Categories: React.FC<Props> = ({ route }) => {
             </View>
             <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
             <Posts />
-            <TouchableOpacity style={style.follow}>
-              <Image source={follow} resizeMode='contain' />
-            </TouchableOpacity>
+            {
+              category &&
+              <TouchableOpacity
+                style={style.follow}
+                onPress={() => followHandle()}
+              >
+                <Image source={user?.follows?.includes(category.id) ? followCheck : follow} resizeMode='contain' />
+              </TouchableOpacity>
+            }
             {
               loading &&
               <ActivityIndicator size='large' color='#0000ff' />

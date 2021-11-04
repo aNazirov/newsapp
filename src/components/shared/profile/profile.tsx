@@ -127,6 +127,14 @@ export const Profile = () => {
                   <AppText style={{ ...style.profileTab }}>{user?.name}</AppText>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  onPress={() => {
+                    setProfile(false);
+                    navigation.navigate('Profile');
+                  }}
+                >
+                  <AppText style={{ ...style.profileTab }}>{t('Настройки')}</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity
                   onPress={() => dispatch(logout())}
                 >
                   <AppText style={{ ...style.profileTab }}>{t('Выйти')}</AppText>

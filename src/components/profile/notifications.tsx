@@ -9,9 +9,9 @@ export const Notifications: React.FC = () => {
     <>
       {
         !!notifications.length
-          ? notifications.map(notification => {
+          ? notifications.map((notification, i) => {
             return (
-              <View key={notification.id} style={{ ...style.container, flexDirection: 'row' }}>
+              <View key={notification.id} style={{ ...style.container, flexDirection: 'row', borderBottomWidth: i === notifications.length - 1 ? 0 : 1 }}>
                 {
                   notification.foreign_user &&
                   <Image source={{uri: notification.foreign_user.avatar}} style={{ width: 36, height: 36, borderRadius: 7, marginRight: 12 }}/>
@@ -53,6 +53,7 @@ const style = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 7,
     height: 'auto',
+    borderBottomColor: 'rgba(0, 0, 0, .1)'
   },
   notFoundImage: {
     width: 52,

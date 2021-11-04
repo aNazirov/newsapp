@@ -7,6 +7,7 @@ interface IState {
   weather: IWeather[];
   user: IUser | null;
   loginFormOpen: boolean;
+  eventFormOpen: boolean;
   lang: 'ru' | 'uz';
 }
 
@@ -16,6 +17,7 @@ const initialState: IState = {
   weather: [],
   user: null,
   loginFormOpen: false,
+  eventFormOpen: false,
   lang: 'ru',
 };
 
@@ -39,6 +41,10 @@ export const { actions: globalAction, reducer: globalReducer } = createSlice({
       ...action.payload,
     }),
     setLoginFormOpen: (state: IState, action: PayloadAction<{ loginFormOpen: boolean }>) => ({
+      ...state,
+      ...action.payload,
+    }),
+    setEventFormOpen: (state: IState, action: PayloadAction<{ eventFormOpen: boolean }>) => ({
       ...state,
       ...action.payload,
     }),

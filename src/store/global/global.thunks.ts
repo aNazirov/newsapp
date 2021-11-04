@@ -18,6 +18,9 @@ import { errorObject } from '../../_data/helpers';
 export const loginFormOpenSet = (open: boolean) => (dispatch: any) => {
   dispatch(globalAction.setLoginFormOpen({ loginFormOpen: open }));
 };
+export const eventFormOpenSet = (open: boolean) => (dispatch: any) => {
+  dispatch(globalAction.setEventFormOpen({ eventFormOpen: open }));
+};
 export const userSet = (user: IUser) => (dispatch: any) => {
   dispatch(globalAction.setUser({ user }));
 };
