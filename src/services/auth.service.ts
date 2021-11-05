@@ -3,7 +3,7 @@ import {api} from "../api";
 export const googleAuthenticate = (token: string) => {
   return api.post('/auth/google', {}, {
     headers: {
-      'ID-TOKEN': token,
+      'ACCESS-TOKEN': token,
     },
   })
     .then(res => res.data.result);

@@ -16,9 +16,14 @@
     "@reduxjs/toolkit": "^1.6.2",
     "axios": "^0.24.0",
     "expo": "~43.0.0",
+    "expo-application": "^4.0.0",
+    "expo-auth-session": "~3.4.2",
+    "expo-facebook": "~12.0.3",
     "expo-font": "^10.0.3",
     "expo-linear-gradient": "~10.0.3",
+    "expo-random": "~12.0.1",
     "expo-status-bar": "~1.1.0",
+    "expo-web-browser": "~10.0.3",
     "i18next": "^21.3.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -29,11 +34,11 @@
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.8.0",
-    "react-native-simple-auth": "^2.4.0",
     "react-native-toast-message": "^1.6.0",
     "react-native-web": "0.17.1",
     "react-native-web-swiper": "^2.2.1",
-    "react-redux": "^7.2.6"
+    "react-redux": "^7.2.6",
+    "expo-google-app-auth": "~9.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

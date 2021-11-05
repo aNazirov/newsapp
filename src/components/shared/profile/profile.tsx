@@ -99,7 +99,7 @@ export const Profile = () => {
             setProfile(true);
           }}
         >
-          <Image source={{ uri: user?.avatar }} style={{ ...headerStyles.icons }} />
+          <Image source={{ uri: user?.avatar }} style={{ ...headerStyles.icons, borderRadius: 7 }} />
         </TouchableOpacity>
         <Modal
           visible={profile}
@@ -129,7 +129,7 @@ export const Profile = () => {
                 <TouchableOpacity
                   onPress={() => {
                     setProfile(false);
-                    navigation.navigate('Profile');
+                    navigation.navigate('Settings');
                   }}
                 >
                   <AppText style={{ ...style.profileTab }}>{t('Настройки')}</AppText>
