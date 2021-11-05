@@ -70,7 +70,7 @@ export const Profile = () => {
                 {
                   loading
                     ? <View style={{ height: 100, justifyContent: 'center' }}><ActivityIndicator size='small' color={blue} /></View>
-                    : <Notifications />
+                    : <Notifications notifications={alertNotifications}/>
                 }
                 <TouchableOpacity
                   onPress={() => {

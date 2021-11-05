@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const ExtraPost: React.FC<Props> = ({ post }) => {
-  const { navigate } = useNavigation<any>();
+  const navigation = useNavigation<any>();
   return (
     <View style={style.container}>
       <View style={style.content}>
@@ -21,20 +21,26 @@ export const ExtraPost: React.FC<Props> = ({ post }) => {
             <View style={style.category}><CategoryTitle category={post.category} /></View>
           }
           {
-            post.user  &&
+            post.user &&
             <TouchableOpacity
               onPress={() => {
-                navigate('Authors', {
+                navigation.navigate('Authors', {
                   id: post.user.id,
                 });
               }}
             >
-            <AppText style={style.author}>{post.user.name}</AppText>
+              <AppText style={style.author}>{post.user.name}</AppText>
             </TouchableOpacity>
           }
           <AppText style={style.date}>{post.created_at}</AppText>
         </View>
-        <AppText style={style.title} ellipsizeMode='tail' numberOfLines={2}>{post.title}</AppText>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Posts', { slug: post.slug });
+          }}
+        >
+          <AppText style={style.title} ellipsizeMode='tail' numberOfLines={2}>{post.title}</AppText>
+        </TouchableOpacity>
         <AppText style={style.description} ellipsizeMode='tail' numberOfLines={4}>{post.meta_description}</AppText>
         <Indicators
           comments={post.comments_count}
@@ -45,7 +51,13 @@ export const ExtraPost: React.FC<Props> = ({ post }) => {
           fontSize={13}
         />
       </View>
-      <Image source={{ uri: post.image }} style={style.image} />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Posts', { slug: post.slug });
+        }}
+      >
+        <Image source={{ uri: post.image }} style={style.image} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -58,7 +70,7 @@ const style = StyleSheet.create({
   head: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   content: {
     flex: 1,

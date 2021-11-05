@@ -13,6 +13,7 @@ import { Tags } from '../../screens/tags';
 import { Search } from '../../screens/search';
 import { Profile, Settings } from '../../screens/profile';
 import { useAppSelector } from '../../store/hooks';
+import { Post } from '../../screens/post';
 
 const Drawer = createDrawerNavigator();
 
@@ -67,6 +68,13 @@ export const DrawerNavigation: React.FC = () => {
       <Drawer.Screen
         name='Categories'
         component={Categories}
+        options={{
+          header: (props) => <Header style={LayoutStyles.header} {...props} />,
+        }}
+      />
+      <Drawer.Screen
+        name='Posts'
+        component={Post}
         options={{
           header: (props) => <Header style={LayoutStyles.header} {...props} />,
         }}

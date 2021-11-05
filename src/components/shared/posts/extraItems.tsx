@@ -1,7 +1,8 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AppText } from '../appText';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   title: string,
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export const ExtraItems: React.FC<Props> = ({ items, title }) => {
+  const navigation = useNavigation<any>()
   const { t } = useTranslation()
   return (
     <View style={style.container}>
@@ -18,11 +20,23 @@ export const ExtraItems: React.FC<Props> = ({ items, title }) => {
           return (
             <View style={style.itemContainer} key={item.id + item.slug}>
               <View style={style.content}>
-                <AppText style={style.itemTitle} ellipsizeMode='tail' numberOfLines={2}>{item.title || item.name}</AppText>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate(title === 'categories' ? 'Categories' : 'Authors', title === 'categories' ? { slug: item.slug } : { id: item.id });
+                  }}
+                >
+                  <AppText style={style.itemTitle} ellipsizeMode='tail' numberOfLines={2}>{item.title || item.name}</AppText>
+                </TouchableOpacity>
                 <AppText style={style.description} ellipsizeMode='tail' numberOfLines={4}>{item.meta_description || item.about_me}</AppText>
                 <AppText style={style.date} ellipsizeMode='tail' numberOfLines={4}>{item.created_at}</AppText>
               </View>
-              <Image source={{ uri: item.image || item.avatar }} style={style.image} />
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate(title === 'categories' ? 'Categories' : 'Authors', title === 'categories' ? { slug: item.slug } : { id: item.id });
+                }}
+              >
+                <Image source={{ uri: item.image || item.avatar }} style={style.image} />
+              </TouchableOpacity>
             </View>
           )
         })

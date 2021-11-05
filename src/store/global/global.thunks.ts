@@ -70,8 +70,8 @@ export const loginViaGoogle = (token: string) => (dispatch: any) => {
   return googleAuthenticate(token)
     .then((res: any) => dispatch(login(res)));
 };
-export const loginViaFacebook = (user: any) => (dispatch: any) => {
-  return facebookAuthenticate(user)
+export const loginViaFacebook = (token: string) => (dispatch: any) => {
+  return facebookAuthenticate(token)
     .then((res: any) => dispatch(login(res)));
 };
 export const loginViaTelegram = (user: any) => (dispatch: any) => {

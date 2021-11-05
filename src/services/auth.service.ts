@@ -8,15 +8,10 @@ export const googleAuthenticate = (token: string) => {
   })
     .then(res => res.data.result);
 };
-export const facebookAuthenticate = (user: any) => {
-  return api.post('/auth/facebook', {
-    email: user._profile.email,
-    name: user._profile.name,
-    profilePicURL: user._profile.profilePicURL,
-  }, {
+export const facebookAuthenticate = (token: string) => {
+  return api.post('/auth/facebook', {}, {
     headers: {
-      'ID-TOKEN': user._profile.id,
-      'ACCESS-TOKEN': user._token.accessToken,
+      'ACCESS-TOKEN': token,
     },
   })
     .then(res => res.data.result);

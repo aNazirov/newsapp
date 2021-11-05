@@ -16,7 +16,10 @@ export const getAlertNotificationsService = (token: string) => {
       'Authorization': `Bearer ${token}`,
     },
   })
-    .then(res => res.data.result.notifications.data)
+    .then(res => {
+      console.log(res.data.result.notifications.data);
+      return res.data.result.notifications.data;
+    })
 };
 export const getNotificationsCountService = (token: string) => {
   return api.get(`/user/alert/notifications/count`, {

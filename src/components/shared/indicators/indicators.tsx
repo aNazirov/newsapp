@@ -3,15 +3,15 @@ import { Image, StyleSheet, View } from 'react-native';
 import { AppText } from '../appText';
 
 interface Props {
-  comments: number,
-  views: number,
+  comments?: number,
+  views?: number,
   color: string,
-  light: boolean
+  light?: boolean
   size: number,
   fontSize: number
 }
 
-export const Indicators: React.FC<Props> = ({ color, comments = 0, light,views = 0, size, fontSize }) => {
+export const Indicators: React.FC<Props> = ({ color, comments = 0, light = false, views = 0, size, fontSize }) => {
   const sizing = {
     width: size,
     height: size

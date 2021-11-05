@@ -12,17 +12,23 @@ interface Props {
 }
 
 export const BasePost: React.FC<Props> = ({ post }) => {
-  const { navigate } = useNavigation<any>();
+  const navigation = useNavigation<any>();
   return (
     <View style={style.container}>
-      <Image source={{uri: post.image}} style={style.image}/>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Posts', { slug: post.slug });
+        }}
+      >
+        <Image source={{ uri: post.image }} style={style.image} />
+      </TouchableOpacity>
       <View style={style.head}>
-        <View style={style.category}><CategoryTitle category={post.category}/></View>
+        <View style={style.category}><CategoryTitle category={post.category} /></View>
         {
           post.user &&
           <TouchableOpacity
             onPress={() => {
-              navigate('Authors', {
+              navigation.navigate('Authors', {
                 id: post.user.id,
               });
             }}
@@ -32,7 +38,13 @@ export const BasePost: React.FC<Props> = ({ post }) => {
         }
         <AppText style={style.date}>{post.created_at}</AppText>
       </View>
-      <AppText style={style.title} ellipsizeMode='tail' numberOfLines={2}>{post.title}</AppText>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Posts', { slug: post.slug });
+        }}
+      >
+        <AppText style={style.title} ellipsizeMode='tail' numberOfLines={2}>{post.title}</AppText>
+      </TouchableOpacity>
       <AppText style={style.description} ellipsizeMode='tail' numberOfLines={4}>{post.meta_description}</AppText>
       <View style={style.indicators}>
         <Indicators
@@ -43,7 +55,7 @@ export const BasePost: React.FC<Props> = ({ post }) => {
           size={24}
           fontSize={13}
         />
-        <RatingLink rating={post.rating}/>
+        <RatingLink rating={post.rating} slug={post.slug}/>
       </View>
     </View>
   );
@@ -54,7 +66,7 @@ const style = StyleSheet.create({
     flex: 1,
     padding: 15,
     backgroundColor: '#fff',
-    marginBottom: 25
+    marginBottom: 25,
   },
   image: {
     width: '100%',
@@ -65,7 +77,7 @@ const style = StyleSheet.create({
   head: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   category: {
     marginRight: 10,
@@ -91,7 +103,7 @@ const style = StyleSheet.create({
     fontFamily: 'roboto-bold',
     fontSize: 16,
     lineHeight: 23,
-    marginTop: 10
+    marginTop: 10,
   },
   description: {
     color: '#000',
@@ -99,5 +111,5 @@ const style = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     marginVertical: 10,
-  }
-})
+  },
+});

@@ -6,12 +6,13 @@ import { errorObject } from '../../_data/helpers';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { toastShow } from '../../services/notifications.service';
 import { getMorePosts } from '../../store/posts/posts.thunks';
-import { commentsNull, getUserComments } from '../../store/comments/comments.thunks';
+import { getUserComments } from '../../store/comments/comments.thunks';
 import { Comments, Notifications } from '../../components/profile';
 import { AppText, Posts } from '../../components/shared';
 import { headerStyles } from '../../styles/header.styles';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
-import { getNotifications, notificationsNull } from '../../store/notifications/notifications.thunks';
+import { getNotifications } from '../../store/notifications/notifications.thunks';
+import { clearStore } from '../../helpers/helpers';
 
 interface ITab {
   id: number;
@@ -39,7 +40,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
   const { user, lang, token } = useAppSelector(state => state.global);
   const { posts, pageCount } = useAppSelector(state => state.posts);
   const { hasMore: hasMoreComments } = useAppSelector(state => state.comments);
-  const { hasMore: hasMoreNotification } = useAppSelector(state => state.notifications);
+  const { notifications, hasMore: hasMoreNotification } = useAppSelector(state => state.notifications);
   const [loading, setLoading] = useState(false);
   const [currentType, setCurrentType] = useState(route.params?.notification ? 'notifications' : user?.role.name === 'Автор' ? 'articles' : 'comments');
   const [tabs, setTabs] = useState<ITab[]>(Tabs);
@@ -86,8 +87,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    dispatch(commentsNull());
-    dispatch(notificationsNull());
+    clearStore(dispatch)
     dispatch(getUserComments({ page: 1 }, token!))
       .catch(() => toastShow(errorObject));
     dispatch(getNotifications({ page: 1 }, token!))
@@ -105,7 +105,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
             <View style={style.container}>
               <Image source={{ uri: user?.avatar }} style={style.avatar} />
               <AppText style={style.name}>{user?.name}</AppText>
-              <AppText style={style.aboutMe}>{user?.about_me}</AppText>
+              <AppText style={{ ...style.aboutMe, marginBottom: user?.about_me ? 10 : 0}}>{user?.about_me}</AppText>
               <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
                 <AppText style={{ ...style.edit, color: blue }}>{t('Изменить имя или описание')}</AppText>
               </TouchableOpacity>
@@ -166,7 +166,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
             }
             {
               currentType === 'notifications' && (
-                <Notifications />
+                <Notifications notifications={notifications}/>
               )
             }
             {
@@ -213,8 +213,6 @@ const style = StyleSheet.create({
   },
   aboutMe: {
     fontSize: 14,
-
-    marginBottom: 10,
   },
   edit: {
     fontSize: 16,

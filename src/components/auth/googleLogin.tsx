@@ -1,9 +1,12 @@
 import React from 'react';
 import { AppText } from '../shared';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
 import { useAppDispatch } from '../../store/hooks';
 import { loginFormOpenSet, loginViaGoogle } from '../../store/global/global.thunks';
+import { headerStyles } from '../../styles/header.styles';
+import { toastShow } from '../../services/notifications.service';
+import { errorObject } from '../../_data/helpers';
 
 export const GoogleLogin: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -19,17 +22,38 @@ export const GoogleLogin: React.FC = () => {
       const { authentication } = response;
       dispatch(loginViaGoogle(authentication!.accessToken))
         .then(() => dispatch(loginFormOpenSet(false)))
+        .catch(() => toastShow(errorObject))
     }
     if (response?.type === 'error') {
     }
   }, [response]);
   return (
     <TouchableOpacity
+      style={style.button}
       disabled={!request}
       onPress={() => promptAsync()}
     >
-      <Image source={require('../../../assets/images/icons/google.png')}/>
-      <AppText>Google</AppText>
+      <Image
+        source={require('../../../assets/images/icons/google.png')}
+        style={{ ...headerStyles.icons, marginRight: 10 }}
+      />
+      <AppText style={style.buttonText}>Google</AppText>
     </TouchableOpacity>
   )
 }
+
+const style = StyleSheet.create({
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    paddingVertical: 12,
+    backgroundColor: '#DD4B39',
+    borderRadius: 7,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14
+  },
+});

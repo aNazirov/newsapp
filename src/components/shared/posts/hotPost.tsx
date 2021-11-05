@@ -1,20 +1,30 @@
 import React from 'react';
 import { IPost } from '../../../interfaces';
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Indicators } from '../indicators';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppText } from '../appText';
+import { CategoryTitle } from '../utils';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   post: IPost;
 }
 
 export const HotPost: React.FC<Props> = ({ post }) => {
+  const navigation = useNavigation<any>()
   return (
     <View style={style.container}>
       <ImageBackground source={{ uri: post.image }} resizeMode='cover' style={style.background}>
         <LinearGradient colors={['rgba(80, 80, 80, 0)', 'rgba(37, 37, 37, 0.5)', 'rgba(0, 0, 0, 0.5)']} style={style.gradient}>
-          <AppText style={style.title}>{post.title}</AppText>
+          <CategoryTitle category={post.category} color='#fff'/>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Posts', { slug: post.slug });
+            }}
+          >
+            <AppText style={style.title}>{post.title}</AppText>
+          </TouchableOpacity>
           <View style={style.indicators}>
             <AppText style={{ marginRight: 13, color: 'rgba(250, 250, 250, .7)' }}>{post.created_at}</AppText>
             <Indicators
@@ -43,7 +53,7 @@ const style = StyleSheet.create({
     fontFamily: 'roboto-bold',
     fontSize: 16,
     lineHeight: 23,
-    marginBottom: 15,
+    marginVertical: 15,
   },
   indicators: {
     display: 'flex',

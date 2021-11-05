@@ -7,9 +7,10 @@ import { headerStyles } from '../../../styles/header.styles';
 
 interface Props {
   category: ICategory;
+  color?: string
 }
 
-export const CategoryTitle: React.FC<Props> = ({ category }) => {
+export const CategoryTitle: React.FC<Props> = ({ category , color = '#000'}) => {
   const { navigate } = useNavigation<any>();
   return (
     <TouchableOpacity
@@ -21,7 +22,7 @@ export const CategoryTitle: React.FC<Props> = ({ category }) => {
       }}
     >
       <Image source={{ uri: category.image }} style={{ ...headerStyles.icons,...style.image }} resizeMode='cover' />
-      <AppText style={style.title}>{category.name}</AppText>
+      <AppText style={{ ...style.title, color }}>{category.name}</AppText>
     </TouchableOpacity>
   );
 };
@@ -36,7 +37,6 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 13,
-
     marginLeft: 10,
   },
 });

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { loginFormOpenSet, loginStatic } from '../../store/global/global.thunks';
-import { FacebookLogin } from './facebookLoginAnother';
+import { FacebookLogin } from './facebookLogin';
 import { GoogleLogin } from './googleLogin';
 
 interface ITab {
@@ -140,12 +140,14 @@ export const Auth: React.FC = () => {
           </TouchableOpacity>
           <AppText style={{ ...style.text, color: blue }}>{t('Забыли пароль')}?</AppText>
           <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)' }}>{t('Войти через соц-сети')}</AppText>
-          <View style={{ flexDirection: 'row' }}>
-            <FacebookLogin/>
-            <GoogleLogin/>
+          <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+            <FacebookLogin />
+            <View style={{ width: 15 }} />
+            <GoogleLogin />
           </View>
           <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'justify' }}>
-            {t('Нажимая “Войти” вы соглашаетесь с политикой конфиденциальности')}
+            {t('Нажимая “Войти” вы соглашаетесь с ')}
+            <AppText style={{ textDecorationLine: 'underline' }}>политикой конфиденциальности</AppText>
           </AppText>
         </View>
       </View>
