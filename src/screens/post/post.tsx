@@ -28,6 +28,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
   }, [route.params?.slug]);
   const { post, pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
+    if (!pageCount) return null;
     setLoading(true);
     dispatch(getMorePosts('posts', route.params?.slug, { page: page.current }, lang))
       .then(() => page.current++)
@@ -105,7 +106,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
       <Posts />
       <View style={{ alignItems: 'center' }}>
         {
-          (page.current <= pageCount) && (
+          !!pageCount && (
             loading
               ? <ActivityIndicator size='large' color='#0000ff' />
               : (
