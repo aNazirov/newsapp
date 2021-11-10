@@ -16,9 +16,9 @@ export const ExtraItems: React.FC<Props> = ({ items, title }) => {
     <View style={style.container}>
       <AppText style={style.title}>{t(title)}</AppText>
       {
-        items.map((item) => {
+        items.map((item, i) => {
           return (
-            <View style={style.itemContainer} key={item.id + item.slug}>
+            <View style={style.itemContainer} key={item.id || item.slug + i}>
               <View style={style.content}>
                 <TouchableOpacity
                   onPress={() => {

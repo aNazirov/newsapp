@@ -23,7 +23,7 @@ export const Posts: React.FC<Props> = ({}) => {
           if (post.type === 'categories' || post.type === 'authors') {
             return [
               ...total,
-              ...post.data.map((item) => <ExtraItems items={post.data} title={post.type} key={item.slug + item?.id + i} />)
+              ...post.data.map((item) => <ExtraItems items={post.data} title={post.type} key={item.slug || item?.id + i} />)
             ];
           }
           if (post.data.length) return [

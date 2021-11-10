@@ -9,6 +9,7 @@ import { NavigationProp } from '@react-navigation/native';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { AppText } from '../../components/shared';
+import { Loader } from '../../components/shared/loader';
 
 interface IFilter {
   fresh?: boolean;
@@ -24,15 +25,17 @@ export const Opinions: React.FC<Props> = ({}) => {
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
   const dispatch = useAppDispatch();
+  const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const { lang } = useAppSelector(state => state.global);
   useEffect(() => {
     clearStore(dispatch);
-    dispatch(getAuthorsPosts({ page: 1, ...filter }, lang));
+    dispatch(getAuthorsPosts({ page: 1, ...filter }, lang))
+      .finally(() => setFirstLoading(false));
   }, [lang]);
   const { pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
-    if (!pageCount) return;
+    if (!pageCount) return null;
     setLoading(true);
     return dispatch(getAuthorsPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
@@ -49,28 +52,30 @@ export const Opinions: React.FC<Props> = ({}) => {
       .finally(() => setLoading(false));
   };
   return (
-    <FlatList
-      data={[1]}
-      renderItem={() => {
-        return (
-          <Fragment key={'opinions-list'}>
-            <View style={style.chapter}>
-              <Image source={require('../../../assets/images/opinions.png')} style={style.image} />
-              <AppText style={style.title}>{t('Авторское мнение')}</AppText>
-              <AppText style={style.description}>Описание категории</AppText>
-            </View>
-            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
-            <Posts />
-            {
-              loading &&
-              <ActivityIndicator size='large' color='#0000ff' />
-            }
-          </Fragment>
-        );
-      }}
-      keyExtractor={(item, index) => index.toString() + 'opinions-list'}
-      onEndReached={getMore}
-    />
+    <Loader loading={firstLoading}>
+      <FlatList
+        data={[1]}
+        renderItem={() => {
+          return (
+            <Fragment key={'opinions-list'}>
+              <View style={style.chapter}>
+                <Image source={require('../../../assets/images/opinions.png')} style={style.image} />
+                <AppText style={style.title}>{t('Авторское мнение')}</AppText>
+                <AppText style={style.description}>Описание категории</AppText>
+              </View>
+              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+              <Posts />
+              {
+                loading &&
+                <ActivityIndicator size='large' color='#0000ff' />
+              }
+            </Fragment>
+          );
+        }}
+        keyExtractor={(item, index) => index.toString() + 'opinions-list'}
+        onEndReached={getMore}
+      />
+    </Loader>
   );
 };
 const style = StyleSheet.create({

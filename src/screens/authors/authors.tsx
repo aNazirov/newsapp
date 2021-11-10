@@ -9,6 +9,7 @@ import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { getAuthor } from '../../store/authors/authors.thunks';
 import { AppText } from '../../components/shared';
+import { Loader } from '../../components/shared/loader';
 
 interface IFilter {
   fresh?: boolean;
@@ -24,18 +25,21 @@ export const Authors: React.FC<Props> = ({ route }) => {
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ popular: true });
   const dispatch = useAppDispatch();
+  const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const { lang } = useAppSelector(state => state.global);
   useEffect(() => {
+    setFirstLoading(true);
     clearStore(dispatch);
-    dispatch(getAuthor({ page: 1, ...filter }, route.params?.id, lang));
-    return () => {
-    };
+    dispatch(getAuthor({ page: 1, ...filter }, route.params?.id, lang))
+      .then(() => page.current = 2)
+      .catch(() => toastShow(errorObject))
+      .finally(() => setFirstLoading(false));
   }, [lang, route.params?.id]);
   const { pageCount } = useAppSelector(state => state.posts);
   const { author } = useAppSelector(state => state.authors);
   const getMore = () => {
-    if (!pageCount) return;
+    if (!pageCount) return null;
     setLoading(true);
     return dispatch(getMorePosts('authors', route.params?.id, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
@@ -52,29 +56,31 @@ export const Authors: React.FC<Props> = ({ route }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <FlatList
-      data={[1]}
-      renderItem={() => {
-        return (
-          <Fragment key={`${route.params?.slug}-list`}>
-            <View style={style.chapter}>
-              <Image source={{ uri: author?.avatar }} style={style.image} />
-              <AppText style={style.title}>{author?.name}</AppText>
-              <AppText style={style.date}>{author?.created_at}</AppText>
-              <AppText style={style.description}>{author?.about_me}</AppText>
-            </View>
-            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='popular' />
-            <Posts />
-            {
-              loading &&
-              <ActivityIndicator size='large' color='#0000ff' />
-            }
-          </Fragment>
-        );
-      }}
-      keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
-      onEndReached={getMore}
-    />
+    <Loader loading={firstLoading}>
+      <FlatList
+        data={[1]}
+        renderItem={() => {
+          return (
+            <Fragment key={`${route.params?.slug}-list`}>
+              <View style={style.chapter}>
+                <Image source={{ uri: author?.avatar }} style={style.image} />
+                <AppText style={style.title}>{author?.name}</AppText>
+                <AppText style={style.date}>{author?.created_at}</AppText>
+                <AppText style={style.description}>{author?.about_me}</AppText>
+              </View>
+              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='popular' />
+              <Posts />
+              {
+                loading &&
+                <ActivityIndicator size='large' color='#0000ff' />
+              }
+            </Fragment>
+          );
+        }}
+        keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
+        onEndReached={getMore}
+      />
+    </Loader>
   );
 };
 const style = StyleSheet.create({
@@ -97,7 +103,6 @@ const style = StyleSheet.create({
   },
   date: {
     fontSize: 13,
-
     lineHeight: 15,
     color: 'rgba(0, 0, 0, .7)',
     marginBottom: 10,

@@ -10,6 +10,7 @@ import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { AppText } from '../../components/shared';
 import { followToCategory, loginFormOpenSet } from '../../store/global/global.thunks';
+import { Loader } from '../../components/shared/loader';
 
 interface IFilter {
   fresh?: boolean;
@@ -28,20 +29,23 @@ export const Categories: React.FC<Props> = ({ route }) => {
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
   const dispatch = useAppDispatch();
+  const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const { lang, user, token } = useAppSelector(state => state.global);
   useEffect(() => {
+    setFirstLoading(true)
     clearStore(dispatch);
     dispatch(getCategory({ page: 1, ...filter }, route.params?.slug, lang))
       .then(() => page.current = 2)
-      .catch(() => toastShow(errorObject));
+      .catch(() => toastShow(errorObject))
+      .finally(() => setFirstLoading(false));
     return () => {
     };
   }, [lang, route.params?.slug]);
   const { pageCount } = useAppSelector(state => state.posts);
   const { category } = useAppSelector(state => state.categories);
   const getMore = () => {
-    if (!pageCount) return;
+    if (!pageCount) return null;
     setLoading(true);
     return dispatch(getMorePosts('categories', route.params?.slug, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
@@ -58,44 +62,46 @@ export const Categories: React.FC<Props> = ({ route }) => {
       .finally(() => setLoading(false));
   };
   const followHandle = () => {
-    if (!user || !token) return dispatch(loginFormOpenSet(true))
-    const message = user?.follows?.includes(category!.id) ? 'Отписка прошла успешно' : 'Подписка прошла успешно'
+    if (!user || !token) return dispatch(loginFormOpenSet(true));
+    const message = user?.follows?.includes(category!.id) ? 'Отписка прошла успешно' : 'Подписка прошла успешно';
     dispatch(followToCategory(category!.id, token))
       .then(() => toastShow({ type: 'success', title: 'Успешно', message }))
-      .catch(() => toastShow(errorObject))
+      .catch(() => toastShow(errorObject));
   };
   return (
-    <FlatList
-      data={[1]}
-      renderItem={() => {
-        return (
-          <Fragment key={`${route.params?.slug}-list`}>
-            <View style={style.chapter}>
-              <Image source={{ uri: category?.image }} style={style.image} />
-              <AppText style={style.title}>{category?.name}</AppText>
-              <AppText style={style.description}>{category?.description}</AppText>
-            </View>
-            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
-            <Posts />
-            {
-              category &&
-              <TouchableOpacity
-                style={style.follow}
-                onPress={() => followHandle()}
-              >
-                <Image source={user?.follows?.includes(category.id) ? followCheck : follow} resizeMode='contain' />
-              </TouchableOpacity>
-            }
-            {
-              loading &&
-              <ActivityIndicator size='large' color='#0000ff' />
-            }
-          </Fragment>
-        );
-      }}
-      keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
-      onEndReached={getMore}
-    />
+    <Loader loading={firstLoading}>
+      <FlatList
+        data={[1]}
+        renderItem={() => {
+          return (
+            <Fragment key={`${route.params?.slug}-list`}>
+              <View style={style.chapter}>
+                <Image source={{ uri: category?.image }} style={style.image} />
+                <AppText style={style.title}>{category?.name}</AppText>
+                <AppText style={style.description}>{category?.description}</AppText>
+              </View>
+              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+              <Posts />
+              {
+                category &&
+                <TouchableOpacity
+                  style={style.follow}
+                  onPress={() => followHandle()}
+                >
+                  <Image source={user?.follows?.includes(category.id) ? followCheck : follow} resizeMode='contain' />
+                </TouchableOpacity>
+              }
+              {
+                loading &&
+                <ActivityIndicator size='large' color='#0000ff' />
+              }
+            </Fragment>
+          );
+        }}
+        keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
+        onEndReached={getMore}
+      />
+    </Loader>
   );
 };
 const style = StyleSheet.create({

@@ -10,6 +10,7 @@ import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { useTranslation } from 'react-i18next';
 import { blue } from '../../styles/layout.styles';
+import { Loader } from '../../components/shared/loader';
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -19,12 +20,17 @@ interface Props {
 export const Post: React.FC<Props> = ({ route, navigation }) => {
   const { t } = useTranslation();
   const { lang } = useAppSelector(state => state.global);
+  const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const page = useRef(2);
   const dispatch = useAppDispatch();
   useEffect(() => {
+    setFirstLoading(true)
     clearStore(dispatch);
-    dispatch(getPost(route.params?.slug, lang));
+    dispatch(getPost(route.params?.slug, lang))
+      .then(() => page.current = 2)
+      .catch(() => toastShow(errorObject))
+      .finally(() => setFirstLoading(false));
   }, [route.params?.slug]);
   const { post, pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
@@ -36,91 +42,93 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <ScrollView>
-      <View style={style.container}>
-        <View style={style.head}>
-          {
-            post?.category &&
-            <View style={style.category}><CategoryTitle category={post?.category} /></View>
-          }
+    <Loader loading={firstLoading}>
+      <ScrollView>
+        <View style={style.container}>
+          <View style={style.head}>
+            {
+              post?.category &&
+              <View style={style.category}><CategoryTitle category={post?.category} /></View>
+            }
+            {
+              post?.user &&
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Authors', {
+                    id: post.user.id,
+                  });
+                }}
+              >
+                <AppText style={style.author}>{post.user.name}</AppText>
+              </TouchableOpacity>
+            }
+            <AppText style={style.date}>{post?.created_at}</AppText>
+          </View>
+          <AppText style={style.title}>{post?.title}</AppText>
+          <AppText style={style.metaDescription}>{post?.meta_description}</AppText>
+          <ButtonsGroup
+            views={post?.views_count}
+            comments={post?.comments_count}
+            rating={post?.rating}
+            slug={post?.slug}
+          />
+          <Image source={{ uri: post?.image }} resizeMode='cover' style={style.mainImage} />
+          <AppText style={style.metaDescription}>{post?.description}</AppText>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10 }}>
+            {
+              post?.tags.map((tag, i) => {
+                return (
+                  <View style={{ ...style.tag, marginRight: i + 1 !== post?.tags.length ? 10 : 0 }} key={tag.id}>
+                    <AppText style={style.text}>#{tag.name}</AppText>
+                  </View>
+                );
+              })
+            }
+          </View>
+          <ButtonsGroup
+            views={post?.views_count}
+            comments={post?.comments_count}
+            rating={post?.rating}
+            slug={post?.slug}
+          />
           {
             post?.user &&
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Authors', {
-                  id: post.user.id,
-                });
-              }}
-            >
-              <AppText style={style.author}>{post.user.name}</AppText>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30 }}>
+              <Image source={{ uri: post.user.avatar }} style={style.authorAvatar} />
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Authors', {
+                    id: post.user.id,
+                  });
+                }}
+              >
+                <AppText style={style.authorName}>{post.user.name}</AppText>
+              </TouchableOpacity>
+            </View>
           }
-          <AppText style={style.date}>{post?.created_at}</AppText>
         </View>
-        <AppText style={style.title}>{post?.title}</AppText>
-        <AppText style={style.metaDescription}>{post?.meta_description}</AppText>
-        <ButtonsGroup
-          views={post?.views_count}
-          comments={post?.comments_count}
-          rating={post?.rating}
-          slug={post?.slug}
-        />
-        <Image source={{ uri: post?.image }} resizeMode='cover' style={style.mainImage} />
-        <AppText style={style.metaDescription}>{post?.description}</AppText>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10 }}>
+        <View>
+          {/*Комменты*/}
+        </View>
+        <Posts />
+        <View style={{ alignItems: 'center' }}>
           {
-            post?.tags.map((tag, i) => {
-              return (
-                <View style={{ ...style.tag, marginRight: i + 1 !== post?.tags.length ? 10 : 0 }} key={tag.id}>
-                  <AppText style={style.text}>#{tag.name}</AppText>
-                </View>
-              );
-            })
+            !!pageCount && (
+              loading
+                ? <ActivityIndicator size='large' color='#0000ff' />
+                : (
+                  <TouchableOpacity
+                    style={style.more}
+                    onPress={getMore}
+                  >
+                    <AppText style={{ ...style.text, color: '#fff' }}>{t('Больше статей')}</AppText>
+                  </TouchableOpacity>
+                )
+            )
           }
         </View>
-        <ButtonsGroup
-          views={post?.views_count}
-          comments={post?.comments_count}
-          rating={post?.rating}
-          slug={post?.slug}
-        />
-        {
-          post?.user &&
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30 }}>
-            <Image source={{ uri: post.user.avatar }} style={style.authorAvatar} />
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Authors', {
-                  id: post.user.id,
-                });
-              }}
-            >
-              <AppText style={style.authorName}>{post.user.name}</AppText>
-            </TouchableOpacity>
-          </View>
-        }
-      </View>
-      <View>
-        {/*Комменты*/}
-      </View>
-      <Posts />
-      <View style={{ alignItems: 'center' }}>
-        {
-          !!pageCount && (
-            loading
-              ? <ActivityIndicator size='large' color='#0000ff' />
-              : (
-                <TouchableOpacity
-                  style={style.more}
-                  onPress={getMore}
-                >
-                  <AppText style={{ ...style.text, color: '#fff' }}>{t('Больше статей')}</AppText>
-                </TouchableOpacity>
-              )
-          )
-        }
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </Loader>
   );
 };
 

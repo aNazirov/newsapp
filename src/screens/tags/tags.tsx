@@ -9,6 +9,7 @@ import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { getTag } from '../../store/tags/tags.thunks';
 import { AppText } from '../../components/shared';
+import { Loader } from '../../components/shared/loader';
 
 interface IFilter {
   fresh?: boolean;
@@ -24,13 +25,14 @@ export const Tags: React.FC<Props> = ({ route }) => {
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
   const dispatch = useAppDispatch();
+  const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const { lang } = useAppSelector(state => state.global);
   useEffect(() => {
+    setFirstLoading(true);
     clearStore(dispatch);
-    dispatch(getTag({ page: 1, ...filter }, route.params?.slug, lang));
-    return () => {
-    };
+    dispatch(getTag({ page: 1, ...filter }, route.params?.slug, lang))
+      .finally(() => setFirstLoading(false));
   }, [lang, route.params?.slug]);
   const { pageCount } = useAppSelector(state => state.posts);
   const { tag } = useAppSelector(state => state.tags);
@@ -52,27 +54,29 @@ export const Tags: React.FC<Props> = ({ route }) => {
       .finally(() => setLoading(false));
   };
   return (
-    <FlatList
-      data={[1]}
-      renderItem={() => {
-        return (
-          <Fragment key={`${route.params?.slug}-list`}>
-            <View style={style.chapter}>
-              <AppText style={style.title}>{tag?.name}</AppText>
-              <AppText style={style.description}>{tag?.meta_description}</AppText>
-            </View>
-            <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
-            <Posts />
-            {
-              loading &&
-              <ActivityIndicator size='large' color='#0000ff' />
-            }
-          </Fragment>
-        );
-      }}
-      keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
-      onEndReached={getMore}
-    />
+    <Loader loading={firstLoading}>
+      <FlatList
+        data={[1]}
+        renderItem={() => {
+          return (
+            <Fragment key={`${route.params?.slug}-list`}>
+              <View style={style.chapter}>
+                <AppText style={style.title}>{tag?.name}</AppText>
+                <AppText style={style.description}>{tag?.meta_description}</AppText>
+              </View>
+              <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+              <Posts />
+              {
+                loading &&
+                <ActivityIndicator size='large' color='#0000ff' />
+              }
+            </Fragment>
+          );
+        }}
+        keyExtractor={(item, index) => index.toString() + `${route.params?.slug}-list`}
+        onEndReached={getMore}
+      />
+    </Loader>
   );
 };
 const style = StyleSheet.create({

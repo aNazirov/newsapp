@@ -10,6 +10,7 @@ import { errorObject } from '../../_data/helpers';
 import { useTranslation } from 'react-i18next';
 import { AppText } from '../../components/shared';
 import { headerStyles } from '../../styles/header.styles';
+import { Loader } from '../../components/shared/loader';
 
 interface IFilter {
   fresh?: boolean;
@@ -26,14 +27,15 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
   const { t } = useTranslation();
   const [text, setText] = useState(route.params?.text);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
+  const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { lang } = useAppSelector(state => state.global);
   useEffect(() => {
+    setFirstLoading(true);
     clearStore(dispatch);
-    dispatch(getSearchPosts({ page: 1, ...filter, text }, lang));
-    return () => {
-    };
+    dispatch(getSearchPosts({ page: 1, ...filter, text }, lang))
+      .finally(() => setFirstLoading(false));
   }, [lang, route.params?.text]);
   const { pageCount, postsCount } = useAppSelector(state => state.posts);
   const getMore = () => {
@@ -74,11 +76,13 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
               <AppText style={style.description}>Результатов: примерно {postsCount}</AppText>
             </View>
             <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
-            <Posts />
-            {
-              loading &&
-              <ActivityIndicator size='large' color='#0000ff' />
-            }
+            <Loader loading={firstLoading}>
+              <Posts />
+              {
+                loading &&
+                <ActivityIndicator size='large' color='#0000ff' />
+              }
+            </Loader>
           </Fragment>
         );
       }}
