@@ -38,7 +38,7 @@ export const Feed: React.FC<Props> = ({}) => {
   }, [lang]);
   const { hotPosts, pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
-    if (page.current > pageCount) return;
+    if (!pageCount) return;
     setLoading(true);
     return dispatch(getFeedPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)

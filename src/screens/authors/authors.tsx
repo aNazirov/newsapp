@@ -35,7 +35,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
   const { pageCount } = useAppSelector(state => state.posts);
   const { author } = useAppSelector(state => state.authors);
   const getMore = () => {
-    if (page.current > pageCount) return;
+    if (!pageCount) return;
     setLoading(true);
     return dispatch(getMorePosts('authors', route.params?.id, { page: page.current, ...filter }, lang))
       .then(() => page.current++)

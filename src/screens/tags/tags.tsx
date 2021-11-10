@@ -35,7 +35,7 @@ export const Tags: React.FC<Props> = ({ route }) => {
   const { pageCount } = useAppSelector(state => state.posts);
   const { tag } = useAppSelector(state => state.tags);
   const getMore = () => {
-    if (page.current > pageCount) return;
+    if (!pageCount) return;
     setLoading(true);
     return dispatch(getMorePosts('tags', route.params?.slug, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
