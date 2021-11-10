@@ -37,7 +37,7 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
   }, [lang, route.params?.text]);
   const { pageCount, postsCount } = useAppSelector(state => state.posts);
   const getMore = () => {
-    if (page.current > pageCount) return;
+    if (!pageCount) return;
     setLoading(true);
     return dispatch(getSearchPosts({ page: page.current, ...filter, text }, lang))
       .then(() => page.current++)

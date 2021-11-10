@@ -41,7 +41,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
   const { pageCount } = useAppSelector(state => state.posts);
   const { category } = useAppSelector(state => state.categories);
   const getMore = () => {
-    if (page.current > pageCount) return;
+    if (!pageCount) return;
     setLoading(true);
     return dispatch(getMorePosts('categories', route.params?.slug, { page: page.current, ...filter }, lang))
       .then(() => page.current++)

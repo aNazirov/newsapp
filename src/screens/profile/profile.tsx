@@ -56,7 +56,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
   };
 
   const getMore = () => {
-    if (page.current > pageCount) return;
+    if (!pageCount) return;
     setLoading(true);
     dispatch(getMorePosts('authors', user?.id, { page: page.current }, lang))
       .then(() => {
