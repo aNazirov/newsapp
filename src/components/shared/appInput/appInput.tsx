@@ -13,12 +13,11 @@ interface Props extends TextInputProps{
   style: any;
   error: IError;
   control: Control;
-  placeholder?: string;
   defaultValue?: any;
   autoCapitalize?: 'none' | 'characters' | 'words' | 'sentences';
 }
 
-export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', style, error, placeholder = '', autoCapitalize = 'none', children, ...props }) => {
+export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', style, error, autoCapitalize = 'none', children, ...props }) => {
   const { field } = useController({
     control,
     defaultValue,
@@ -28,7 +27,6 @@ export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', st
     <>
       <TextInput
         style={style}
-        placeholder={placeholder}
         onBlur={field.onBlur}
         onChangeText={field.onChange}
         value={field.value}

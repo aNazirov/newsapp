@@ -1,8 +1,8 @@
 import { globalAction } from './global.slices';
 import { ICurrency, IUser } from '../../interfaces';
 import {
-  facebookAuthenticate,
   getMe,
+  facebookAuthenticate,
   googleAuthenticate,
   staticAuthenticate,
   telegramAuthenticate,
@@ -20,6 +20,9 @@ export const loginFormOpenSet = (open: boolean) => (dispatch: any) => {
 };
 export const eventFormOpenSet = (open: boolean) => (dispatch: any) => {
   dispatch(globalAction.setEventFormOpen({ eventFormOpen: open }));
+};
+export const commentFormOpenSet = (open: boolean) => (dispatch: any) => {
+  dispatch(globalAction.setCommentFormOpen({ commentFormOpen: open }));
 };
 export const userSet = (user: IUser) => (dispatch: any) => {
   dispatch(globalAction.setUser({ user }));

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppText } from '../appText';
 import { useTranslation } from 'react-i18next';
 import { deleteComment, reportComment } from '../../../services/global.services';
@@ -10,6 +10,7 @@ import { errorObject, getActiveRouteState } from '../../../_data/helpers';
 import { loginFormOpenSet } from '../../../store/global/global.thunks';
 import { useNavigation } from '@react-navigation/native';
 import { headerStyles } from '../../../styles/header.styles';
+import { ModalContainer } from '../modal';
 
 interface Props {
   userId: number,
@@ -44,65 +45,49 @@ export const Options: React.FC<Props> = ({ commentId, userId }) => {
       >
         <Image source={require('../../../../assets/images/icons/dots.png')} style={headerStyles.icons} />
       </TouchableOpacity>
-      <Modal
+      <ModalContainer
         visible={show}
-        transparent={true}
-        animationType='fade'
+        hide={() => setShow(false)}
+        styleContainer={style.popup}
+        styleMainContainer={{justifyContent: 'flex-end'}}
       >
-        <View
-          style={style.popupContainer}
-          onTouchStart={() => setShow(false)}
-        >
-          <View
-            style={{ ...style.popup }}
-            onTouchStart={e => e.stopPropagation()}
-          >
-            <View style={{ backgroundColor: '#fff', borderRadius: 7 }}>
-              {
-                userId === user?.id &&
-                <TouchableOpacity
-                  onPress={commentDelete}
-                >
-                  <AppText style={{
-                    ...style.profileTab,
-                    borderBottomColor: 'rgba(0, 0, 0, .1)',
-                    borderBottomWidth: activeRoute.name !== 'Profile' ? 1 : 0,
-                  }}>{t('Удалить')}</AppText>
-                </TouchableOpacity>
-              }
-              {
-                activeRoute.name !== 'Profile' &&
-                <TouchableOpacity
-                  onPress={commentReport}
-                >
-                  <AppText style={{ ...style.profileTab }}>{t('Пожаловаться')}</AppText>
-                </TouchableOpacity>
-              }
-            </View>
-
+        <View style={{ backgroundColor: '#fff', borderRadius: 7 }}>
+          {
+            userId === user?.id &&
             <TouchableOpacity
-              onPress={() => setShow(false)}
+              onPress={commentDelete}
             >
-              <View style={{ backgroundColor: '#fff', borderRadius: 7, marginVertical: 25 }}>
-                <AppText style={{ ...style.profileTab}}>
-                  {t('Отменить')}
-                </AppText>
-              </View>
+              <AppText style={{
+                ...style.profileTab,
+                borderBottomColor: 'rgba(0, 0, 0, .1)',
+                borderBottomWidth: activeRoute.name !== 'Profile' ? 1 : 0,
+              }}>{t('Удалить')}</AppText>
             </TouchableOpacity>
-          </View>
+          }
+          {
+            activeRoute.name !== 'Profile' &&
+            <TouchableOpacity
+              onPress={commentReport}
+            >
+              <AppText style={{ ...style.profileTab }}>{t('Пожаловаться')}</AppText>
+            </TouchableOpacity>
+          }
         </View>
-      </Modal>
+
+        <TouchableOpacity
+          onPress={() => setShow(false)}
+        >
+          <View style={{ backgroundColor: '#fff', borderRadius: 7, marginVertical: 25 }}>
+            <AppText style={{ ...style.profileTab }}>
+              {t('Отменить')}
+            </AppText>
+          </View>
+        </TouchableOpacity>
+      </ModalContainer>
     </View>
   );
 };
 const style = StyleSheet.create({
-  popupContainer: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0,0 ,.7)',
-  },
   popup: {
     marginTop: 40,
     width: '90%',

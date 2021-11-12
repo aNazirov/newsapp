@@ -1,9 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
-import { ActivityIndicator, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { clearStore } from '../../helpers/helpers';
-import { AppText, CategoryTitle, Posts } from '../../components/shared';
+import { AppText, CategoryTitle, Comments, Posts } from '../../components/shared';
 import { getMorePosts, getPost } from '../../store/posts/posts.thunks';
 import { ButtonsGroup } from '../../components/post';
 import { toastShow } from '../../services/notifications.service';
@@ -11,6 +18,9 @@ import { errorObject } from '../../_data/helpers';
 import { useTranslation } from 'react-i18next';
 import { blue } from '../../styles/layout.styles';
 import { Loader } from '../../components/shared/loader';
+import { parseEditor } from '../../helpers/editor';
+import { EditorJs } from '../../helpers/EditorJs';
+import { commentsNull, getPostComments } from '../../store/comments/comments.thunks';
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -24,23 +34,26 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
   const [loading, setLoading] = useState(false);
   const page = useRef(2);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    setFirstLoading(true)
-    clearStore(dispatch);
-    dispatch(getPost(route.params?.slug, lang))
-      .then(() => page.current = 2)
-      .catch(() => toastShow(errorObject))
-      .finally(() => setFirstLoading(false));
-  }, [route.params?.slug]);
   const { post, pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
     if (!pageCount) return null;
     setLoading(true);
+
     dispatch(getMorePosts('posts', route.params?.slug, { page: page.current }, lang))
       .then(() => page.current++)
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
   };
+  useEffect(() => {
+    setFirstLoading(true);
+    clearStore(dispatch);
+    dispatch(commentsNull());
+    dispatch(getPostComments(route.params?.slug, lang));
+    dispatch(getPost(route.params?.slug, lang))
+      .then(() => page.current = 2)
+      .catch(() => toastShow(errorObject))
+      .finally(() => setFirstLoading(false));
+  }, [route.params?.slug]);
   return (
     <Loader loading={firstLoading}>
       <ScrollView>
@@ -73,7 +86,16 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
             slug={post?.slug}
           />
           <Image source={{ uri: post?.image }} resizeMode='cover' style={style.mainImage} />
-          <AppText style={style.metaDescription}>{post?.description}</AppText>
+          <AppText>{post?.caption}</AppText>
+          {
+            post &&
+            JSON.parse(post?.description).blocks.map((block: any) => {
+              if (block.type === 'instagram' || block.type === 'telegram') {
+                return <EditorJs key={block.id} link={block.data.link} html={parseEditor(block)} />
+              }
+              return <EditorJs key={block.id} html={parseEditor(block)} />
+            })
+          }
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10 }}>
             {
               post?.tags.map((tag, i) => {
@@ -107,9 +129,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
             </View>
           }
         </View>
-        <View>
-          {/*Комменты*/}
-        </View>
+        <Comments />
         <Posts />
         <View style={{ alignItems: 'center' }}>
           {
@@ -169,7 +189,7 @@ const style = StyleSheet.create({
   },
   mainImage: {
     width: '100%',
-    height: 150,
+    height: 300,
     borderRadius: 7,
     marginVertical: 30,
   },

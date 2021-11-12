@@ -8,6 +8,7 @@ interface IState {
   user: IUser | null;
   loginFormOpen: boolean;
   eventFormOpen: boolean;
+  commentFormOpen: boolean;
   lang: 'ru' | 'uz';
 }
 
@@ -18,6 +19,7 @@ const initialState: IState = {
   user: null,
   loginFormOpen: false,
   eventFormOpen: false,
+  commentFormOpen: false,
   lang: 'ru',
 };
 
@@ -45,6 +47,10 @@ export const { actions: globalAction, reducer: globalReducer } = createSlice({
       ...action.payload,
     }),
     setEventFormOpen: (state: IState, action: PayloadAction<{ eventFormOpen: boolean }>) => ({
+      ...state,
+      ...action.payload,
+    }),
+    setCommentFormOpen: (state: IState, action: PayloadAction<{ commentFormOpen: boolean }>) => ({
       ...state,
       ...action.payload,
     }),

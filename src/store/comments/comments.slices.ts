@@ -3,11 +3,13 @@ import {IComment} from "../../interfaces";
 
 interface IState {
   comments: IComment[];
+  comment: IComment | null;
   hasMore: boolean;
 }
 
 const initialState: IState = {
   comments: [],
+  comment: null,
   hasMore: false,
 };
 
@@ -19,6 +21,10 @@ export const { actions: commentsAction, reducer: commentsReducer } = createSlice
       ...state,
       comments: [],
       hasMore: false,
+    }),
+    setComment: (state: IState, action: PayloadAction<{ comment: IComment | null }>) => ({
+      ...state,
+      ...action.payload
     }),
     setComments: (state: IState, action: PayloadAction<{ comments: IComment[], hasMore: boolean }>) => ({
       ...state,
@@ -49,7 +55,7 @@ export const { actions: commentsAction, reducer: commentsReducer } = createSlice
         comments
       };
     },
-    setComment: (state: IState, action: PayloadAction<{ comment: IComment }>) => {
+    setCommentToComments: (state: IState, action: PayloadAction<{ comment: IComment }>) => {
       const comments = state.comments.reduce((total: any[], comment, i) => {
         if (action.payload.comment.parent_id === comment.id) {
           if (!comment.children) {

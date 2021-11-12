@@ -13,7 +13,10 @@ export const commentsSet = (res: any): AppThunk => (dispatch: any) => {
 export const commentRatingSet = (resRating: string | undefined, rating: number, id: any): AppThunk => (dispatch: any) => {
   dispatch(commentsAction.setCommentRating({ resRating, rating, id }));
 };
-export const commentSet = (comment: IComment): AppThunk => (dispatch: any) => {
+export const commentSetToComments = (comment: IComment): AppThunk => (dispatch: any) => {
+  dispatch(commentsAction.setCommentToComments({ comment }));
+};
+export const commentSet = (comment: IComment | null): AppThunk => (dispatch: any) => {
   dispatch(commentsAction.setComment({ comment }));
 };
 export const commentDeleteAction = (id: number): AppThunk => (dispatch: any) => {

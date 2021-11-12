@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { AppText, AppInput } from '../shared';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppText, AppInput, ModalContainer } from '../shared';
 import { blue } from '../../styles/layout.styles';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { loginFormOpenSet, loginStatic } from '../../store/global/global.thunks';
 import { FacebookLogin } from './facebookLogin';
 import { GoogleLogin } from './googleLogin';
+import { toastShow } from '../../services/notifications.service';
+import { errorObject } from '../../_data/helpers';
 
 interface ITab {
   id: number;
@@ -69,100 +71,83 @@ export const Auth: React.FC = () => {
         setType('Войти');
       })
       .catch((err: any) => {
-        Object.keys(err.response.data.errors).forEach(key => {
-          setError(key, {
-            type: 'required',
-            message: err.response.data.errors[key][0],
+        if (err.response?.data?.errors) {
+          return Object.keys(err.response.data.errors).forEach(key => {
+            setError(key, {
+              type: 'required',
+              message: err.response.data.errors[key][0],
+            });
           });
-        });
+        }
+        toastShow(errorObject);
       });
   };
   return (
-    <Modal
-      animationType='fade'
-      transparent={true}
+    <ModalContainer
       visible={loginFormOpen}
-      onRequestClose={() => {
-        dispatch(loginFormOpenSet(false));
-      }}
+      hide={() => dispatch(loginFormOpenSet(false))}
+      styleContainer={style.container}
     >
-      <View
-        style={style.centeredView}
-        onTouchStart={() => dispatch(loginFormOpenSet(false))}
-      >
-        <View
-          style={style.container}
-          onTouchStart={e => e.stopPropagation()}
-        >
-          <View style={style.tabs}>
-            {
-              tabs.map(tab => (
-                <TouchableOpacity
-                  key={tab.id + tab.type}
-                  onPress={() => handleChangeActiveTab(tab)}
-                  style={{
-                    flex: 1,
-                    borderBottomWidth: 2,
-                    borderBottomColor: currentType === tab.type ? blue : 'transparent',
-                  }}
-                >
-                  <AppText
-                    style={{
-                      ...style.tab,
-                      color: currentType === tab.type ? '#000' : 'rgba(0, 0, 0, .7)',
-                    }}
-                  >
-                    {t(tab.name)}
-                  </AppText>
-                </TouchableOpacity>
-              ))
-            }
-          </View>
-          {
-            Fields.map(field => {
-              if (currentType === 'Войти' && field.name === 'name') return null;
-              return (
-                <AppInput
-                  key={field.name}
-                  control={control}
-                  name={field.name}
-                  placeholder={t(field.placeholder)}
-                  style={style.textInput}
-                  error={errors[field.name]}
-                />
-              );
-            })
-          }
-          <TouchableOpacity
-            onPress={handleSubmit(onSubmit)}
-          >
-            <AppText style={style.submit}>{t(currentType)}</AppText>
-          </TouchableOpacity>
-          <AppText style={{ ...style.text, color: blue }}>{t('Забыли пароль')}?</AppText>
-          <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)' }}>{t('Войти через соц-сети')}</AppText>
-          <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-            <FacebookLogin />
-            <View style={{ width: 15 }} />
-            <GoogleLogin />
-          </View>
-          <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'justify' }}>
-            {t('Нажимая “Войти” вы соглашаетесь с ')}
-            <AppText style={{ textDecorationLine: 'underline' }}>политикой конфиденциальности</AppText>
-          </AppText>
-        </View>
+      <View style={style.tabs}>
+        {
+          tabs.map(tab => (
+            <TouchableOpacity
+              key={tab.id + tab.type}
+              onPress={() => handleChangeActiveTab(tab)}
+              style={{
+                flex: 1,
+                borderBottomWidth: 2,
+                borderBottomColor: currentType === tab.type ? blue : 'transparent',
+              }}
+            >
+              <AppText
+                style={{
+                  ...style.tab,
+                  color: currentType === tab.type ? '#000' : 'rgba(0, 0, 0, .7)',
+                }}
+              >
+                {t(tab.name)}
+              </AppText>
+            </TouchableOpacity>
+          ))
+        }
       </View>
-    </Modal>
+      {
+        Fields.map(field => {
+          if (currentType === 'Войти' && field.name === 'name') return null;
+          return (
+            <AppInput
+              key={field.name}
+              control={control}
+              name={field.name}
+              placeholder={t(field.placeholder)}
+              style={style.textInput}
+              error={errors[field.name]}
+            />
+          );
+        })
+      }
+      <TouchableOpacity
+        onPress={handleSubmit(onSubmit)}
+      >
+        <AppText style={style.submit}>{t(currentType)}</AppText>
+      </TouchableOpacity>
+      <AppText style={{ ...style.text, color: blue }}>{t('Забыли пароль')}?</AppText>
+      <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)' }}>{t('Войти через соц-сети')}</AppText>
+      <View style={{ flexDirection: 'row', marginBottom: 20 }}>
+        <FacebookLogin />
+        <View style={{ width: 15 }} />
+        <GoogleLogin />
+      </View>
+      <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'justify' }}>
+        {t('Нажимая “Войти” вы соглашаетесь с ')}
+        <AppText style={{ textDecorationLine: 'underline' }}>политикой конфиденциальности</AppText>
+      </AppText>
+    </ModalContainer>
   );
 };
 
 const style = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, .5)',
-  },
   container: {
     width: '90%',
     paddingHorizontal: 15,

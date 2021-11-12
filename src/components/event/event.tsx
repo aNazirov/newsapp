@@ -1,6 +1,6 @@
 import React from 'react';
-import { Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { AppInput, AppText } from '../shared';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { AppInput, AppText, ModalContainer } from '../shared';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { blue } from '../../styles/layout.styles';
@@ -28,7 +28,7 @@ const Fields: IField[] = [
 
 export const Event: React.FC = () => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { control, handleSubmit, formState: { errors }, setError } = useForm();
   const { eventFormOpen } = useAppSelector(state => state.global);
   const submitEvent = (formdata: any) => {
@@ -38,14 +38,14 @@ export const Event: React.FC = () => {
         {
           id: 'bgcVLuI1sV',
           type: 'paragraph',
-          data: { text: formdata.description }
-        }
+          data: { text: formdata.description },
+        },
       ],
-      version: '2.22.2'
-    }
+      version: '2.22.2',
+    };
     createEvent({ ...formdata, description: JSON.stringify(description) })
       .then(() => {
-        dispatch(eventFormOpenSet(false))
+        dispatch(eventFormOpenSet(false));
         toastShow({ type: 'success', title: 'Успешно', message: 'Событие отправлено' });
       })
       .catch(err => {
@@ -61,68 +61,51 @@ export const Event: React.FC = () => {
       });
   };
   return (
-    <Modal
+    <ModalContainer
       visible={eventFormOpen}
-      animationType='fade'
-      transparent
+      hide={() => dispatch(eventFormOpenSet(false))}
+      styleContainer={style.container}
     >
-      <View
-        style={style.containerCenter}
-        onTouchStart={() => dispatch(eventFormOpenSet(false))}
-      >
-        <View
-          style={style.container}
-          onTouchStart={e => e.stopPropagation()}
+      {
+        Fields.map(field => {
+          return (
+            <AppInput
+              key={field.name}
+              name={field.name}
+              style={{
+                ...style.textInput,
+                height: field.name === 'description' ? 100 : 'auto',
+                justifyContent: 'flex-start',
+                textAlignVertical: field.name === 'description' ? 'top' : 'center',
+              }}
+              placeholder={t(field.placeholder)}
+              error={errors[field.name]}
+              control={control}
+              multiline={field.name === 'description'}
+              numberOfLines={field.name === 'description' ? 10 : 1}
+            />
+          );
+        })
+      }
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity
+          style={{ ...style.button, backgroundColor: 'rgba(0, 0, 0, 0)', marginRight: 15 }}
+          onPress={() => dispatch(eventFormOpenSet(false))}
         >
-          {
-            Fields.map(field => {
-              return (
-                <AppInput
-                  key={field.name}
-                  name={field.name}
-                  style={{
-                    ...style.textInput,
-                    height: field.name === 'description' ? 150 : 'auto',
-                    justifyContent: 'flex-start',
-                    textAlignVertical: field.name === 'description' ? 'top' : 'center',
-                  }}
-                  placeholder={t(field.placeholder)}
-                  error={errors[field.name]}
-                  control={control}
-                  multiline={field.name === 'description'}
-                  numberOfLines={field.name === 'description' ? 10 : 1}
-                />
-              );
-            })
-          }
-          <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity
-              style={{ ...style.button, backgroundColor: 'rgba(0, 0, 0, .1)', marginRight: 15 }}
-              onPress={() => dispatch(eventFormOpenSet(false))}
-            >
-              <AppText style={{ ...style.buttonText }}>{t('Отменить')}</AppText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ ...style.button, backgroundColor: blue }}
-              onPress={handleSubmit(submitEvent)}
-            >
-              <AppText style={{ ...style.buttonText, color: '#fff' }}>{t('Сохранить')}</AppText>
-            </TouchableOpacity>
-          </View>
-        </View>
+          <AppText style={{ ...style.buttonText }}>{t('Отменить')}</AppText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ ...style.button, backgroundColor: blue }}
+          onPress={handleSubmit(submitEvent)}
+        >
+          <AppText style={{ ...style.buttonText, color: '#fff' }}>{t('Отправить')}</AppText>
+        </TouchableOpacity>
       </View>
-    </Modal>
+    </ModalContainer>
   );
 };
 
 const style = StyleSheet.create({
-  containerCenter: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, .7)',
-  },
   container: {
     width: '90%',
     padding: 15,
