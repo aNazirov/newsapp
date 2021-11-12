@@ -15,7 +15,6 @@ import { commentFormOpenSet } from '../../../store/global/global.thunks';
 
 interface PropsCommentChilds {
   child: IComment[];
-  commentId: number;
 }
 
 interface PropsCommentChild {
@@ -63,7 +62,7 @@ const CommentChild: React.FC<PropsCommentChild> = ({ comment, parent }) => {
       </View>
       {
         !!comment.children?.length &&
-        <CommentChilds child={comment.children} commentId={comment.id} />
+        <CommentChilds child={comment.children} />
       }
     </View>
   );
@@ -103,7 +102,7 @@ const styleCommentChild = StyleSheet.create({
   },
 });
 
-const CommentChilds: React.FC<PropsCommentChilds> = ({ child, commentId }) => {
+const CommentChilds: React.FC<PropsCommentChilds> = ({ child}) => {
   const { t } = useTranslation('common');
   const [showComment, setShowComment] = useState(true);
   const [showAllComment, setShowAllComment] = useState(false);
@@ -129,7 +128,6 @@ const CommentChilds: React.FC<PropsCommentChilds> = ({ child, commentId }) => {
                       key={comment.id + comment.reply_user?.name}
                       parent={comment.reply_user?.name}
                       comment={comment}
-                      commentId={commentId}
                     />;
                   })
                 }
