@@ -88,6 +88,7 @@ const style = StyleSheet.create({
     padding: 15,
     backgroundColor: '#fff',
     position: 'relative',
+    marginTop: 25,
   },
   image: {
     width: 60,

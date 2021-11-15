@@ -3,7 +3,7 @@ import { useAppSelector } from '../../store/hooks';
 import { Image, StyleSheet, View } from 'react-native';
 import { AppText } from '../shared';
 import { headerStyles } from '../../styles/header.styles';
-import { Option } from '../shared/options';
+import { Options } from '../shared/options';
 
 export const Comments: React.FC = () => {
   const { user } = useAppSelector(state => state.global);
@@ -26,7 +26,7 @@ export const Comments: React.FC = () => {
                   <AppText style={{ fontSize: 12, color: 'rgba(0, 0, 0, .7)' }}>{comment.user?.created_at}</AppText>
                 </View>
                 <AppText style={{ fontSize: 12 }}>{comment.text}</AppText>
-                <Option userId={comment.user?.id} commentId={comment.id}/>
+                <Options userId={comment.user?.id} commentId={comment.id}/>
               </View>
             );
           })

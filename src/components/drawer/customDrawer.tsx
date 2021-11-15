@@ -20,7 +20,7 @@ import { blue } from '../../styles/layout.styles';
 import { getMainCategories } from '../../store/categories/categories.thunks';
 import { AppText } from '../shared';
 import { toastShow } from '../../services/notifications.service';
-import { handleOpenWithWebBrowser } from '../../helpers/helpers';
+import { handleOpenWithWebBrowser, website } from '../../helpers/helpers';
 
 const navigationTitles = [
   {
@@ -132,7 +132,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                     });
                   }}
                 >
-                  <Image source={{ uri: category.image }} style={{ ...headerStyles.icons, ...style.navigationImage, display: 'none' }}
+                  <Image source={{ uri: category.image }}
+                         style={{ ...headerStyles.icons, ...style.navigationImage, display: 'none' }}
                          resizeMode='cover' />
                   <AppText style={style.navigationTitle}>{t(category.name)}</AppText>
                 </TouchableOpacity>
@@ -149,8 +150,12 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           </TouchableOpacity>
         </View>
         <View style={style.addInformation}>
-          <AppText style={style.information}>{t('Реклама')}</AppText>
-          <AppText style={{ ...style.information, marginLeft: 25 }}>{t('Контакты')}</AppText>
+          <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/ads`)}>
+            <AppText style={style.information}>{t('Реклама')}</AppText>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/contacts`)}>
+            <AppText style={{ ...style.information, marginLeft: 25 }}>{t('Контакты')}</AppText>
+          </TouchableOpacity>
         </View>
         <AppText style={{ ...style.information, fontWeight: '400' }}>{t('Присоединяйтесь')}:</AppText>
         <View style={style.specialIcons}>
@@ -166,7 +171,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
             <Image source={require('../../../assets/images/icons/faceb.png')} style={{ ...headerStyles.icons }} />
           </TouchableOpacity>
         </View>
-        <AppText style={{ ...style.information, marginTop: 25, fontWeight: '400' }}>{t('© 2015-2020 «UzNews.uz»')}:</AppText>
+        <AppText
+          style={{ ...style.information, marginTop: 25, fontWeight: '400' }}>{t('© 2015-2020 «UzNews.uz»')}:</AppText>
         <AppText style={{ ...style.information, marginTop: 10, fontWeight: '400' }}>{t('Сделано в')}:</AppText>
       </ScrollView>
     </SafeAreaView>

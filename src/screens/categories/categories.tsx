@@ -76,7 +76,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
           return (
             <Fragment key={`${route.params?.slug}-list`}>
               <View style={style.chapter}>
-                <Image source={{ uri: category?.image }} style={style.image} />
+                <Image source={{ uri: category?.image }} style={style.image} resizeMode='cover'/>
                 <AppText style={style.title}>{category?.name}</AppText>
                 <AppText style={style.description}>{category?.description}</AppText>
               </View>
@@ -88,7 +88,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
                   style={style.follow}
                   onPress={() => followHandle()}
                 >
-                  <Image source={user?.follows?.includes(category.id) ? followCheck : follow} resizeMode='contain' />
+                  <Image source={user?.follows?.includes(category.id) ? followCheck : follow} resizeMode='contain' style={style.followIcon} />
                 </TouchableOpacity>
               }
               {
@@ -109,6 +109,7 @@ const style = StyleSheet.create({
     padding: 15,
     backgroundColor: '#fff',
     position: 'relative',
+    marginTop: 25,
   },
   image: {
     width: 60,
@@ -127,10 +128,12 @@ const style = StyleSheet.create({
     lineHeight: 21,
   },
   follow: {
-    width: 36,
-    height: 36,
     position: 'absolute',
-    top: 15,
+    top: 40,
     right: 15,
   },
+  followIcon: {
+    width: 36,
+    height: 36,
+  }
 });

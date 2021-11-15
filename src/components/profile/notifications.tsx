@@ -21,7 +21,7 @@ export const Notifications: React.FC<Props> = ({ notifications }) => {
               }}>
                 {
                   notification.foreign_user &&
-                  <Image source={{ uri: notification.foreign_user.avatar }}
+                  <Image source={{ uri: notification?.foreign_user?.avatar }}
                          style={{ width: 36, height: 36, borderRadius: 7, marginRight: 12 }} />
                 }
                 <AppText
@@ -29,10 +29,10 @@ export const Notifications: React.FC<Props> = ({ notifications }) => {
                   numberOfLines={2}
                   style={{ maxWidth: '90%' }}
                 >
-                  <AppText style={{ fontFamily: 'roboto-bold' }}>{notification.foreign_user.name} </AppText>
+                  <AppText style={{ fontFamily: 'roboto-bold' }}>{notification?.foreign_user?.name} </AppText>
                   {notification.notification}
-                  <AppText style={{ fontFamily: 'roboto-bold' }}> {notification.post.title} </AppText>
-                  <AppText style={{ color: 'rgba(0, 0, 0, .7)', fontSize: 12 }}>{notification.created_at}</AppText>
+                  <AppText style={{ fontFamily: 'roboto-bold' }}> {notification?.post?.title} </AppText>
+                  <AppText style={{ color: 'rgba(0, 0, 0, .7)', fontSize: 12 }}>{notification?.created_at}</AppText>
                 </AppText>
               </View>
             );

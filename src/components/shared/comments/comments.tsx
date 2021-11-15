@@ -27,9 +27,9 @@ const CommentChild: React.FC<PropsCommentChild> = ({ comment, parent }) => {
   return (
     <View style={styleCommentChild.container}>
       <View style={styleCommentChild.head}>
-        <Image source={{ uri: comment.user.avatar }} style={styleCommentChild.avatar} />
+        <Image source={{ uri: comment?.user?.avatar }} style={styleCommentChild.avatar} />
         <View style={styleCommentChild.meta}>
-          <AppText style={styleCommentChild.name}>{comment.user.name}</AppText>
+          <AppText style={styleCommentChild.name}>{comment?.user?.name}</AppText>
           <AppText style={styleCommentChild.date}>{comment.created_at}</AppText>
         </View>
         <RatingButton id={comment.id} rating={comment.rating} type='comment' />

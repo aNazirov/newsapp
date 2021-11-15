@@ -130,7 +130,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
           }
         </View>
         <Comments />
-        <AppText style={{ ...style.title }}>{t('Похожие новости')}</AppText>
+        <AppText style={{ ...style.title, marginHorizontal: 15, marginTop: 25 }}>{t('Похожие новости')}</AppText>
         <Posts />
         <View style={{ alignItems: 'center' }}>
           {
@@ -157,6 +157,7 @@ const style = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     padding: 15,
+    marginTop: 25,
   },
   head: {
     display: 'flex',
@@ -184,8 +185,6 @@ const style = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'roboto-bold',
     lineHeight: 31,
-    marginTop: 25,
-    marginHorizontal: 15
   },
   metaDescription: {
     color: '#000',

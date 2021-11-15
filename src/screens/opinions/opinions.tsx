@@ -82,6 +82,7 @@ const style = StyleSheet.create({
   chapter: {
     padding: 15,
     backgroundColor: '#fff',
+    marginTop: 25,
   },
   image: {
     width: 60,

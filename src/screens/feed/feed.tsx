@@ -139,6 +139,7 @@ const style = StyleSheet.create({
   container: {
     padding: 15,
     backgroundColor: '#fff',
+    marginTop: 25,
   },
   chapter: {
     display: 'flex',
