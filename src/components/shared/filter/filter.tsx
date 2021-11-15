@@ -68,7 +68,7 @@ const style = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 25,
+    marginTop: 20,
     paddingHorizontal: 15,
   },
   button: {
@@ -78,7 +78,6 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-
     lineHeight: 24,
   },
 });

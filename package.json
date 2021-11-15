@@ -11,6 +11,7 @@
     "@expo/vector-icons": "^12.0.5",
     "@native-html/iframe-plugin": "^2.6.0",
     "@react-native-async-storage/async-storage": "~1.15.0",
+    "@react-native-picker/picker": "2.1.0",
     "@react-navigation/drawer": "^6.1.8",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
@@ -23,6 +24,7 @@
     "expo-facebook": "~12.0.3",
     "expo-font": "^10.0.3",
     "expo-google-app-auth": "~9.0.0",
+    "expo-image-picker": "~11.0.3",
     "expo-linear-gradient": "~10.0.3",
     "expo-random": "~12.0.1",
     "expo-status-bar": "~1.1.0",
@@ -33,6 +35,7 @@
     "react-hook-form": "^7.18.1",
     "react-i18next": "^11.12.0",
     "react-native": "0.64.3",
+    "react-native-default-menu": "0.0.8",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-reanimated": "~2.2.0",
     "react-native-render-html": "^6.3.0",
@@ -42,9 +45,7 @@
     "react-native-web": "0.17.1",
     "react-native-web-swiper": "^2.2.1",
     "react-native-webview": "11.13.0",
-    "react-redux": "^7.2.6",
-    "expo-image-picker": "~11.0.3",
-    "@react-native-picker/picker": "2.1.0"
+    "react-redux": "^7.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -86,7 +86,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
             slug={post?.slug}
           />
           <Image source={{ uri: post?.image }} resizeMode='cover' style={style.mainImage} />
-          <AppText>{post?.caption}</AppText>
+          <AppText style={style.caption}>{post?.caption}</AppText>
           {
             post &&
             JSON.parse(post?.description).blocks.map((block: any) => {
@@ -130,6 +130,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
           }
         </View>
         <Comments />
+        <AppText style={{ ...style.title }}>{t('Похожие новости')}</AppText>
         <Posts />
         <View style={{ alignItems: 'center' }}>
           {
@@ -166,6 +167,10 @@ const style = StyleSheet.create({
   category: {
     marginRight: 10,
   },
+  caption: {
+    marginTop: 10,
+    fontFamily: 'roboto-regular-italic'
+  },
   author: {
     fontSize: 13,
     marginRight: 10,
@@ -176,10 +181,11 @@ const style = StyleSheet.create({
     color: 'rgba(0, 0, 0, .7)',
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: 'roboto-bold',
     lineHeight: 31,
-    marginBottom: 15,
+    marginTop: 25,
+    marginHorizontal: 15
   },
   metaDescription: {
     color: '#000',

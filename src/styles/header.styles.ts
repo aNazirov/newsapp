@@ -6,7 +6,7 @@ export const headerStyles = StyleSheet.create({
     position: 'relative',
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: '#e5e5e5',
     borderRadius: 7,
     fontSize: 12,
     height: 28,
@@ -29,7 +29,9 @@ export const headerStyles = StyleSheet.create({
     marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     paddingTop: 13,
     paddingBottom: 13,
-    backgroundColor: '#ECF6FF',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, .1)',
+    backgroundColor: '#fff',
   },
   infoContainer: {
     display: 'flex',

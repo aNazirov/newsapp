@@ -20,6 +20,7 @@ import { blue } from '../../styles/layout.styles';
 import { getMainCategories } from '../../store/categories/categories.thunks';
 import { AppText } from '../shared';
 import { toastShow } from '../../services/notifications.service';
+import { handleOpenWithWebBrowser } from '../../helpers/helpers';
 
 const navigationTitles = [
   {
@@ -28,8 +29,8 @@ const navigationTitles = [
     name: 'Home',
   },
   {
-    image: require('../../../assets/images/icons/feed.png'),
-    title: 'Лента',
+    image: require('../../../assets/images/icons/special.png'),
+    title: 'Популярное',
     name: 'Feed',
   },
   {
@@ -38,7 +39,7 @@ const navigationTitles = [
     name: 'Opinions',
   },
   {
-    image: require('../../../assets/images/icons/special.png'),
+    image: require('../../../assets/images/icons/feed.png'),
     title: 'Спецрепортажи',
     name: 'SpecialReports',
   },
@@ -65,7 +66,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           <TouchableOpacity
             onPress={() => navigation.closeDrawer()}
           >
-            <Image source={require('../../../assets/images/icons/close.png')} style={{ ...headerStyles.icons,...style.close }} />
+            <Image source={require('../../../assets/images/icons/close.png')}
+                   style={{ ...headerStyles.icons, ...style.close }} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('Home')}
@@ -98,7 +100,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                   key={nav.title}
                   onPress={() => navigation.navigate(nav.name)}
                 >
-                  <Image source={nav.image} style={{ ...headerStyles.icons, ...style.navigationImage }} resizeMode='cover' />
+                  <Image source={nav.image} style={{ ...headerStyles.icons, ...style.navigationImage }}
+                         resizeMode='cover' />
                   <AppText style={style.navigationTitle}>{t(nav.title)}</AppText>
                 </TouchableOpacity>
               );
@@ -109,7 +112,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           style={style.event}
           onPress={() => dispatch(eventFormOpenSet(true))}
         >
-          <Image source={require('../../../assets/images/icons/plus.png')} style={{ ...headerStyles.icons,...style.close }} />
+          <Image source={require('../../../assets/images/icons/plus.png')}
+                 style={{ ...headerStyles.icons, ...style.close }} />
           <AppText style={style.eventTitle}>{t('Событие')}</AppText>
         </TouchableOpacity>
         <View style={style.categories}>
@@ -128,7 +132,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                     });
                   }}
                 >
-                  <Image source={{ uri: category.image }} style={{ ...headerStyles.icons, ...style.navigationImage }} resizeMode='cover' />
+                  <Image source={{ uri: category.image }} style={{ ...headerStyles.icons, ...style.navigationImage, display: 'none' }}
+                         resizeMode='cover' />
                   <AppText style={style.navigationTitle}>{t(category.name)}</AppText>
                 </TouchableOpacity>
               );
@@ -138,7 +143,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
             style={{ ...style.more, display: hasMore ? 'flex' : 'none' }}
             onPress={getMore}
           >
-            <Image source={require('../../../assets/images/icons/chevronDown.png')} style={{ ...headerStyles.icons,...style.close }} />
+            <Image source={require('../../../assets/images/icons/chevronDown.png')}
+                   style={{ ...headerStyles.icons, ...style.close }} />
             <AppText style={{ ...style.title, color: '#000' }}>{t('Еще')}</AppText>
           </TouchableOpacity>
         </View>
@@ -147,6 +153,21 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           <AppText style={{ ...style.information, marginLeft: 25 }}>{t('Контакты')}</AppText>
         </View>
         <AppText style={{ ...style.information, fontWeight: '400' }}>{t('Присоединяйтесь')}:</AppText>
+        <View style={style.specialIcons}>
+          <TouchableOpacity onPress={handleOpenWithWebBrowser(`https://instagram.com/uznews/`)}>
+            <Image source={require('../../../assets/images/icons/intsta.png')}
+                   style={{ ...headerStyles.icons, marginRight: 20 }} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenWithWebBrowser(`https://t.me/uznews`)}>
+            <Image source={require('../../../assets/images/icons/telega.png')}
+                   style={{ ...headerStyles.icons, marginRight: 20 }} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenWithWebBrowser(`https://www.facebook.com/uznews.uz`)}>
+            <Image source={require('../../../assets/images/icons/faceb.png')} style={{ ...headerStyles.icons }} />
+          </TouchableOpacity>
+        </View>
+        <AppText style={{ ...style.information, marginTop: 25, fontWeight: '400' }}>{t('© 2015-2020 «UzNews.uz»')}:</AppText>
+        <AppText style={{ ...style.information, marginTop: 10, fontWeight: '400' }}>{t('Сделано в')}:</AppText>
       </ScrollView>
     </SafeAreaView>
   );
@@ -198,7 +219,6 @@ const style = StyleSheet.create({
     marginBottom: 1,
   },
   navigationImage: {
-    display: 'none',
     marginRight: 10,
     borderRadius: 7,
   },
@@ -228,11 +248,15 @@ const style = StyleSheet.create({
   addInformation: {
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: 25
+    marginBottom: 25,
   },
   information: {
     fontSize: 14,
     fontFamily: 'roboto-medium',
     color: 'rgba(0, 0, 0, .7)',
+  },
+  specialIcons: {
+    flexDirection: 'row',
+    marginTop: 15,
   },
 });

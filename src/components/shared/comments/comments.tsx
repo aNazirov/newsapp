@@ -3,9 +3,8 @@ import { CommentForm, CommentModal } from './commentForm';
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppText } from '../appText';
 import { useTranslation } from 'react-i18next';
-import { Picker } from '@react-native-picker/picker';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { commentSet, commentsNull, getPostComments } from '../../../store/comments/comments.thunks';
+import { commentSet, getPostComments } from '../../../store/comments/comments.thunks';
 import { useRoute } from '@react-navigation/native';
 import { blue } from '../../../styles/layout.styles';
 import { IComment } from '../../../interfaces';
@@ -209,7 +208,7 @@ export const Comments: React.FC = () => {
   const { t } = useTranslation();
   const { hasMore } = useAppSelector(state => state.comments);
   const { lang } = useAppSelector(state => state.global);
-  const [filter, setFilter] = useState('popular');
+  // const [filter, setFilter] = useState('popular');
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -219,35 +218,24 @@ export const Comments: React.FC = () => {
       .then(() => pageRef.current++)
       .finally(() => setLoading(false));
   }, []);
-  const getFilter = (value: any) => {
-    setLoading(true);
-    let params = {};
-    if (value === 'popular') {
-      params = Object.assign({}, { popular: true });
-    }
-    if (value === 'fresh') {
-      params = Object.assign({}, { fresh: true });
-    }
-    dispatch(commentsNull());
-    dispatch(getPostComments(route.params.slug, lang, { page: 1, ...params }))
-      .then(() => pageRef.current = 2)
-      .finally(() => setLoading(false));
-  };
+  // const getFilter = (value: any) => {
+  //   setLoading(true);
+  //   let params = {};
+  //   if (value === 'popular') {
+  //     params = Object.assign({}, { popular: true });
+  //   }
+  //   if (value === 'fresh') {
+  //     params = Object.assign({}, { fresh: true });
+  //   }
+  //   dispatch(commentsNull());
+  //   dispatch(getPostComments(route.params.slug, lang, { page: 1, ...params }))
+  //     .then(() => pageRef.current = 2)
+  //     .finally(() => setLoading(false));
+  // };
   return (
     <View style={style.container}>
       <View style={style.head}>
         <AppText style={style.title}>{t('Комментарии')}</AppText>
-        <Picker
-          style={{ color: '#000' }}
-          selectedValue={filter}
-          onValueChange={(itemValue) => {
-            setFilter(itemValue);
-            getFilter(itemValue);
-          }
-          }>
-          <Picker.Item label={t('По популярности')} value='popular' />
-          <Picker.Item label={t('По дате')} value='fresh' />
-        </Picker>
       </View>
       <CommentForm />
       <Comment />

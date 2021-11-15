@@ -5,7 +5,7 @@ import { errorObject } from '../../../_data/helpers';
 import { getAlertNotifications } from '../../../store/notifications/notifications.thunks';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { logout } from '../../../store/global/global.thunks';
 import { headerStyles } from '../../../styles/header.styles';
 import { AppText } from '../appText';
@@ -58,24 +58,28 @@ export const Profile = () => {
           styleMainContainer={style.popupContainer}
           hide={() => setNotification(false)}
         >
-          {
-            loading
-              ? <View style={{ height: 100, justifyContent: 'center' }}><ActivityIndicator size='small' color={blue} /></View>
-              : <Notifications notifications={alertNotifications} />
-          }
-          <TouchableOpacity
-            onPress={() => {
-              setNotification(false);
-              navigation.navigate('Profile', { notification: true });
-            }}
-          >
-            <View style={{
-              borderTopWidth: 1,
-              borderTopColor: 'rgba(0, 0, 0, .1)',
-            }}>
-              <AppText style={style.allNotifications}>{t('Все уведомления')}</AppText>
-            </View>
-          </TouchableOpacity>
+          <SafeAreaView>
+
+            {
+              loading
+                ?
+                <View style={{ height: 100, justifyContent: 'center' }}><ActivityIndicator size='small' color={blue} /></View>
+                : <Notifications notifications={alertNotifications} />
+            }
+            <TouchableOpacity
+              onPress={() => {
+                setNotification(false);
+                navigation.navigate('Profile', { notification: true });
+              }}
+            >
+              <View style={{
+                borderTopWidth: 1,
+                borderTopColor: 'rgba(0, 0, 0, .1)',
+              }}>
+                <AppText style={style.allNotifications}>{t('Все уведомления')}</AppText>
+              </View>
+            </TouchableOpacity>
+          </SafeAreaView>
         </ModalContainer>
       </View>
       <View
@@ -95,28 +99,28 @@ export const Profile = () => {
           styleContainer={{ ...style.popup, width: 200, marginRight: 15 }}
           styleMainContainer={{ ...style.popupContainer, alignItems: 'flex-end' }}
         >
-          <AppText style={{ ...style.profileTab, fontSize: 10, paddingBottom: 0 }}>{t('Профиль')}</AppText>
-          <TouchableOpacity
-            onPress={() => {
-              setProfile(false);
-              navigation.navigate('Profile');
-            }}
-          >
-            <AppText style={{ ...style.profileTab }}>{user?.name}</AppText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setProfile(false);
-              navigation.navigate('Settings');
-            }}
-          >
-            <AppText style={{ ...style.profileTab }}>{t('Настройки')}</AppText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => dispatch(logout())}
-          >
-            <AppText style={{ ...style.profileTab }}>{t('Выйти')}</AppText>
-          </TouchableOpacity>
+            <AppText style={{ ...style.profileTab, fontSize: 10, paddingBottom: 0 }}>{t('Профиль')}</AppText>
+            <TouchableOpacity
+              onPress={() => {
+                setProfile(false);
+                navigation.navigate('Profile');
+              }}
+            >
+              <AppText style={{ ...style.profileTab }}>{user?.name}</AppText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setProfile(false);
+                navigation.navigate('Settings');
+              }}
+            >
+              <AppText style={{ ...style.profileTab }}>{t('Настройки')}</AppText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => dispatch(logout())}
+            >
+              <AppText style={{ ...style.profileTab }}>{t('Выйти')}</AppText>
+            </TouchableOpacity>
         </ModalContainer>
       </View>
     </View>
@@ -128,14 +132,14 @@ const style = StyleSheet.create({
     flexDirection: 'row',
   },
   popup: {
-    marginTop: 40,
+    marginTop: Platform.OS === 'android' ? 40 : 90,
     backgroundColor: '#fff',
     borderRadius: 7,
     width: 300,
   },
   popupContainer: {
     backgroundColor: 'transparent',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   notifications: {
     marginRight: 22,

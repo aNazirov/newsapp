@@ -73,7 +73,7 @@ export const Header: React.FC<Props> = ({ style }) => {
               <View onTouchStart={e => e.stopPropagation()}>
                 <Image source={require('../../../assets/images/icons/searchL.png')} style={headerStyles.inputIcon} />
                 <TextInput
-                  style={headerStyles.input}
+                  style={{ ...headerStyles.input, marginRight: token ? 22 : 0 }}
                   onChangeText={val => setText(val)}
                   onSubmitEditing={() => navigation.navigate('Search', { text })}
                   value={text}

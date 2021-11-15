@@ -140,7 +140,7 @@ export const Auth: React.FC = () => {
         <View style={{ width: 15 }} />
         <GoogleLogin />
       </View>
-      <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'justify' }}>
+      <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'left' }}>
         {t('Нажимая “Войти” вы соглашаетесь с ')}
         <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/privacy`)}><AppText style={{ textDecorationLine: 'underline' }}>политикой конфиденциальности</AppText></TouchableOpacity>
       </AppText>
@@ -189,7 +189,6 @@ const style = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    fontWeight: '400',
     lineHeight: 24,
     marginBottom: 15,
   },

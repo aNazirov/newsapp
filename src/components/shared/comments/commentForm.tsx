@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { AppInput } from '../appInput';
 import { useForm } from 'react-hook-form';
-import { ActivityIndicator, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image, KeyboardAvoidingView,
+  Platform, SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from 'react-i18next';
 import { headerStyles } from '../../../styles/header.styles';
@@ -21,23 +29,18 @@ export const CommentForm: React.FC = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <View
+    <TouchableOpacity
       style={{ ...style.formCommentDummy, height: 'auto' }}
-      onTouchStart={() => {
+      onPress={() => {
         dispatch(commentFormOpenSet(true));
       }}
     >
-      <TextInput
-        onFocus={(e: any) => e.target.blur()}
-        style={{ ...style.textInput }}
-        placeholder={`${t('Комментарий')}...`}
-
-      />
+      <View style={{ ...style.textInput }}><AppText style={{ color: 'rgba(0, 0, 0, .5)' }}>{t('Комментарий')}</AppText></View>
       <Image
         source={require('../../../../assets/images/icons/image.png')}
         style={{ ...style.formCommentDummyImage, ...headerStyles.icons }}
       />
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -110,7 +113,20 @@ export const CommentModal: React.FC = () => {
       hide={onClose}
       styleContainer={style.container}
     >
-      <AppText style={style.title}>{t('Комментирование')}</AppText>
+      <View style={{ marginTop: Platform.OS === 'android' ? 0 : StatusBar.currentHeight }}>
+        <SafeAreaView style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+          <TouchableOpacity
+            onPress={() => {
+              onClose();
+              reset();
+            }}
+          >
+            <Image source={require('../../../../assets/images/icons/right-arrows.png')}
+                   style={{ ...headerStyles.icons, marginRight: 20, marginTop: Platform.OS === 'android' ? 5 : 0 }} />
+          </TouchableOpacity>
+          <AppText style={style.title}>{t('Комментирование')}</AppText>
+        </SafeAreaView>
+      </View>
       {
         comment &&
         <View style={style.head}>
@@ -150,38 +166,42 @@ export const CommentModal: React.FC = () => {
           </TouchableOpacity>
         </View>
       }
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <TouchableOpacity
-          onPress={pickImage}
-        >
-          <Image
-            source={require('../../../../assets/images/icons/image.png')}
-            style={{ ...style.formCommentDummy, ...headerStyles.icons }}
-          />
-        </TouchableOpacity>
-        {
-          loading
-            ? <ActivityIndicator size='large' color='#0000ff' />
-            : <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ ...style.button, backgroundColor: 'rgba(0, 0, 0, 0)', marginRight: 15 }}
-                onPress={() => {
-                  onClose();
-                  reset();
-                }}
-              >
-                <AppText style={{ ...style.buttonText }}>{t('Отменить')}</AppText>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ ...style.button, backgroundColor: blue }}
-                onPress={handleSubmit(createComment)}
-              >
-                <AppText style={{ ...style.buttonText, color: '#fff' }}>{t('Отправить')}</AppText>
-              </TouchableOpacity>
-            </View>
-        }
-
-      </View>
+      <KeyboardAvoidingView
+        behavior={'position'}
+        style={{ paddingBottom: Platform.OS === 'ios' ? 15 : 0 }}
+      >
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <TouchableOpacity
+            onPress={pickImage}
+          >
+            <Image
+              source={require('../../../../assets/images/icons/image.png')}
+              style={{ ...style.formCommentDummy, ...headerStyles.icons }}
+            />
+          </TouchableOpacity>
+          {
+            loading
+              ? <ActivityIndicator size='large' color='#0000ff' />
+              : <View style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                  style={{ ...style.button, backgroundColor: 'rgba(0, 0, 0, 0)', marginRight: 15 }}
+                  onPress={() => {
+                    onClose();
+                    reset();
+                  }}
+                >
+                  <AppText style={{ ...style.buttonText }}>{t('Отменить')}</AppText>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ ...style.button, backgroundColor: blue }}
+                  onPress={handleSubmit(createComment)}
+                >
+                  <AppText style={{ ...style.buttonText, color: '#fff' }}>{t('Отправить')}</AppText>
+                </TouchableOpacity>
+              </View>
+          }
+        </View>
+      </KeyboardAvoidingView>
     </ModalContainer>
   );
 };
@@ -239,7 +259,7 @@ const style = StyleSheet.create({
   },
   formCommentDummyImage: {
     position: 'absolute',
-    top: 10,
+    top: Platform.OS === 'ios' ? 5 : 8,
     right: 10,
   },
   formComment: {

@@ -61,7 +61,7 @@ export const Opinions: React.FC<Props> = ({}) => {
               <View style={style.chapter}>
                 <Image source={require('../../../assets/images/opinions.png')} style={style.image} />
                 <AppText style={style.title}>{t('Авторское мнение')}</AppText>
-                <AppText style={style.description}>Описание категории</AppText>
+                <AppText style={style.description}>{t('Экспертный взгляд на происходящие события от лидеров мнений и ведущих профессионалов.')}</AppText>
               </View>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
               <Posts />

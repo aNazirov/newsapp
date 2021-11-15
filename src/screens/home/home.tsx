@@ -2,12 +2,13 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, LogBox, StyleSheet } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getHotPosts, getMainPosts } from '../../store/posts/posts.thunks';
-import { HotPost, Posts } from '../../components/shared';
+import { AppText, HotPost, Posts } from '../../components/shared';
 import { clearStore } from '../../helpers/helpers';
 import { NavigationProp } from '@react-navigation/native';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { Loader } from '../../components/shared/loader';
+import { useTranslation } from 'react-i18next';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const Home: React.FC<Props> = ({}) => {
+  const { t } = useTranslation()
   const page = useRef(2);
   const dispatch = useAppDispatch();
   const [firstLoading, setFirstLoading] = useState(true);
@@ -50,6 +52,7 @@ export const Home: React.FC<Props> = ({}) => {
                   return <HotPost key={post.id} post={post} />;
                 })
               }
+              <AppText style={{ ...style.title }}>{t('Лента новостей')}</AppText>
               <Posts />
               {
                 loading &&
@@ -68,4 +71,11 @@ export const Home: React.FC<Props> = ({}) => {
 
 const style = StyleSheet.create({
   container: {},
+  title: {
+    fontSize: 20,
+    fontFamily: 'roboto-bold',
+    lineHeight: 31,
+    marginTop: 25,
+    marginHorizontal: 15
+  },
 });

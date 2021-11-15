@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Platform, StyleSheet, TextInput, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { getSearchPosts, postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
@@ -93,7 +93,8 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
 };
 const style = StyleSheet.create({
   chapter: {
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingTop: 15
   },
   inputContainer: {
     position: 'relative',
@@ -102,14 +103,14 @@ const style = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 7,
     fontSize: 12,
-    paddingVertical: 4,
+    paddingVertical: 8,
     paddingLeft: 40,
     paddingRight: 12,
   },
   inputIcon: {
     position: 'absolute',
     zIndex: 10,
-    top: 4,
+    top: Platform.OS === 'ios' ? 3 : 8,
     left: 6,
   },
   title: {
@@ -120,7 +121,6 @@ const style = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-
     lineHeight: 21,
     marginTop: 10,
   },

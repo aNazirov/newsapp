@@ -77,7 +77,7 @@ export const Options: React.FC<Props> = ({ commentId, userId }) => {
         <TouchableOpacity
           onPress={() => setShow(false)}
         >
-          <View style={{ backgroundColor: '#fff', borderRadius: 7, marginVertical: 25 }}>
+          <View style={{ backgroundColor: '#fff', borderRadius: 7, marginBottom: 25, marginTop: 15 }}>
             <AppText style={{ ...style.profileTab }}>
               {t('Отменить')}
             </AppText>
@@ -94,7 +94,7 @@ const style = StyleSheet.create({
   },
   profile: {},
   profileTab: {
-    paddingVertical: 8,
+    paddingVertical: 15,
     paddingHorizontal: 16,
     fontSize: 14,
     textAlign: 'center',

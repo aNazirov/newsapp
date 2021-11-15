@@ -39,6 +39,7 @@ export const ModalContainer: React.FC<Props> = ({
 
 const style = StyleSheet.create({
   container: {
+    position: 'relative',
     flex: 1,
     height: '100%',
     alignItems: 'center',
