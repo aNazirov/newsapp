@@ -14,7 +14,9 @@ import { Event } from './src/components/event';
 
 async function loadApplication() {
   await Font.loadAsync({
+    'roboto-light': require('./assets/fonts/Roboto-Light.ttf'),
     'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
+    'roboto-regular-italic': require('./assets/fonts/Roboto-Italic.ttf'),
     'roboto-medium': require('./assets/fonts/Roboto-Medium.ttf'),
     'roboto-bold': require('./assets/fonts/Roboto-Bold.ttf'),
   });

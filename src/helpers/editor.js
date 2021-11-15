@@ -7,9 +7,7 @@ const customParsers = {
       ${data.caption
       ? `
       <p style='
-        font-family: "roboto-regular";
-        font-style: italic;
-        font-weight: 400;
+        font-family: "roboto-regular-italic";
         font-size: 13px;
         line-height: 15px;
         margin: 10px 0 15px;
@@ -18,6 +16,12 @@ const customParsers = {
     `;
   },
   paragraph: (data) => {
+    if (data.text.includes('class="text-sm font-normal"')) {
+      data.text = data.text.replace(/class="text-sm font-normal"/g, `style="font-family: 'roboto-regular';font-size: 14px;color: #999;"`)
+    }
+    if (data.text.includes('class="text-2xl font-light"')) {
+      data.text = data.text.replace(/class="text-2xl font-light"/g, `style="font-family: 'roboto-light';font-size: 24px;color: #222;"`)
+    }
     return `<p style='
         font-family: "roboto-regular";
         margin: 15px 0;

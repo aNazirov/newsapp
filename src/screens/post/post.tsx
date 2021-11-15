@@ -189,9 +189,9 @@ const style = StyleSheet.create({
   },
   mainImage: {
     width: '100%',
-    height: 300,
+    height: 250,
     borderRadius: 7,
-    marginVertical: 30,
+    marginTop: 30,
   },
   tag: {
     backgroundColor: '#ECF6FF',
