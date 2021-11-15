@@ -1,12 +1,15 @@
 import React from 'react';
 import { AppText } from '../shared';
-import { Image, Platform, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
 import { useAppDispatch } from '../../store/hooks';
 import { loginFormOpenSet, loginViaGoogle } from '../../store/global/global.thunks';
 import { headerStyles } from '../../styles/header.styles';
 import { toastShow } from '../../services/notifications.service';
+import * as WebBrowser from 'expo-web-browser';
 import { errorObject } from '../../_data/helpers';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export const GoogleLogin: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -15,7 +18,6 @@ export const GoogleLogin: React.FC = () => {
     iosClientId: '866558658392-uetcis6avp4qt9768s8bfk6hpge942ut.apps.googleusercontent.com',
     androidClientId: '866558658392-fc9q33hl5o5upcnpu2o2ngbkmts1d0rm.apps.googleusercontent.com',
     webClientId: '866558658392-bmdicbi6n5a42vo6jban13ckd8mu6sv5.apps.googleusercontent.com',
-    clientId: Platform.OS === 'android' ? '866558658392-fc9q33hl5o5upcnpu2o2ngbkmts1d0rm.apps.googleusercontent.com' : '866558658392-uetcis6avp4qt9768s8bfk6hpge942ut.apps.googleusercontent.com'
   });
 
   React.useEffect(() => {
