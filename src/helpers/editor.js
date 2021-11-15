@@ -52,6 +52,7 @@ const customParsers = {
 const parser = new edjsParser(undefined, customParsers);
 
 export const parseEditor = (data) => {
+  console.log(data)
   return parser.parseBlock(data);
 };
 
