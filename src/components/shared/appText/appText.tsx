@@ -1,7 +1,7 @@
 import React from 'react';
-import {Text, StyleSheet} from 'react-native';
+import { Text, StyleSheet, TextProps } from 'react-native';
 
-export const AppText = ({ style, children, ...props }: any) => (
+export const AppText: React.FC<TextProps> = ({ style, children, ...props }: any) => (
   <Text
     style={{...styles.default, ...style}}
     {...props}

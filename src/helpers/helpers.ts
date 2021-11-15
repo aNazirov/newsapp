@@ -1,6 +1,7 @@
 import { postSet, postsNull } from '../store/posts/posts.thunks';
 import { commentsNull } from '../store/comments/comments.thunks';
 import { notificationsNull } from '../store/notifications/notifications.thunks';
+import * as WebBrowser from 'expo-web-browser';
 
 export const clearStore = (dispatch: any) => {
   dispatch(commentsNull());
@@ -8,3 +9,8 @@ export const clearStore = (dispatch: any) => {
   dispatch(postsNull())
   dispatch(postSet(null))
 }
+export const website = 'https://front.djomi.uz'
+
+export const handleOpenWithWebBrowser = (url: string) => () => {
+  WebBrowser.openBrowserAsync(url);
+};

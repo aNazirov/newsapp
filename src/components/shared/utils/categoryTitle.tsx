@@ -33,10 +33,11 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
+    display: 'none',
     borderRadius: 7,
+    marginRight: 10,
   },
   title: {
     fontSize: 13,
-    marginLeft: 10,
   },
 });
