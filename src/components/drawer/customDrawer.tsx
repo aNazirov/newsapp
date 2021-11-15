@@ -15,11 +15,11 @@ import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { eventFormOpenSet, langSet } from '../../store/global/global.thunks';
-import { getActiveRouteState } from '../../_data/helpers';
+import { errorObject, getActiveRouteState } from '../../_data/helpers';
 import { blue } from '../../styles/layout.styles';
 import { getMainCategories } from '../../store/categories/categories.thunks';
-import { AxiosError } from 'axios';
 import { AppText } from '../shared';
+import { toastShow } from '../../services/notifications.service';
 
 const navigationTitles = [
   {
@@ -56,7 +56,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
   };
   const getMore = () => {
     dispatch(getMainCategories({ page: 2 }, lang))
-      .catch((e: AxiosError) => console.log(e));
+      .catch(() => toastShow(errorObject));
   };
   return (
     <SafeAreaView>
@@ -198,11 +198,12 @@ const style = StyleSheet.create({
     marginBottom: 1,
   },
   navigationImage: {
+    display: 'none',
+    marginRight: 10,
     borderRadius: 7,
   },
   navigationTitle: {
     fontSize: 14,
-    marginLeft: 10,
   },
   event: {
     display: 'flex',

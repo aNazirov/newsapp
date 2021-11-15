@@ -11,6 +11,8 @@ import AppLoadingPlaceholder from 'expo/build/launch/AppLoadingPlaceholder';
 import './i18n';
 import { Auth } from './src/components/auth';
 import { Event } from './src/components/event';
+import { errorObject } from './src/_data/helpers';
+import { toastShow } from './src/services/notifications.service';
 
 async function loadApplication() {
   await Font.loadAsync({
@@ -28,7 +30,7 @@ export default function App() {
     return (
       <AppLoadingPlaceholder
         startAsync={loadApplication}
-        onError={err => console.log(err)}
+        onError={() => toastShow(errorObject)}
         onFinish={() => setIsReady(true)}
       />
     );

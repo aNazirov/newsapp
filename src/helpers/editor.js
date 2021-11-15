@@ -27,6 +27,10 @@ const customParsers = {
     if (data.text.includes('<i>')) {
       data.text = data.text.replace(/<i>/g, `<i style="font-family: 'roboto-regular-italic'">`);
     }
+    if (data.text.includes('<b>')) {
+      data.text = data.text.replace(/<b>/g, `<span style="font-family: 'roboto-bold';">`);
+      data.text = data.text.replace(/<\/b>/g, `</span>`);
+    }
     return `<p 
       style='
         font-family: "roboto-regular";
@@ -63,21 +67,32 @@ const customParsers = {
     return `<iframe src='${link}' width='100%' height='720' style='margin-bottom: 15px'></iframe>`;
   },
   quote: (data) => {
+    if (data.text.includes('class="text-sm font-normal"')) {
+      data.text = data.text.replace(/class="text-sm font-normal"/g, `style="font-family: 'roboto-regular';font-size: 14px;color: #999;"`);
+    }
+    if (data.text.includes('class="text-2xl font-light"')) {
+      data.text = data.text.replace(/class="text-2xl font-light"/g, `style="font-family: 'roboto-light';font-size: 24px;color: #222;"`);
+    }
+    if (data.text.includes('<i>')) {
+      data.text = data.text.replace(/<i>/g, `<i style="font-family: 'roboto-regular-italic'">`);
+    }
     if (data.text.includes('<b>')) {
       data.text = data.text.replace(/<b>/g, `<span style="font-family: 'roboto-bold';">`);
       data.text = data.text.replace(/<\/b>/g, `</span>`);
     }
     return `<div
-      style='
+      style="
         border-radius: 3px;
         background-color: #ECF6FF; 
         box-shadow: none; 
-        padding: 20px 25px; 
+        padding: 20px 25px;
+        font-size: 16px;
+        font-family: 'roboto-medium';
         border-left-width: 3px; 
         border-left-style: solid; 
         border-left-color: #0A85FF; 
         margin-bottom: 0;
-        '
+        "
     >
       <p style="font-family: 'roboto-regular';">${data.text}</p>
     </div>`;
