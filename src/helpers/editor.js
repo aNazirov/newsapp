@@ -10,7 +10,7 @@ const customParsers = {
           font-family: "roboto-regular-italic";
           font-size: 13px;
           line-height: 15px;
-          margin: 10px 0 15px;
+          margin: 10px 0 15px 5px;
           '
         >
           ${data.caption}

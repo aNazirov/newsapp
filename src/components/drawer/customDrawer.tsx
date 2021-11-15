@@ -156,7 +156,11 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/contacts`)}>
             <AppText style={{ ...style.information, marginLeft: 25 }}>{t('Контакты')}</AppText>
           </TouchableOpacity>
+          <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/resources`)}>
+            <AppText style={{ ...style.information, marginTop: 15 }}>{t('Использование материалов')}</AppText>
+          </TouchableOpacity>
         </View>
+
         <AppText style={{ ...style.information, fontWeight: '400' }}>{t('Присоединяйтесь')}:</AppText>
         <View style={style.specialIcons}>
           <TouchableOpacity onPress={handleOpenWithWebBrowser(`https://instagram.com/uznews/`)}>
@@ -254,6 +258,7 @@ const style = StyleSheet.create({
   addInformation: {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     marginBottom: 25,
   },
   information: {
