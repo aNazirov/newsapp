@@ -17,18 +17,18 @@ export const Posts: React.FC<Props> = ({}) => {
           if (post.type === 'posts') {
             return [
               ...total,
-              ...post.data.map((item) => <BasePost post={item} key={item.slug + item?.id + i} />)
+              ...post.data.map((item) => <BasePost post={item} key={item.slug + i} />)
             ];
           }
-          if (post.type === 'categories' || post.type === 'authors') {
+          if ((post.type === 'categories' || post.type === 'authors') && post.data.length) {
             return [
               ...total,
-              <ExtraItems items={post.data} title={post.type} key={post.type + i} />
+              <ExtraItems items={post.data} title={post.type} key={post.type + Date.now() + i} />
             ];
           }
           if (post.data.length) return [
             ...total,
-            <ExtraPosts posts={post.data} title={post.type} key={post.type + i} />
+            <ExtraPosts posts={post.data} title={post.type} key={post.type + Date.now() + i} />
           ];
 
           return total;

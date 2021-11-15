@@ -18,7 +18,7 @@ export const ExtraPost: React.FC<Props> = ({ post }) => {
         <View style={style.head}>
           {
             post.category &&
-            <View style={style.category}><CategoryTitle category={post.category} /></View>
+            <View style={style.category}><CategoryTitle category={post.category}/></View>
           }
           {
             post.user &&
@@ -69,6 +69,7 @@ const style = StyleSheet.create({
   },
   head: {
     display: 'flex',
+    flexWrap: 'wrap',
     flexDirection: 'row',
     alignItems: 'center',
   },

@@ -50,13 +50,7 @@ const CommentChild: React.FC<PropsCommentChild> = ({ comment, parent }) => {
             dispatch(commentFormOpenSet(true));
           }}
         >
-          <AppText style={{
-            fontSize: 13,
-            lineHeight: 24,
-            color: 'rgba(0, 0, 0, .7)',
-            marginBottom: 10,
-            marginRight: 20,
-          }}>{t('Ответить')}</AppText>
+          <AppText style={styleCommentChild.send}>{t('Ответить')}</AppText>
         </TouchableOpacity>
         <Options userId={comment.user.id} commentId={comment.id} />
       </View>
@@ -100,6 +94,13 @@ const styleCommentChild = StyleSheet.create({
     color: '#000000',
     opacity: 0.7,
   },
+  send: {
+    fontSize: 13,
+    lineHeight: 24,
+    color: 'rgba(0, 0, 0, .7)',
+    marginBottom: 10,
+    marginRight: 20,
+  }
 });
 
 const CommentChilds: React.FC<PropsCommentChilds> = ({ child}) => {

@@ -25,7 +25,10 @@ export const getSearchPostsService = (params: any, lang: string = 'ru') => {
       'Accept-Language': lang,
     },
   })
-    .then(res => res.data.result.posts);
+    .then(res => {
+      console.log(params, res.data.result.posts)
+      return res.data.result.posts;
+    });
 };
 export const getAuthorsPostsService = (params: any, lang: string) => {
   return api.get('/authors/posts', {

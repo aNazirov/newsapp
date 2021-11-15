@@ -1,4 +1,5 @@
 const edjsParser = require('editorjs-parser');
+
 const customParsers = {
   image: function(data) {
     return `
@@ -6,7 +7,7 @@ const customParsers = {
       ${data.caption
       ? `
       <p style='
-        font-family: Roboto;
+        font-family: "roboto-regular";
         font-style: italic;
         font-weight: 400;
         font-size: 13px;
@@ -18,7 +19,9 @@ const customParsers = {
   },
   paragraph: (data) => {
     return `<p style='
+        font-family: "roboto-regular";
         margin: 15px 0;
+        font-size: 16px;
     '>${data.text}</p>`;
   },
   linkTool: ({ link, meta }) => {
