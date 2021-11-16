@@ -9,7 +9,7 @@ export const clearStore = (dispatch: any) => {
   dispatch(postsNull())
   dispatch(postSet(null))
 }
-export const website = 'https://front.djomi.uz'
+export const website = 'https://uznews.uz'
 
 export const handleOpenWithWebBrowser = (url: string) => () => {
   WebBrowser.openBrowserAsync(url);
