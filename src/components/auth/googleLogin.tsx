@@ -22,6 +22,7 @@ export const GoogleLogin: React.FC = () => {
   });
 
   React.useEffect(() => {
+    toastShow({type: 'success', title: '', message: JSON.stringify(response)})
     if (response?.type === 'success') {
       const { authentication } = response;
       dispatch(loginViaGoogle(authentication!.accessToken))
