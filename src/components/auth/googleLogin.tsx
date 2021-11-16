@@ -10,6 +10,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { errorObject } from '../../_data/helpers';
 
 WebBrowser.maybeCompleteAuthSession();
+// const useProxy = Platform.select({ default: false });
 
 export const GoogleLogin: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ export const GoogleLogin: React.FC = () => {
       const { authentication } = response;
       dispatch(loginViaGoogle(authentication!.accessToken))
         .then(() => dispatch(loginFormOpenSet(false)))
-        .catch(() => toastShow(errorObject))
+        .catch(() => toastShow(errorObject));
     }
     if (response?.type === 'error') {
     }
@@ -34,7 +35,7 @@ export const GoogleLogin: React.FC = () => {
     <TouchableOpacity
       style={style.button}
       disabled={!request}
-      onPress={() => promptAsync()}
+      onPress={() => promptAsync({ showInRecents:true  })}
     >
       <Image
         source={require('../../../assets/images/icons/google.png')}
@@ -42,8 +43,8 @@ export const GoogleLogin: React.FC = () => {
       />
       <AppText style={style.buttonText}>Google</AppText>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const style = StyleSheet.create({
   button: {
@@ -57,6 +58,6 @@ const style = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 14
+    fontSize: 14,
   },
 });
