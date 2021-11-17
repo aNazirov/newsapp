@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { CustomDrawer } from './customDrawer';
 import { Home } from '../../screens/home';
@@ -12,13 +12,25 @@ import { Authors } from '../../screens/authors';
 import { Tags } from '../../screens/tags';
 import { Search } from '../../screens/search';
 import { Profile, Settings } from '../../screens/profile';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { Post } from '../../screens/post';
+import { autoLogin, getGlobalData, langSet } from '../../store/global/global.thunks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator();
 
 export const DrawerNavigation: React.FC = () => {
-  const { token } = useAppSelector(state => state.global);
+  const dispatch = useAppDispatch()
+  const { token, lang } = useAppSelector(state => state.global);
+  useEffect(() => {
+    dispatch(autoLogin());
+    AsyncStorage.getItem('lang')
+      .then((result: any) => dispatch(langSet(result || 'ru')));
+  }, []);
+  useEffect(() => {
+    dispatch(getGlobalData(lang));
+  }, [lang]);
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawer {...props} />}

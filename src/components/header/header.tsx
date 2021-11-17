@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   LayoutAnimation,
@@ -11,10 +11,8 @@ import {
 } from 'react-native';
 import { headerStyles } from '../../styles/header.styles';
 import { Weather, Currency, Profile, Sign } from '../shared';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { autoLogin, getGlobalData, langSet } from '../../store/global/global.thunks';
+import { useAppSelector } from '../../store/hooks';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   style: any;
@@ -28,18 +26,9 @@ if (
 }
 export const Header: React.FC<Props> = ({ style }) => {
   const navigation = useNavigation<any>();
-  const dispatch = useAppDispatch();
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
-  const { lang, token } = useAppSelector(state => state.global);
-  useEffect(() => {
-    dispatch(autoLogin());
-    AsyncStorage.getItem('lang')
-      .then((result: any) => dispatch(langSet(result || 'ru')));
-  }, []);
-  useEffect(() => {
-    dispatch(getGlobalData(lang));
-  }, [lang]);
+  const { token } = useAppSelector(state => state.global);
 
   return (
     <SafeAreaView style={{backgroundColor: '#fff'}}>

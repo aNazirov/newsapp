@@ -49,8 +49,9 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
     clearStore(dispatch);
     dispatch(commentsNull());
     dispatch(getPostComments(route.params?.slug, lang));
-    dispatch(getPost(route.params?.slug, lang))
+    dispatch(getMorePosts('posts', route.params?.slug, { page: 1 }, lang))
       .then(() => page.current = 2)
+    dispatch(getPost(route.params?.slug, lang))
       .catch(() => toastShow(errorObject))
       .finally(() => setFirstLoading(false));
   }, [route.params?.slug]);
