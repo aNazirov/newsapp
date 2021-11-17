@@ -42,7 +42,7 @@ export const Header: React.FC<Props> = ({ style }) => {
   }, [lang]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor: '#fff'}}>
       <View onTouchStart={e => {
         e.stopPropagation();
         LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);

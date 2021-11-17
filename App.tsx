@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { LayoutStyles } from './src/styles/layout.styles';
 import { Provider } from 'react-redux';
 import { store } from './src/store';
@@ -41,6 +41,7 @@ export default function App() {
       <Provider store={store}>
         <View style={LayoutStyles.layoutContainer}>
           <View style={LayoutStyles.body}>
+            <StatusBar barStyle='dark-content' backgroundColor='white'/>
             <DrawerNavigation />
           </View>
         </View>
