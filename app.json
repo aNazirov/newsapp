@@ -22,7 +22,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.uznews",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "866558658392-uetcis6avp4qt9768s8bfk6hpge942ut.apps.googleusercontent.com"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {

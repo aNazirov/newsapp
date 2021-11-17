@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { loginFormOpenSet, loginStatic } from '../../store/global/global.thunks';
 import { FacebookLogin } from './facebookLogin';
 import { GoogleLogin } from './googleLogin';
+import { GoogleLogin2 } from './google';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { website, handleOpenWithWebBrowser } from '../../helpers/helpers';
@@ -140,6 +141,7 @@ export const Auth: React.FC = () => {
         <View style={{ width: 15 }} />
         <GoogleLogin />
       </View>
+      <GoogleLogin2 />
       <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'left' }}>
         {t('Нажимая “Войти” вы соглашаетесь с ')}
         <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/privacy`)}><AppText style={{ textDecorationLine: 'underline' }}>политикой конфиденциальности</AppText></TouchableOpacity>
