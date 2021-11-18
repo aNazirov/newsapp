@@ -8,10 +8,8 @@ import { headerStyles } from '../../styles/header.styles';
 import { toastShow } from '../../services/notifications.service';
 import * as WebBrowser from 'expo-web-browser';
 import { errorObject } from '../../_data/helpers';
-import * as AppAuth from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
-// const useProxy = Platform.select({ default: false });
 
 export const GoogleLogin: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,23 +19,25 @@ export const GoogleLogin: React.FC = () => {
     androidClientId: '866558658392-fc9q33hl5o5upcnpu2o2ngbkmts1d0rm.apps.googleusercontent.com',
   });
 
-  React.useEffect(() => {
-    toastShow({type: 'success', title: '', message: JSON.stringify(response)})
-    toastShow({type: 'success', title: '', message: AppAuth.getRedirectUrl()})
-    if (response?.type === 'success') {
-      const { authentication } = response;
-      dispatch(loginViaGoogle(authentication!.accessToken))
-        .then(() => dispatch(loginFormOpenSet(false)))
-        .catch(() => toastShow(errorObject));
-    }
-    if (response?.type === 'error') {
-    }
-  }, [response]);
+  const login = () => {
+    promptAsync()
+      .then(res => {
+        if (res.type === 'success') {
+          return dispatch(loginViaGoogle(res.authentication!.accessToken))
+            .then(() => dispatch(loginFormOpenSet(false)))
+            .catch(() => toastShow(errorObject));
+        }
+        if (res.type === 'error') {
+          return toastShow(errorObject)
+        }
+        toastShow({type: 'info', title: '', message: JSON.stringify(res)})
+      })
+  }
   return (
     <TouchableOpacity
       style={style.button}
       disabled={!request}
-      onPress={() => promptAsync()}
+      onPress={login}
     >
       <Image
         source={require('../../../assets/images/icons/google.png')}

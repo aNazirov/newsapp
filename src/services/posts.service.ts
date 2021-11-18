@@ -51,7 +51,7 @@ export const getPostService = (slug: any, lang: string) => {
       'Accept-Language': lang,
     },
   })
-    .then(res => res.data.result);
+    .then(res => res.data.result.post);
 };
 export const getMorePostsService = (page: string, slug: any, lang: string, params: any) => {
   return api.get(`/${page}/${slug}/more`, {

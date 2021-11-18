@@ -58,9 +58,8 @@ export const getMorePosts = (page: string, slug: any, params: any = {}, lang: st
 };
 export const getPost = (slug: string, lang: string): AppThunk => async (dispatch: any) => {
   return getPostService(slug, lang)
-    .then(({ post, recommended }) => {
-      dispatch(postSet(post));
-      dispatch(postsSet(recommended));
+    .then((post) => {
+      dispatch(postSet(post))
     })
 };
 export const getHotPosts = (params: any, lang: string): AppThunk => async (dispatch: any) => {
