@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppText } from '../shared';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
@@ -8,6 +8,7 @@ import { headerStyles } from '../../styles/header.styles';
 import { toastShow } from '../../services/notifications.service';
 import * as WebBrowser from 'expo-web-browser';
 import { errorObject } from '../../_data/helpers';
+import * as AppAuth from 'expo-auth-session'
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -17,22 +18,28 @@ export const GoogleLogin: React.FC = () => {
     expoClientId: '866558658392-bmdicbi6n5a42vo6jban13ckd8mu6sv5.apps.googleusercontent.com',
     iosClientId: '866558658392-uetcis6avp4qt9768s8bfk6hpge942ut.apps.googleusercontent.com',
     androidClientId: '866558658392-fc9q33hl5o5upcnpu2o2ngbkmts1d0rm.apps.googleusercontent.com',
+    webClientId: '866558658392-bmdicbi6n5a42vo6jban13ckd8mu6sv5.apps.googleusercontent.com'
   });
-
   const login = () => {
-    promptAsync()
+    promptAsync({ showInRecents: true, useProxy: true })
       .then(res => {
         if (res.type === 'success') {
           return dispatch(loginViaGoogle(res.authentication!.accessToken))
-            .then(() => dispatch(loginFormOpenSet(false)))
+            .then(() => {
+              toastShow({ type: 'info', title: '', message: JSON.stringify(res) });
+              dispatch(loginFormOpenSet(false));
+            })
             .catch(() => toastShow(errorObject));
         }
         if (res.type === 'error') {
-          return toastShow(errorObject)
+          return toastShow(errorObject);
         }
-        toastShow({type: 'info', title: '', message: JSON.stringify(res)})
-      })
-  }
+        toastShow({ type: 'info', title: '', message: JSON.stringify(res) });
+      });
+  };
+  useEffect(() => {
+    toastShow({ type: 'info', title: '', message: `${AppAuth.getRedirectUrl()}, ${AppAuth.getDefaultReturnUrl()}`  });
+  }, [])
   return (
     <TouchableOpacity
       style={style.button}
