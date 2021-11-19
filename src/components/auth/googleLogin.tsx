@@ -8,7 +8,6 @@ import { headerStyles } from '../../styles/header.styles';
 import { toastShow } from '../../services/notifications.service';
 import * as WebBrowser from 'expo-web-browser';
 import { errorObject } from '../../_data/helpers';
-import * as AppAuth from 'expo-auth-session'
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -18,37 +17,32 @@ export const GoogleLogin: React.FC = () => {
     expoClientId: '866558658392-bmdicbi6n5a42vo6jban13ckd8mu6sv5.apps.googleusercontent.com',
     iosClientId: '866558658392-uetcis6avp4qt9768s8bfk6hpge942ut.apps.googleusercontent.com',
     androidClientId: '866558658392-fc9q33hl5o5upcnpu2o2ngbkmts1d0rm.apps.googleusercontent.com',
-    webClientId: '866558658392-bmdicbi6n5a42vo6jban13ckd8mu6sv5.apps.googleusercontent.com'
+    webClientId: '866558658392-bmdicbi6n5a42vo6jban13ckd8mu6sv5.apps.googleusercontent.com',
   });
-  const login = () => {
-    promptAsync({ showInRecents: true, useProxy: true })
-      .then(res => {
-        if (res.type === 'success') {
-          return dispatch(loginViaGoogle(res.authentication!.accessToken))
-            .then(() => {
-              toastShow({ type: 'info', title: '', message: JSON.stringify(res) });
-              dispatch(loginFormOpenSet(false));
-            })
-            .catch(() => toastShow(errorObject));
-        }
-        if (res.type === 'error') {
-          return toastShow(errorObject);
-        }
-        toastShow({ type: 'info', title: '', message: JSON.stringify(res) });
-      });
-  };
   useEffect(() => {
-    toastShow({ type: 'info', title: '', message: `${AppAuth.getRedirectUrl()}, ${AppAuth.getDefaultReturnUrl()}`  });
-  }, [])
+    if (response?.type === 'success') {
+      const { authentication, url } = response;
+      return dispatch(loginViaGoogle(authentication!.accessToken))
+        .then(() => {
+          toastShow({ type: 'info', title: '', message: JSON.stringify(url) });
+          dispatch(loginFormOpenSet(false));
+        })
+        .catch(() => toastShow(errorObject));
+    }
+    if (response?.type === 'error') {
+      return toastShow(errorObject);
+    }
+    toastShow({ type: 'info', title: '', message: JSON.stringify(response) });
+  }, [response]);
   return (
     <TouchableOpacity
       style={style.button}
       disabled={!request}
-      onPress={login}
+      onPress={() => promptAsync({ useProxy: false })}
     >
       <Image
         source={require('../../../assets/images/icons/google.png')}
-        style={{ ...headerStyles.icons, marginRight: 10 }}
+        style={{ ...headerStyles.icons, marginRight: 10, marginBottom: 5 }}
       />
       <AppText style={style.buttonText}>Google</AppText>
     </TouchableOpacity>

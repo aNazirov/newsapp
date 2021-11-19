@@ -1,14 +1,15 @@
 import React from 'react';
 import { useAppSelector } from '../../store/hooks';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppText } from '../shared';
 import { headerStyles } from '../../styles/header.styles';
 import { Options } from '../shared/options';
+import { useNavigation } from '@react-navigation/native';
 
 export const Comments: React.FC = () => {
   const { user } = useAppSelector(state => state.global);
   const { comments } = useAppSelector(state => state.comments);
-
+  const navigation: any = useNavigation();
   return (
     <>
       {
@@ -16,7 +17,11 @@ export const Comments: React.FC = () => {
           ? comments.map(comment => {
             return (
               <View style={{ ...style.container, marginBottom: 15 }} key={comment.id}>
-                <AppText style={{ ...style.title, marginBottom: 8 }}>{comment.post?.title}</AppText>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Posts', {slug: comment.post?.slug})}
+                >
+                  <AppText style={{ ...style.title, marginBottom: 8 }}>{comment.post?.title}</AppText>
+                </TouchableOpacity>
                 <View style={style.authorComment}>
                   <Image
                     source={{ uri: user?.avatar }}
@@ -26,7 +31,7 @@ export const Comments: React.FC = () => {
                   <AppText style={{ fontSize: 12, color: 'rgba(0, 0, 0, .7)' }}>{comment.user?.created_at}</AppText>
                 </View>
                 <AppText style={{ fontSize: 12 }}>{comment.text}</AppText>
-                <Options userId={comment.user?.id} commentId={comment.id}/>
+                <Options userId={comment.user?.id} commentId={comment.id} />
               </View>
             );
           })

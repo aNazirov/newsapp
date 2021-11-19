@@ -167,7 +167,7 @@ export const CommentModal: React.FC = () => {
         </View>
       }
       <KeyboardAvoidingView
-        behavior={'position'}
+        behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         style={{ paddingBottom: Platform.OS === 'ios' ? 15 : 0 }}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

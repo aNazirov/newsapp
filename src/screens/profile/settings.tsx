@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppCheckbox, AppInput, AppText } from '../../components/shared';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { userSettings } from '../../services/global.services';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { blue } from '../../styles/layout.styles';
+import { userSet } from '../../store/global/global.thunks';
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -59,10 +60,12 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
   const { control, handleSubmit, formState: { errors }, setError } = useForm();
   const { user, token } = useAppSelector(state => state.global);
+  const dispatch = useAppDispatch()
   if (!user) return <></>;
   const editUserSettings = (data: any) => {
     userSettings(data, token!)
-      .then(() => {
+      .then(user => {
+        dispatch(userSet(user))
         navigation.navigate('Profile');
         toastShow({ type: 'success', title: 'Успешно', message: 'Изменения успешно сохранены' });
       })

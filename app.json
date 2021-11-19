@@ -37,7 +37,7 @@
       "package": "com.uznews",
       "versionCode": 1
     },
-    "scheme": "uznews",
+    "scheme": "com.uznews",
     "web": {
       "favicon": "./assets/favicon.png"
     },
