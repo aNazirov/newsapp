@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   LayoutAnimation,
@@ -11,8 +11,9 @@ import {
 } from 'react-native';
 import { headerStyles } from '../../styles/header.styles';
 import { Weather, Currency, Profile, Sign } from '../shared';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useNavigation } from '@react-navigation/native';
+import { getNotificationsCount } from '../../store/notifications/notifications.thunks';
 
 interface Props {
   style: any;
@@ -26,10 +27,14 @@ if (
 }
 export const Header: React.FC<Props> = ({ style }) => {
   const navigation = useNavigation<any>();
+  const dispatch = useAppDispatch()
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
   const { token } = useAppSelector(state => state.global);
 
+  useEffect(() => {
+    if (token) dispatch(getNotificationsCount(token))
+  }, [])
   return (
     <SafeAreaView style={{backgroundColor: '#fff'}}>
       <View onTouchStart={e => {

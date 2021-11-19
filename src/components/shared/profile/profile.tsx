@@ -28,7 +28,7 @@ export const Profile = () => {
   const { notificationsCount, alertNotifications } = useAppSelector(state => state.notifications);
   const getNotifications = () => {
     setLoading(true);
-    if (!alertNotifications.length) {
+    if (!alertNotifications.length || notificationsCount) {
       return dispatch(getAlertNotifications(token!))
         .then(() => setLoading(false))
         .catch(() => toastShow(errorObject));

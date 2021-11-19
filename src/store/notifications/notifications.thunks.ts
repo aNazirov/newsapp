@@ -30,7 +30,10 @@ export const getNotifications = (params: any = {}, token: string = ''): AppThunk
 };
 export const getAlertNotifications = (token: string): AppThunk => async (dispatch: any) => {
   return getAlertNotificationsService(token)
-    .then(notifications => dispatch(alertNotificationsSet(notifications)));
+    .then(notifications => {
+      dispatch(notificationsCountSet(0))
+      return dispatch(alertNotificationsSet(notifications));
+    });
 };
 export const getNotificationsCount = (token: string = ''): AppThunk => async (dispatch: any) => {
   return getNotificationsCountService(token)

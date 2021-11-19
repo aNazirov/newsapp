@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 export const Comments: React.FC = () => {
   const { user } = useAppSelector(state => state.global);
   const { comments } = useAppSelector(state => state.comments);
-  const navigation: any = useNavigation();
+  const navigation = useNavigation<any>();
   return (
     <>
       {

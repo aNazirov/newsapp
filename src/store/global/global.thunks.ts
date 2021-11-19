@@ -7,7 +7,7 @@ import {
   staticAuthenticate,
   telegramAuthenticate,
 } from '../../services/auth.service';
-import { getNotificationsCount } from '../notifications/notifications.thunks';
+import { alertNotificationsSet, getNotificationsCount } from '../notifications/notifications.thunks';
 import { followToCategoryService, getFirstData } from '../../services/global.services';
 import { categoriesSet } from '../categories/categories.thunks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -49,8 +49,10 @@ export const autoLogin = () => async (dispatch: any) => {
     .then(token => {
       if (token) {
         return getMe(token)
-          .then(user => dispatch(globalAction.logIn({ token, user })))
-          .then(() => dispatch(getNotificationsCount(token)))
+          .then(user => {
+            dispatch(getNotificationsCount(token))
+            dispatch(globalAction.logIn({ token, user }));
+          })
           .catch(() => {
             toastShow({ ...errorObject, message: 'Ваш токен истек, войдите заного' })
             dispatch(logout());
@@ -62,6 +64,7 @@ export const autoLogin = () => async (dispatch: any) => {
 export const logout = () => (dispatch: any) => {
   AsyncStorage.removeItem('token')
     .catch(() => toastShow(errorObject));
+  dispatch(alertNotificationsSet([]))
   dispatch(globalAction.logOut());
 };
 

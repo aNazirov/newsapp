@@ -2,12 +2,14 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { AppText } from '../shared';
 import { INotification } from '../../interfaces';
+import { useNavigation } from '@react-navigation/native';
 
 interface Props {
   notifications: INotification[];
 }
 
 export const Notifications: React.FC<Props> = ({ notifications }) => {
+  const navigation = useNavigation<any>();
   return (
     <>
       {
@@ -31,7 +33,10 @@ export const Notifications: React.FC<Props> = ({ notifications }) => {
                 >
                   <AppText style={{ fontFamily: 'roboto-bold' }}>{notification?.foreign_user?.name} </AppText>
                   {notification.notification}
-                  <AppText style={{ fontFamily: 'roboto-bold' }}> {notification?.post?.title} </AppText>
+                  <AppText
+                    style={{ fontFamily: 'roboto-bold' }}
+                    onPress={() => navigation.navigate('Posts', {slug: notification.post?.slug})}
+                  > {notification?.post?.title} </AppText>
                   <AppText style={{ color: 'rgba(0, 0, 0, .7)', fontSize: 12 }}>{notification?.created_at}</AppText>
                 </AppText>
               </View>
