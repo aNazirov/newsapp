@@ -24,6 +24,9 @@ export const eventFormOpenSet = (open: boolean) => (dispatch: any) => {
 export const commentFormOpenSet = (open: boolean) => (dispatch: any) => {
   dispatch(globalAction.setCommentFormOpen({ commentFormOpen: open }));
 };
+export const reportFormOpenSet = (open: boolean) => async (dispatch: any) => {
+  return dispatch(globalAction.setReportFormOpen({ reportFormOpen: open }));
+};
 export const userSet = (user: IUser) => (dispatch: any) => {
   dispatch(globalAction.setUser({ user }));
 };

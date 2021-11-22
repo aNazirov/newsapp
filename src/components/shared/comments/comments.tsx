@@ -10,7 +10,13 @@ import { blue } from '../../../styles/layout.styles';
 import { IComment } from '../../../interfaces';
 import { Options } from '../options';
 import { RatingButton } from '../raiting';
-import { commentFormOpenSet } from '../../../store/global/global.thunks';
+import { commentFormOpenSet, eventFormOpenSet } from '../../../store/global/global.thunks';
+import { reportComment } from '../../../services/global.services';
+import { toastShow } from '../../../services/notifications.service';
+import { errorObject } from '../../../_data/helpers';
+import { ModalContainer } from '../modal';
+import { AppInput } from '../appInput';
+import { ReportModal } from './reportModal';
 
 interface PropsCommentChilds {
   child: IComment[];
@@ -51,7 +57,7 @@ const CommentChild: React.FC<PropsCommentChild> = ({ comment, parent }) => {
         >
           <AppText style={styleCommentChild.send}>{t('Ответить')}</AppText>
         </TouchableOpacity>
-        <Options userId={comment.user.id} commentId={comment.id} />
+        <Options userId={comment.user.id} comment={comment} />
       </View>
       {
         !!comment.children?.length &&
@@ -256,6 +262,7 @@ export const Comments: React.FC = () => {
         }
       </View>
       <CommentModal />
+      <ReportModal />
     </View>
   );
 };

@@ -31,7 +31,7 @@ export const Comments: React.FC = () => {
                   <AppText style={{ fontSize: 12, color: 'rgba(0, 0, 0, .7)' }}>{comment.user?.created_at}</AppText>
                 </View>
                 <AppText style={{ fontSize: 12 }}>{comment.text}</AppText>
-                <Options userId={comment.user?.id} commentId={comment.id} />
+                <Options userId={comment.user?.id} comment={comment} />
               </View>
             );
           })

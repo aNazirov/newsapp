@@ -53,8 +53,8 @@ export const deleteComment = (id: number, token: string) => {
   })
     .then(res => res.data.result);
 };
-export const reportComment = (id: any, token: string) => {
-  return api.post(`/posts/comments/${id}/report`, {}, {
+export const reportComment = (id: any, data: any, token: string) => {
+  return api.post(`/posts/comments/${id}/report`, data, {
     headers: {
       'Authorization': `Bearer ${token}`,
     },

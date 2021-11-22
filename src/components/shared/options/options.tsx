@@ -4,39 +4,40 @@ import { AppText } from '../appText';
 import { useTranslation } from 'react-i18next';
 import { deleteComment, reportComment } from '../../../services/global.services';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { commentDeleteAction } from '../../../store/comments/comments.thunks';
+import { commentDeleteAction, commentSet } from '../../../store/comments/comments.thunks';
 import { toastShow } from '../../../services/notifications.service';
 import { errorObject, getActiveRouteState } from '../../../_data/helpers';
-import { loginFormOpenSet } from '../../../store/global/global.thunks';
+import { loginFormOpenSet, reportFormOpenSet } from '../../../store/global/global.thunks';
 import { useNavigation } from '@react-navigation/native';
 import { headerStyles } from '../../../styles/header.styles';
 import { ModalContainer } from '../modal';
+import { IComment } from '../../../interfaces';
 
 interface Props {
   userId: number,
-  commentId: number,
+  comment: IComment,
 }
 
-export const Options: React.FC<Props> = ({ commentId, userId }) => {
+export const Options: React.FC<Props> = ({ comment, userId }) => {
   const { t } = useTranslation();
   const activeRoute = getActiveRouteState(useNavigation().getState());
   const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
   const { user, token } = useAppSelector(state => state.global);
   const commentDelete = () => {
-    deleteComment(commentId, token!)
+    deleteComment(comment.id, token!)
       .then(() => {
-        dispatch(commentDeleteAction(commentId));
+        dispatch(commentDeleteAction(comment.id));
         toastShow({ type: 'success', message: 'Сообщение успешно удалено', title: 'Успешно' });
       })
       .catch(() => toastShow(errorObject));
 
   };
   const commentReport = () => {
+    setShow(false)
     if (!user) return dispatch(loginFormOpenSet(true));
-    reportComment(commentId, token!)
-      .then(() => toastShow({ type: 'success', message: 'Ваша жалоба принята на рассмотрение', title: 'Успешно' }))
-      .catch(() => toastShow(errorObject));
+    dispatch(commentSet(comment))
+    dispatch(reportFormOpenSet(true))
   };
   return (
     <View>
