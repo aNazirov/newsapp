@@ -8,7 +8,6 @@ import { headerStyles } from '../../styles/header.styles';
 import { toastShow } from '../../services/notifications.service';
 import * as WebBrowser from 'expo-web-browser';
 import { errorObject } from '../../_data/helpers';
-import * as AppAuth from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -19,7 +18,6 @@ export const GoogleLogin: React.FC = () => {
     iosClientId: '866558658392-uetcis6avp4qt9768s8bfk6hpge942ut.apps.googleusercontent.com',
     androidClientId: '866558658392-fc9q33hl5o5upcnpu2o2ngbkmts1d0rm.apps.googleusercontent.com',
     webClientId: '866558658392-bmdicbi6n5a42vo6jban13ckd8mu6sv5.apps.googleusercontent.com',
-    redirectUri: AppAuth.getRedirectUrl()
   });
   useEffect(() => {
     if (response?.type === 'success') {
