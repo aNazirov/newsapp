@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { AppText } from '../shared';
-import { Image, Platform, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
 import { useAppDispatch } from '../../store/hooks';
 import { loginFormOpenSet, loginViaGoogle } from '../../store/global/global.thunks';
@@ -12,9 +12,6 @@ import * as AppAuth from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
-const useProxy = Platform.select({ web: false, default: true });
-const redirectUri = AppAuth.makeRedirectUri({ useProxy });
-
 export const GoogleLogin: React.FC = () => {
   const dispatch = useAppDispatch();
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -22,7 +19,7 @@ export const GoogleLogin: React.FC = () => {
     iosClientId: '866558658392-uetcis6avp4qt9768s8bfk6hpge942ut.apps.googleusercontent.com',
     androidClientId: '866558658392-fc9q33hl5o5upcnpu2o2ngbkmts1d0rm.apps.googleusercontent.com',
     webClientId: '866558658392-bmdicbi6n5a42vo6jban13ckd8mu6sv5.apps.googleusercontent.com',
-    redirectUri
+    redirectUri: AppAuth.getRedirectUrl()
   });
   useEffect(() => {
     if (response?.type === 'success') {
@@ -43,7 +40,7 @@ export const GoogleLogin: React.FC = () => {
     <TouchableOpacity
       style={style.button}
       disabled={!request}
-      onPress={() => promptAsync({ useProxy })}
+      onPress={() => promptAsync()}
     >
       <Image
         source={require('../../../assets/images/icons/google.png')}
