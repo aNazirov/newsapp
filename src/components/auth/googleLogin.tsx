@@ -25,10 +25,9 @@ export const GoogleLogin: React.FC = () => {
   });
   useEffect(() => {
     if (response?.type === 'success') {
-      const { authentication, url } = response;
+      const { authentication } = response;
       return dispatch(loginViaGoogle(authentication!.accessToken))
         .then(() => {
-          toastShow({ type: 'info', title: '', message: JSON.stringify(url) });
           dispatch(loginFormOpenSet(false));
         })
         .catch(() => toastShow(errorObject));
@@ -36,7 +35,6 @@ export const GoogleLogin: React.FC = () => {
     if (response?.type === 'error') {
       return toastShow(errorObject);
     }
-    toastShow({ type: 'info', title: '', message: AppAuth.makeRedirectUri({ useProxy: true, scheme: 'com.uznews' }) });
   }, [response]);
   return (
     <TouchableOpacity
