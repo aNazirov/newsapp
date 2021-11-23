@@ -1,10 +1,8 @@
 import React from 'react';
 import {
   Image,
-  Platform,
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
 
   TouchableOpacity,
@@ -185,8 +183,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
 
 const style = StyleSheet.create({
   container: {
-    padding: 15,
-    marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    paddingHorizontal: 15,
+    marginVertical: 15
   },
   drawerContainer: {
     display: 'flex',

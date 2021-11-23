@@ -16,6 +16,8 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { Post } from '../../screens/post';
 import { autoLogin, getGlobalData, langSet } from '../../store/global/global.thunks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
+import { toastShow } from '../../services/notifications.service';
 
 const Drawer = createDrawerNavigator();
 
@@ -28,9 +30,18 @@ export const DrawerNavigation: React.FC = () => {
       .then((result: any) => dispatch(langSet(result || 'ru')));
   }, []);
   useEffect(() => {
-    dispatch(getGlobalData(lang));
-  }, [lang]);
-
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if(state.isConnected) {
+        dispatch(getGlobalData(lang));
+      }
+      if (!state.isConnected) {
+        toastShow({type: 'error', title: 'Соединение не установлено', message: 'Проверте соединение с интернетом'})
+      }
+    });
+    return () => {
+      unsubscribe()
+    }
+  }, [lang])
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawer {...props} />}

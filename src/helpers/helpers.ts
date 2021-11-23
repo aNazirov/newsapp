@@ -6,10 +6,10 @@ import * as WebBrowser from 'expo-web-browser';
 export const clearStore = (dispatch: any) => {
   dispatch(commentsNull());
   dispatch(notificationsNull());
-  dispatch(postsNull())
-  dispatch(postSet(null))
-}
-export const website = 'https://uznews.uz'
+  dispatch(postsNull());
+  dispatch(postSet(null));
+};
+export const website = 'https://api.djomi.uz';
 
 export const handleOpenWithWebBrowser = (url: string) => () => {
   WebBrowser.openBrowserAsync(url);

@@ -27,6 +27,7 @@ export interface IPost {
   comments_count: number;
   title: string;
   image: string;
+  mobile_image?: string;
   caption: string;
   micro_image: string;
   description: string;

@@ -3,14 +3,14 @@ const edjsParser = require('editorjs-parser');
 const customParsers = {
   image: function(data) {
     return `
-        <img src='${data.file.url}' alt='${data.caption}' style='margin-bottom: 15px;'/>
+        <img src='${data.file.url}' alt='${data.caption}' style='margin-bottom: 10px;'/>
         ${data.caption
       ? `
         <p style='
           font-family: "roboto-regular-italic";
           font-size: 13px;
           line-height: 15px;
-          margin: 10px 0 15px 5px;
+          margin: 0 0 15px 5px;
           '
         >
           ${data.caption}
@@ -34,7 +34,7 @@ const customParsers = {
     return `<p 
       style='
         font-family: "roboto-regular";
-        margin: 15px 0;
+        margin: 0 0 10px;
         font-size: 16px;
     '>${data.text}</p>`;
   },
@@ -61,10 +61,10 @@ const customParsers = {
     `;
   },
   instagram: ({ link }) => {
-    return `<iframe src='${link}' width='100%' height='720' style='margin-bottom: 15px'></iframe>`;
+    return `<iframe src='${link}' width='100%' height='580' style='margin-bottom: 10px'></iframe>`;
   },
   telegram: ({ link }) => {
-    return `<iframe src='${link}' width='100%' height='720' style='margin-bottom: 15px'></iframe>`;
+    return `<iframe src='${link}' width='100%' height='720' style='margin-bottom: 10px'></iframe>`;
   },
   quote: (data) => {
     if (data.text.includes('class="text-sm font-normal"')) {

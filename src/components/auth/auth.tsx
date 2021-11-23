@@ -133,7 +133,9 @@ export const Auth: React.FC = () => {
       >
         <AppText style={style.submit}>{t(currentType)}</AppText>
       </TouchableOpacity>
-      <AppText style={{ ...style.text, color: blue }}>{t('Забыли пароль')}?</AppText>
+      <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/?forgot=true`)}>
+        <AppText style={{ ...style.text, color: blue }}>{t('Забыли пароль')}?</AppText>
+      </TouchableOpacity>
       <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)' }}>{t('Войти через соц-сети')}</AppText>
       <View style={{ flexDirection: 'row', marginBottom: 20 }}>
         <FacebookLogin />
@@ -142,7 +144,8 @@ export const Auth: React.FC = () => {
       </View>
       <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'left' }}>
         {t('Нажимая “Войти” вы соглашаетесь с ')}
-        <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/privacy`)}><AppText style={{ textDecorationLine: 'underline' }}>политикой конфиденциальности</AppText></TouchableOpacity>
+        <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/privacy`)}><AppText
+          style={{ textDecorationLine: 'underline' }}>политикой конфиденциальности</AppText></TouchableOpacity>
       </AppText>
     </ModalContainer>
   );
