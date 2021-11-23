@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, LogBox, StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList, LogBox, StyleSheet, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getHotPosts, getMainPosts } from '../../store/posts/posts.thunks';
-import { AppText, HotPost, Posts } from '../../components/shared';
+import { getHotPosts, getMainPosts, postsNull } from '../../store/posts/posts.thunks';
+import { AppText, Filter, HotPost, Posts } from '../../components/shared';
 import { clearStore } from '../../helpers/helpers';
 import { NavigationProp } from '@react-navigation/native';
 import { toastShow } from '../../services/notifications.service';
@@ -12,29 +12,44 @@ import { useTranslation } from 'react-i18next';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
+interface IFilter {
+  fresh?: boolean;
+  popular?: boolean;
+}
+
 interface Props {
   navigation: NavigationProp<any>;
 }
 
 export const Home: React.FC<Props> = ({}) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const page = useRef(2);
   const dispatch = useAppDispatch();
   const [firstLoading, setFirstLoading] = useState(true);
+  const [filter, setFilter] = useState<IFilter>({ fresh: true });
   const [loading, setLoading] = useState(false);
   const { lang } = useAppSelector(state => state.global);
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getMainPosts({ page: 1 }, lang))
-      .finally(() => setFirstLoading(false))
+      .finally(() => setFirstLoading(false));
     dispatch(getHotPosts({ page: 1 }, lang))
-      .finally(() => setFirstLoading(false))
+      .finally(() => setFirstLoading(false));
   }, [lang]);
   const { hotPosts, pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
     if (!pageCount) return;
     setLoading(true);
-    return dispatch(getMainPosts({ page: page.current }, lang))
+    return dispatch(getMainPosts({ page: page.current, ...filter }, lang))
+      .then(() => page.current++)
+      .catch(() => toastShow(errorObject))
+      .finally(() => setLoading(false));
+  };
+  const getFilter = () => {
+    dispatch(postsNull());
+    setLoading(true);
+    page.current = 1;
+    return dispatch(getMainPosts({ page: 1, ...filter }, lang))
       .then(() => page.current++)
       .catch(() => toastShow(errorObject))
       .finally(() => setLoading(false));
@@ -52,7 +67,10 @@ export const Home: React.FC<Props> = ({}) => {
                   return <HotPost key={post.id} post={post} />;
                 })
               }
-              <AppText style={{ ...style.title }}>{t('Лента новостей')}</AppText>
+              <View style={style.containerFilter}>
+                <AppText style={{ ...style.title }}>{t('Лента новостей')}</AppText>
+                <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
+              </View>
               <Posts />
               {
                 loading &&
@@ -70,12 +88,17 @@ export const Home: React.FC<Props> = ({}) => {
 };
 
 const style = StyleSheet.create({
-  container: {},
+  container: {
+  },
+  containerFilter: {
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
   title: {
-    fontSize: 20,
+    fontSize: 18,
+    marginTop: 15,
     fontFamily: 'roboto-bold',
-    lineHeight: 31,
-    marginTop: 25,
-    marginHorizontal: 15
   },
 });
