@@ -1,5 +1,5 @@
 import React from 'react';
-import { eventFormOpenSet, reportFormOpenSet } from '../../../store/global/global.thunks';
+import { reportFormOpenSet } from '../../../store/global/global.thunks';
 import { AppInput } from '../appInput';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppText } from '../appText';

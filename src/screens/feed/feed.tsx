@@ -66,7 +66,7 @@ export const Feed: React.FC<Props> = ({}) => {
             <Fragment key={'feed-list'}>
               <View style={style.container}>
                 <View style={style.chapter}>
-                  <AppText style={style.title}>{hotPosts?.range}</AppText>
+                  <AppText style={style.title}>{t('Горячие новости')}</AppText>
                   <TouchableOpacity
                     style={{ ...style.more }}
                     onPress={() => setOpen(prev => !prev)}

@@ -6,26 +6,27 @@ import { getAlertNotifications } from '../../../store/notifications/notification
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Image, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { logout } from '../../../store/global/global.thunks';
 import { headerStyles } from '../../../styles/header.styles';
 import { AppText } from '../appText';
 import { blue } from '../../../styles/layout.styles';
 import { Notifications } from '../../profile';
 import { ModalContainer } from '../modal';
+import { Logout } from './logout';
 
 const notificationIcon = require('../../../../assets/images/icons/notification.png');
 const notificationsIcon = require('../../../../assets/images/icons/notifications.png');
 
 export const Profile = () => {
-  const { path } = useRoute();
   const dispatch = useAppDispatch();
   const navigation = useNavigation<any>();
   const { t } = useTranslation();
+  const { path } = useRoute();
+  const { user, token } = useAppSelector(state => state.global);
+  const { notificationsCount, alertNotifications } = useAppSelector(state => state.notifications);
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(false);
   const [profile, setProfile] = useState(false);
-  const { user, token } = useAppSelector(state => state.global);
-  const { notificationsCount, alertNotifications } = useAppSelector(state => state.notifications);
+  const [open, setOpen] = useState(false);
   const getNotifications = () => {
     setLoading(true);
     if (!alertNotifications.length || notificationsCount) {
@@ -117,12 +118,16 @@ export const Profile = () => {
               <AppText style={{ ...style.profileTab }}>{t('Настройки')}</AppText>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => dispatch(logout())}
+              onPress={() => {
+                setProfile(false);
+                setOpen(true);
+              }}
             >
               <AppText style={{ ...style.profileTab }}>{t('Выйти')}</AppText>
             </TouchableOpacity>
         </ModalContainer>
       </View>
+      <Logout open={open} setOpen={setOpen}/>
     </View>
   );
 };
