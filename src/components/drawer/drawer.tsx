@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { CustomDrawer } from './customDrawer';
 import { Home } from '../../screens/home';
@@ -18,15 +18,24 @@ import { autoLogin, getGlobalData, langSet } from '../../store/global/global.thu
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { toastShow } from '../../services/notifications.service';
-import { registerForPushNotificationsAsync } from '../../helpers/helpers';
+import {
+  registerForPushNotificationsAsync,
+  schedulePushNotification,
+  sendPushNotification,
+} from '../../helpers/helpers';
 import * as Notifications from 'expo-notifications';
 
 const Drawer = createDrawerNavigator();
 
-export const DrawerNavigation: React.FC = () => {
-  const [expoPushToken, setExpoPushToken] = useState<string | undefined>('');
-  const [notification, setNotification] = useState<any>(false);
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
+export const DrawerNavigation: React.FC = () => {
   const notificationListener = useRef<any>();
   const responseListener = useRef<any>();
   const dispatch = useAppDispatch()
@@ -39,13 +48,14 @@ export const DrawerNavigation: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token))
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
+    registerForPushNotificationsAsync().then(token => sendPushNotification(token))
+    notificationListener.current = Notifications.addNotificationReceivedListener(({ request: { content: { title, body, data} } }) => {
+      (title || body || data) &&
+      schedulePushNotification({title: title || '', body: body || '', data: JSON.stringify(data || '')})
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      console.log('response', response)
     });
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);

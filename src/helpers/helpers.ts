@@ -18,12 +18,13 @@ export const handleOpenWithWebBrowser = (url: string) => () => {
   WebBrowser.openBrowserAsync(url);
 };
 
-async function sendPushNotification(expoPushToken: string) {
+export async function sendPushNotification(expoPushToken: string | undefined) {
+  if (!expoPushToken) return;
   const message = {
     to: expoPushToken,
     sound: 'default',
-    title: 'Original Title',
-    body: 'And here is the body!',
+    title: 'Это push уведомление',
+    body: 'Я это сделал!',
     data: { someData: 'goes here' },
   };
 
@@ -37,6 +38,20 @@ async function sendPushNotification(expoPushToken: string) {
     body: JSON.stringify(message),
   });
 }
+
+interface IContent {
+  title: string,
+  body: string,
+  data: any,
+}
+
+export async function schedulePushNotification(content: IContent) {
+  await Notifications.scheduleNotificationAsync({
+    content,
+    trigger: { seconds: 2 },
+  });
+}
+
 export async function registerForPushNotificationsAsync() {
   let token;
   if (Constants.isDevice) {
@@ -51,7 +66,6 @@ export async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
   } else {
     alert('Must use physical device for Push Notifications');
   }

@@ -1,19 +1,39 @@
 {
+  "project_info": {
+    "project_number": "123598463548",
+    "project_id": "uznews-mobile",
+    "storage_bucket": "uznews-mobile.appspot.com"
+  },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:712768223356:web:2e89bedd61a565264f71f9",
+        "mobilesdk_app_id": "1:123598463548:android:7d7e0940bd0f33a8ee5939",
         "android_client_info": {
           "package_name": "com.uznews"
         }
-      }
-    },
-    {
+      },
+      "oauth_client": [
+        {
+          "client_id": "123598463548-g123qk04u5emh53sektm1auhnlt532at.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCIIIQmCzLUWGtvYIayAtg9RvHfqw4Cwno"
+          "current_key": "AIzaSyACBSXxPgVKOdbdjU8RiQQQvGWPTmzvEZE"
         }
-      ]
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123598463548-g123qk04u5emh53sektm1auhnlt532at.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
-  ]
+  ],
+  "configuration_version": "1"
 }

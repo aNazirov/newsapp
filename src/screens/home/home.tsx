@@ -89,8 +89,8 @@ export const Home: React.FC<Props> = ({}) => {
                   return <HotPost key={post.id} post={post} />;
                 })
               }
-              <View style={style.containerFilter}>
-                <AppText style={{ ...style.title }}>{t('Лента новостей')}</AppText>
+              <View style={{ ...style.containerFilter, flexWrap: lang === 'ru' ? 'nowrap'  : 'wrap'}}>
+                <AppText style={{ ...style.title, marginTop: lang === 'ru'? 20 : 45 }}>{t('Лента новостей')}</AppText>
                 <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
               </View>
               <Posts />
@@ -114,13 +114,12 @@ const style = StyleSheet.create({
   containerFilter: {
     marginHorizontal: 15,
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   title: {
     fontSize: 18,
-    marginTop: 25,
+    marginRight: 15,
     fontFamily: 'roboto-bold',
   },
 });
