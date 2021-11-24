@@ -10,6 +10,7 @@ import { NavigationProp } from '@react-navigation/native';
 import { toastShow } from '../../services/notifications.service';
 import { AppText } from '../../components/shared';
 import { Loader } from '../../components/shared/loader';
+import NetInfo from '@react-native-community/netinfo';
 
 interface IFilter {
   fresh?: boolean;
@@ -28,12 +29,30 @@ export const SpecialReports: React.FC<Props> = ({}) => {
   const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const { lang } = useAppSelector(state => state.global);
+  const { pageCount, posts } = useAppSelector(state => state.posts);
+
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getSpecialPosts({ page: 1, ...filter }, lang))
       .finally(() => setFirstLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (state.isConnected && !posts.length) {
+        clearStore(dispatch);
+        dispatch(getSpecialPosts({ page: 1, ...filter }, lang))
+          .finally(() => setFirstLoading(false));
+      }
+      if (!state.isConnected) {
+        toastShow({ type: 'error', title: 'Соединение не установлено', message: 'Проверте соединение с интернетом' });
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
   }, [lang]);
-  const { pageCount } = useAppSelector(state => state.posts);
+
   const getMore = () => {
     if (!pageCount) return null;
     setLoading(true);

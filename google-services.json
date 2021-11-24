@@ -1,0 +1,19 @@
+{
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712768223356:web:2e89bedd61a565264f71f9",
+        "android_client_info": {
+          "package_name": "com.uznews"
+        }
+      }
+    },
+    {
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIIIQmCzLUWGtvYIayAtg9RvHfqw4Cwno"
+        }
+      ]
+    }
+  ]
+}

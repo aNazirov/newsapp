@@ -10,6 +10,7 @@ import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { AppText } from '../../components/shared';
 import { Loader } from '../../components/shared/loader';
+import NetInfo from '@react-native-community/netinfo';
 
 interface IFilter {
   fresh?: boolean;
@@ -27,13 +28,30 @@ export const Opinions: React.FC<Props> = ({}) => {
   const dispatch = useAppDispatch();
   const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+
   const { lang } = useAppSelector(state => state.global);
+  const { pageCount, posts } = useAppSelector(state => state.posts);
+
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getAuthorsPosts({ page: 1, ...filter }, lang))
       .finally(() => setFirstLoading(false));
+  }, []);
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (state.isConnected && !posts.length) {
+        clearStore(dispatch);
+        dispatch(getAuthorsPosts({ page: 1, ...filter }, lang))
+          .finally(() => setFirstLoading(false));
+      }
+      if (!state.isConnected) {
+        toastShow({ type: 'error', title: 'Соединение не установлено', message: 'Проверте соединение с интернетом' });
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
   }, [lang]);
-  const { pageCount } = useAppSelector(state => state.posts);
   const getMore = () => {
     if (!pageCount) return null;
     setLoading(true);
@@ -61,7 +79,8 @@ export const Opinions: React.FC<Props> = ({}) => {
               <View style={style.chapter}>
                 <Image source={require('../../../assets/images/opinions.png')} style={style.image} />
                 <AppText style={style.title}>{t('Авторское мнение')}</AppText>
-                <AppText style={style.description}>{t('Экспертный взгляд на происходящие события от лидеров мнений и ведущих профессионалов.')}</AppText>
+                <AppText
+                  style={style.description}>{t('Экспертный взгляд на происходящие события от лидеров мнений и ведущих профессионалов.')}</AppText>
               </View>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
               <Posts />

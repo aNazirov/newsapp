@@ -31,13 +31,13 @@ export const Filter: React.FC<Props> = ({ setFilter, getFilter, filter, first })
         <>
           <TouchableOpacity
             onPress={filterSet(true)}
-            style={{ ...style.button, backgroundColor: filter.fresh ? 'transparent' : '#fff' }}
+            style={{ ...style.button, marginRight: 15, backgroundColor: filter.fresh ? 'transparent' : '#fff' }}
           >
             <AppText style={style.title}>{t('Популярное')}</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={filterSet(false)}
-            style={{ ...style.button, marginLeft: 15, backgroundColor: filter.fresh ? '#fff' : 'transparent' }}
+            style={{ ...style.button, backgroundColor: filter.fresh ? '#fff' : 'transparent' }}
           >
             <AppText style={style.title}>{t('Свежее')}</AppText>
           </TouchableOpacity>
@@ -48,7 +48,7 @@ export const Filter: React.FC<Props> = ({ setFilter, getFilter, filter, first })
         <>
           <TouchableOpacity
             onPress={filterSet(false)}
-            style={{ ...style.button, marginLeft: 15, backgroundColor: filter.fresh ? '#fff' : 'transparent' }}
+            style={{ ...style.button, marginRight: 15, backgroundColor: filter.fresh ? '#fff' : 'transparent' }}
           >
             <AppText style={style.title}>{t('Свежее')}</AppText>
           </TouchableOpacity>
@@ -69,7 +69,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 20,
-    paddingHorizontal: 15,
+    paddingRight: 15,
   },
   button: {
     paddingHorizontal: 15,

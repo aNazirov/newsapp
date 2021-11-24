@@ -50,12 +50,12 @@ const customParsers = {
       border-color: #f3f3f3; 
       color: #000; 
       text-decoration: none; 
-      padding: 25px; 
+      padding: 15px; 
       border-radius: 7px; 
-      margin-bottom: 15px
+      margin-bottom: 15px;
     ' 
     >
-      <h3 style="font-family: 'roboto-bold'">${meta.title}</h3>
+      <h3 style="font-family: 'roboto-bold'; margin-top: 0">${meta.title}</h3>
       ${meta.description ? `<span style="font-family: 'roboto-regular'">${meta.description}</span>` : ''}
     </a>
     `;

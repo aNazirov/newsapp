@@ -9,6 +9,7 @@ import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
 import { Loader } from '../../components/shared/loader';
 import { useTranslation } from 'react-i18next';
+import NetInfo from '@react-native-community/netinfo';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
@@ -28,7 +29,28 @@ export const Home: React.FC<Props> = ({}) => {
   const [firstLoading, setFirstLoading] = useState(true);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
   const [loading, setLoading] = useState(false);
+
   const { lang } = useAppSelector(state => state.global);
+  const { hotPosts, pageCount, posts } = useAppSelector(state => state.posts);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (state.isConnected && !posts.length) {
+        clearStore(dispatch);
+        dispatch(getMainPosts({ page: 1 }, lang))
+          .finally(() => setFirstLoading(false));
+        dispatch(getHotPosts({ page: 1 }, lang))
+          .finally(() => setFirstLoading(false));
+      }
+      if (!state.isConnected) {
+        toastShow({ type: 'error', title: 'Соединение не установлено', message: 'Проверте соединение с интернетом' });
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [])
+
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getMainPosts({ page: 1 }, lang))
@@ -36,7 +58,7 @@ export const Home: React.FC<Props> = ({}) => {
     dispatch(getHotPosts({ page: 1 }, lang))
       .finally(() => setFirstLoading(false));
   }, [lang]);
-  const { hotPosts, pageCount } = useAppSelector(state => state.posts);
+
   const getMore = () => {
     if (!pageCount) return;
     setLoading(true);
@@ -88,17 +110,17 @@ export const Home: React.FC<Props> = ({}) => {
 };
 
 const style = StyleSheet.create({
-  container: {
-  },
+  container: {},
   containerFilter: {
     marginHorizontal: 15,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   title: {
     fontSize: 18,
-    marginTop: 15,
+    marginTop: 25,
     fontFamily: 'roboto-bold',
   },
 });

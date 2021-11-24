@@ -46,10 +46,11 @@ const navigationTitles = [
 
 export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const activeRoute = getActiveRouteState(navigation.getState());
   const { lang } = useAppSelector(state => state.global);
   const { categories, hasMore } = useAppSelector(state => state.categories);
+
+  const dispatch = useAppDispatch();
+  const activeRoute = getActiveRouteState(navigation.getState());
   const changeLang = (lang: 'ru' | 'uz') => () => {
     dispatch(langSet(lang));
   };
@@ -57,6 +58,8 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
     dispatch(getMainCategories({ page: 2 }, lang))
       .catch(() => toastShow(errorObject));
   };
+
+
   return (
     <SafeAreaView>
       <ScrollView style={style.container}>

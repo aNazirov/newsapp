@@ -12,6 +12,7 @@ import { errorObject } from '../../_data/helpers';
 import { AppText } from '../../components/shared';
 import { headerStyles } from '../../styles/header.styles';
 import { Loader } from '../../components/shared/loader';
+import NetInfo from '@react-native-community/netinfo';
 
 interface IFilter {
   fresh?: boolean;
@@ -33,13 +34,33 @@ export const Feed: React.FC<Props> = ({}) => {
   const dispatch = useAppDispatch();
   const [firstLoading, setFirstLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+
   const { lang } = useAppSelector(state => state.global);
+  const { hotPosts, pageCount, posts } = useAppSelector(state => state.posts);
+
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getFeedPosts({ page: 1, ...filter }, lang))
       .finally(() => setFirstLoading(false));
   }, [lang]);
-  const { hotPosts, pageCount } = useAppSelector(state => state.posts);
+
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      if (state.isConnected && !posts.length) {
+        clearStore(dispatch);
+        dispatch(getFeedPosts({ page: 1, ...filter }, lang))
+          .finally(() => setFirstLoading(false));
+      }
+      if (!state.isConnected) {
+        toastShow({ type: 'error', title: 'Соединение не установлено', message: 'Проверте соединение с интернетом' });
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [lang]);
+
   const getMore = () => {
     if (!pageCount) return;
     setLoading(true);

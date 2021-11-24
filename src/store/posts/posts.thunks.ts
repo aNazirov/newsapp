@@ -50,7 +50,7 @@ export const getAuthorsPosts = (params: any, lang: string): AppThunk => async (d
 };
 export const getSpecialPosts = (params: any, lang: string): AppThunk => async (dispatch: any) => {
   return getSpecialPostsService(params, lang)
-    .then(res => dispatch(postsSet(res)))
+    .then(posts => dispatch(postsSet(posts)))
 };
 export const getMorePosts = (page: string, slug: any, params: any = {}, lang: string): AppThunk => async (dispatch: any) => {
   return getMorePostsService(page, slug, lang, params)

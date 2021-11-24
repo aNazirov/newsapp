@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { CustomDrawer } from './customDrawer';
 import { Home } from '../../screens/home';
@@ -18,17 +18,40 @@ import { autoLogin, getGlobalData, langSet } from '../../store/global/global.thu
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { toastShow } from '../../services/notifications.service';
+import { registerForPushNotificationsAsync } from '../../helpers/helpers';
+import * as Notifications from 'expo-notifications';
 
 const Drawer = createDrawerNavigator();
 
 export const DrawerNavigation: React.FC = () => {
+  const [expoPushToken, setExpoPushToken] = useState<string | undefined>('');
+  const [notification, setNotification] = useState<any>(false);
+
+  const notificationListener = useRef<any>();
+  const responseListener = useRef<any>();
   const dispatch = useAppDispatch()
   const { token, lang } = useAppSelector(state => state.global);
+
   useEffect(() => {
     dispatch(autoLogin());
     AsyncStorage.getItem('lang')
       .then((result: any) => dispatch(langSet(result || 'ru')));
   }, []);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token))
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, [])
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       if(state.isConnected) {
@@ -42,6 +65,7 @@ export const DrawerNavigation: React.FC = () => {
       unsubscribe()
     }
   }, [lang])
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawer {...props} />}
