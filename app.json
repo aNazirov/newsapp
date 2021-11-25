@@ -9,7 +9,7 @@
     "facebookAppId": "1031789204286441",
     "facebookDisplayName": "Uznews-2",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
