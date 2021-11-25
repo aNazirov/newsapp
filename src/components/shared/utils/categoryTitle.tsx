@@ -17,12 +17,12 @@ export const CategoryTitle: React.FC<Props> = ({ category , color = '#000'}) => 
       style={style.container}
       onPress={() => {
         navigate('Categories', {
-          slug: category.slug,
+          slug: category?.slug,
         });
       }}
     >
-      <Image source={{ uri: category.image }} style={{ ...headerStyles.icons,...style.image }} resizeMode='cover' />
-      <AppText style={{ ...style.title, color }}>{category.name}</AppText>
+      <Image source={{ uri: category?.image }} style={{ ...headerStyles.icons,...style.image }} resizeMode='cover' />
+      <AppText style={{ ...style.title, color }}>{category?.name}</AppText>
     </TouchableOpacity>
   );
 };

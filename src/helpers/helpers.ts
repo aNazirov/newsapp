@@ -34,7 +34,7 @@ interface IContent {
 export async function schedulePushNotification(content: IContent) {
   await Notifications.scheduleNotificationAsync({
     content,
-    trigger: { seconds: 2 },
+    trigger: { },
   });
 }
 

@@ -54,9 +54,7 @@
         {
           "icon": "./assets/logo.png",
           "color": "#ffffff",
-          "sounds": [
-
-          ],
+          "sounds": [],
           "mode": "production"
         }
       ]

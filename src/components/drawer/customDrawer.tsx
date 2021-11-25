@@ -124,19 +124,19 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
                 <TouchableOpacity
                   style={{
                     ...style.navigationContainer,
-                    backgroundColor: activeRoute.name === category.name ? '#fff' : 'transparent',
+                    backgroundColor: activeRoute.name === category?.name ? '#fff' : 'transparent',
                   }}
-                  key={category.slug}
+                  key={category?.slug}
                   onPress={() => {
                     navigation.navigate('Categories', {
-                      slug: category.slug,
+                      slug: category?.slug,
                     });
                   }}
                 >
-                  <Image source={{ uri: category.image }}
+                  <Image source={{ uri: category?.image }}
                          style={{ ...headerStyles.icons, ...style.navigationImage, display: 'none' }}
                          resizeMode='cover' />
-                  <AppText style={style.navigationTitle}>{t(category.name)}</AppText>
+                  <AppText style={style.navigationTitle}>{t(category?.name)}</AppText>
                 </TouchableOpacity>
               );
             })

@@ -88,7 +88,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
                   style={style.follow}
                   onPress={() => followHandle()}
                 >
-                  <Image source={user?.follows?.includes(category.id) ? followCheck : follow} resizeMode='contain' style={style.followIcon} />
+                  <Image source={user?.follows?.includes(category?.id) ? followCheck : follow} resizeMode='contain' style={style.followIcon} />
                 </TouchableOpacity>
               }
               {

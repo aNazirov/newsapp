@@ -58,8 +58,7 @@ export const DrawerNavigation: React.FC = () => {
       })
 
     notificationListener.current = Notifications.addNotificationReceivedListener(({ request: { content: { title, body, data} } }) => {
-      (title || body || data) &&
-      schedulePushNotification({ title: title || '', body: body || '', data: JSON.stringify(data || '') })
+      if (title || body || data) schedulePushNotification({ title: title || '', body: body || '', data: JSON.stringify(data || '') })
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
