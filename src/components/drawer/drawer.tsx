@@ -48,7 +48,10 @@ export const DrawerNavigation: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => sendPushNotification(token))
+    registerForPushNotificationsAsync().then(token => {
+      toastShow({type: 'info', title: '', message: `${token}`})
+      sendPushNotification(token);
+    })
     notificationListener.current = Notifications.addNotificationReceivedListener(({ request: { content: { title, body, data} } }) => {
       (title || body || data) &&
       schedulePushNotification({title: title || '', body: body || '', data: JSON.stringify(data || '')})
