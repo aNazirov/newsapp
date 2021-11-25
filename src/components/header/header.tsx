@@ -14,6 +14,7 @@ import { Weather, Currency, Profile, Sign } from '../shared';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useNavigation } from '@react-navigation/native';
 import { getNotificationsCount } from '../../store/notifications/notifications.thunks';
+import { getActiveRouteState } from '../../_data/helpers';
 
 interface Props {
   style: any;
@@ -27,11 +28,11 @@ if (
 }
 export const Header: React.FC<Props> = ({ style }) => {
   const navigation = useNavigation<any>();
+  const activeRoute = getActiveRouteState(navigation.getState());
   const dispatch = useAppDispatch()
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
   const { token } = useAppSelector(state => state.global);
-
   useEffect(() => {
     if (token) dispatch(getNotificationsCount(token))
   }, [])
@@ -75,7 +76,7 @@ export const Header: React.FC<Props> = ({ style }) => {
               </View>
             }
             {
-              !show &&
+              !show && activeRoute.name !== 'Search' &&
               <TouchableOpacity
                 onPress={() => {
                   LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);

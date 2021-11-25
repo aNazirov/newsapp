@@ -33,8 +33,11 @@ export const Categories: React.FC<Props> = ({ route }) => {
   const [loading, setLoading] = useState(false);
   const { lang, user, token } = useAppSelector(state => state.global);
   useEffect(() => {
-    setFirstLoading(true)
     clearStore(dispatch);
+    setFirstLoading(true)
+    setLoading(true)
+    dispatch(getMorePosts('categories', route.params?.slug, { page: 1, ...filter }, lang))
+      .then(() => setLoading(false))
     dispatch(getCategory({ page: 1, ...filter }, route.params?.slug, lang))
       .then(() => page.current = 2)
       .catch(() => toastShow(errorObject))

@@ -82,12 +82,12 @@ export const CommentModal: React.FC = () => {
     }, token)
       .then(comment => {
         onClose();
+        setImage(null)
+        reset();
         if (comment.status === 'banned') {
-          reset();
           return toastShow({ type: 'info', title: '', message: comment.deleted_reason });
         }
         dispatch(commentSetToComments(comment));
-        reset();
       })
       .catch((err: any) => {
         if (err.response?.data?.errors) {
@@ -118,6 +118,7 @@ export const CommentModal: React.FC = () => {
           <TouchableOpacity
             onPress={() => {
               onClose();
+              setImage(null)
               reset();
             }}
           >
@@ -187,6 +188,7 @@ export const CommentModal: React.FC = () => {
                   style={{ ...style.button, backgroundColor: 'rgba(0, 0, 0, 0)', marginRight: 15 }}
                   onPress={() => {
                     onClose();
+                    setImage(null)
                     reset();
                   }}
                 >

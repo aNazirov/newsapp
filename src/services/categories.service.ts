@@ -16,5 +16,5 @@ export const getCategoriesService = (params: any, slug: string, lang: string = '
       'Accept-Language': lang
     }
   })
-    .then(res => res.data.result);
+    .then(res => res.data.result.category);
 };
