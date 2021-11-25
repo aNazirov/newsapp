@@ -55,8 +55,7 @@
           "icon": "./assets/logo.png",
           "color": "#ffffff",
           "sounds": [
-            "./local/assets/notification-sound.wav",
-            "./local/assets/notification-sound-other.wav"
+
           ],
           "mode": "production"
         }
