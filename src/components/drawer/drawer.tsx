@@ -48,10 +48,15 @@ export const DrawerNavigation: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => {
-      toastShow({type: 'info', title: '', message: `${token}`})
-      sendPushNotification(token);
-    })
+    AsyncStorage.getItem('expoPushToken')
+      .then(token => {
+        if (!token) {
+          registerForPushNotificationsAsync().then(token => {
+            sendPushNotification(token);
+          })
+        }
+      })
+
     notificationListener.current = Notifications.addNotificationReceivedListener(({ request: { content: { title, body, data} } }) => {
       (title || body || data) &&
       schedulePushNotification({title: title || '', body: body || '', data: JSON.stringify(data || '')})
@@ -65,6 +70,7 @@ export const DrawerNavigation: React.FC = () => {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, [])
+
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
       if(state.isConnected) {

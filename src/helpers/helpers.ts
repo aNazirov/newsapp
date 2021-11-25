@@ -5,6 +5,8 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { api } from '../api';
 
 export const clearStore = (dispatch: any) => {
   dispatch(commentsNull());
@@ -20,23 +22,7 @@ export const handleOpenWithWebBrowser = (url: string) => () => {
 
 export async function sendPushNotification(expoPushToken: string | undefined) {
   if (!expoPushToken) return;
-  const message = {
-    to: expoPushToken,
-    sound: 'default',
-    title: 'Это push уведомление',
-    body: 'Я это сделал!',
-    data: { someData: 'goes here' },
-  };
-
-  await fetch('https://exp.host/--/api/v2/push/send', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Accept-encoding': 'gzip, deflate',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(message),
-  });
+  await api.post('/mobile/notification/create', { token: expoPushToken });
 }
 
 interface IContent {
@@ -78,6 +64,6 @@ export async function registerForPushNotificationsAsync() {
       lightColor: '#FF231F7C',
     });
   }
-
+  if (token) AsyncStorage.setItem('expoPushToken', token);
   return token;
 }
