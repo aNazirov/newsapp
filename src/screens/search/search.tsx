@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { AppText } from '../../components/shared';
 import { headerStyles } from '../../styles/header.styles';
 import { Loader } from '../../components/shared/loader';
+import { AxiosError } from 'axios';
 
 interface IFilter {
   fresh?: boolean;
@@ -43,7 +44,7 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
     setLoading(true);
     return dispatch(getSearchPosts({ page: page.current, ...filter, text }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -52,7 +53,7 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
     setLoading(true);
     dispatch(getSearchPosts({ page: 1, ...filters, text }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   return (

@@ -53,6 +53,7 @@ export const CommentModal: React.FC = () => {
   const { comment } = useAppSelector(state => state.comments);
   const [image, setImage] = useState<ImageInfo | null>(null);
   const [loading, setLoading] = useState(false);
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       base64: true,
@@ -72,17 +73,14 @@ export const CommentModal: React.FC = () => {
       dispatch(commentFormOpenSet(false));
       return dispatch(loginFormOpenSet(true));
     }
+    data = Object.assign({post_id: post?.id}, data)
+    if (comment) data = Object.assign({ user_id: comment?.user.id }, { comment_id: comment?.parent_id ? comment?.parent_id : comment?.id }, data);
+    if (image) data = Object.assign({ image: image['base64'] }, data);
     setLoading(true);
-    createCommentService({
-      ...data,
-      user_id: comment?.user.id,
-      post_id: post?.id,
-      comment_id: comment?.parent_id ? comment?.parent_id : comment?.id,
-      image,
-    }, token)
+    createCommentService(data, token)
       .then(comment => {
         onClose();
-        setImage(null)
+        setImage(null);
         reset();
         if (comment.status === 'banned') {
           return toastShow({ type: 'info', title: '', message: comment.deleted_reason });
@@ -90,6 +88,7 @@ export const CommentModal: React.FC = () => {
         dispatch(commentSetToComments(comment));
       })
       .catch((err: any) => {
+        console.log(err.response.data)
         if (err.response?.data?.errors) {
           return Object.keys(err.response.data.errors).forEach(key => {
             setError(key, {
@@ -99,7 +98,7 @@ export const CommentModal: React.FC = () => {
           });
         }
         onClose();
-        return toastShow(errorObject);
+        return toastShow({ ...errorObject, message: err.response?.data?.result?.message });
       })
       .finally(() => setLoading(false));
   };
@@ -118,7 +117,7 @@ export const CommentModal: React.FC = () => {
           <TouchableOpacity
             onPress={() => {
               onClose();
-              setImage(null)
+              setImage(null);
               reset();
             }}
           >
@@ -188,7 +187,7 @@ export const CommentModal: React.FC = () => {
                   style={{ ...style.button, backgroundColor: 'rgba(0, 0, 0, 0)', marginRight: 15 }}
                   onPress={() => {
                     onClose();
-                    setImage(null)
+                    setImage(null);
                     reset();
                   }}
                 >

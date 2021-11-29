@@ -10,6 +10,7 @@ import { commentRatingSet } from '../../../store/comments/comments.thunks';
 import { toastShow } from '../../../services/notifications.service';
 import { errorObject } from '../../../_data/helpers';
 import { loginFormOpenSet } from '../../../store/global/global.thunks';
+import { AxiosError } from 'axios';
 
 interface Props {
   rating?: number;
@@ -27,7 +28,7 @@ export const RatingButton: React.FC<Props> = ({ rating = 0, id, type}) => {
           if (type === 'post') return dispatch(postRatingSet( resRating,rating))
           if (type === 'comment') return dispatch(commentRatingSet(resRating, rating, id))
         })
-        .catch(() => toastShow(errorObject))
+        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
     }
     dispatch(loginFormOpenSet(true))
   };

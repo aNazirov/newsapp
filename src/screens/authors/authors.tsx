@@ -10,6 +10,7 @@ import { errorObject } from '../../_data/helpers';
 import { getAuthor } from '../../store/authors/authors.thunks';
 import { AppText } from '../../components/shared';
 import { Loader } from '../../components/shared/loader';
+import { AxiosError } from 'axios';
 
 interface IFilter {
   fresh?: boolean;
@@ -33,7 +34,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
     clearStore(dispatch);
     dispatch(getAuthor({ page: 1, ...filter }, route.params?.id, lang))
       .then(() => page.current = 2)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setFirstLoading(false));
   }, [lang, route.params?.id]);
   const { pageCount } = useAppSelector(state => state.posts);
@@ -43,7 +44,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
     setLoading(true);
     return dispatch(getMorePosts('authors', route.params?.id, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -52,7 +53,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
     setLoading(true);
     dispatch(getMorePosts('authors', route.params?.id, { page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   return (

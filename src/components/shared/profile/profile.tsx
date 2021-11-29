@@ -12,6 +12,7 @@ import { blue } from '../../../styles/layout.styles';
 import { Notifications } from '../../profile';
 import { ModalContainer } from '../modal';
 import { Logout } from './logout';
+import { AxiosError } from 'axios';
 
 const notificationIcon = require('../../../../assets/images/icons/notification.png');
 const notificationsIcon = require('../../../../assets/images/icons/notifications.png');
@@ -32,7 +33,7 @@ export const Profile = () => {
     if (!alertNotifications.length || notificationsCount) {
       return dispatch(getAlertNotifications(token!))
         .then(() => setLoading(false))
-        .catch(() => toastShow(errorObject));
+        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
     }
     setLoading(false);
   };

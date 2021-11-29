@@ -31,8 +31,19 @@ const customParsers = {
       data.text = data.text.replace(/<b>/g, `<span style="font-family: 'roboto-bold';">`);
       data.text = data.text.replace(/<\/b>/g, `</span>`);
     }
-    return `<p 
-      style='
+    if (data.text.includes('<code class="inline-code">')) {
+      data.text = data.text.replace(/<code class="inline-code">/g,
+        `<code style="
+          background: rgba(250, 239, 240, 0.78);
+          color: #b44437;
+          padding: 3px 4px;
+          border-radius: 5px;
+          margin: 0 1px;
+          font-family: 'roboto-medium';
+          font-size: 16px;
+        ">`);
+    }
+    return `<p style='
         font-family: "roboto-regular";
         margin: 0 0 10px;
         font-size: 16px;

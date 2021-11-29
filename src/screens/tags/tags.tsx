@@ -10,6 +10,7 @@ import { errorObject } from '../../_data/helpers';
 import { getTag } from '../../store/tags/tags.thunks';
 import { AppText } from '../../components/shared';
 import { Loader } from '../../components/shared/loader';
+import { AxiosError } from 'axios';
 
 interface IFilter {
   fresh?: boolean;
@@ -41,7 +42,7 @@ export const Tags: React.FC<Props> = ({ route }) => {
     setLoading(true);
     return dispatch(getMorePosts('tags', route.params?.slug, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -50,7 +51,7 @@ export const Tags: React.FC<Props> = ({ route }) => {
     setLoading(true);
     dispatch(getMorePosts('tags', route.params?.slug, { page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   return (

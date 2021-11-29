@@ -8,6 +8,7 @@ import { headerStyles } from '../../styles/header.styles';
 import { toastShow } from '../../services/notifications.service';
 import * as WebBrowser from 'expo-web-browser';
 import { errorObject } from '../../_data/helpers';
+import { AxiosError } from 'axios';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -26,7 +27,7 @@ export const GoogleLogin: React.FC = () => {
         .then(() => {
           dispatch(loginFormOpenSet(false));
         })
-        .catch(() => toastShow(errorObject));
+        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
     }
     if (response?.type === 'error') {
       return toastShow(errorObject);

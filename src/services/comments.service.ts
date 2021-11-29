@@ -20,7 +20,7 @@ export const getUserCommentsService = (params: any, token: string) => {
 };
 
 export const createCommentService = (data: any, token: string) => {
-  return api.post(`/mobile/comments`, data, {
+  return api.post(`/posts/mobile/comments`, data, {
     headers: {
       'Authorization': `Bearer ${token}`,
     },

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Filter, Posts } from '../../components/shared';
 import { getAuthorsPosts, postsNull } from '../../store/posts/posts.thunks';
 import { clearStore } from '../../helpers/helpers';
@@ -11,6 +11,7 @@ import { errorObject } from '../../_data/helpers';
 import { AppText } from '../../components/shared';
 import { Loader } from '../../components/shared/loader';
 import NetInfo from '@react-native-community/netinfo';
+import { AxiosError } from 'axios';
 
 interface IFilter {
   fresh?: boolean;
@@ -21,7 +22,7 @@ interface Props {
   navigation: NavigationProp<any>;
 }
 
-export const Opinions: React.FC<Props> = ({}) => {
+export const Opinions: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
   const page = useRef(2);
   const [filter, setFilter] = useState<IFilter>({ fresh: true });
@@ -30,12 +31,14 @@ export const Opinions: React.FC<Props> = ({}) => {
   const [loading, setLoading] = useState(false);
 
   const { lang } = useAppSelector(state => state.global);
+  const { authors } = useAppSelector(state => state.authors);
   const { pageCount, posts } = useAppSelector(state => state.posts);
 
   useEffect(() => {
     clearStore(dispatch);
     dispatch(getAuthorsPosts({ page: 1, ...filter }, lang))
       .finally(() => setFirstLoading(false));
+    dispatch(getAuthorsPosts({ page: 1, ...filter }, lang));
   }, []);
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
@@ -57,7 +60,7 @@ export const Opinions: React.FC<Props> = ({}) => {
     setLoading(true);
     return dispatch(getAuthorsPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -66,7 +69,7 @@ export const Opinions: React.FC<Props> = ({}) => {
     setLoading(true);
     dispatch(getAuthorsPosts({ page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   return (
@@ -82,6 +85,17 @@ export const Opinions: React.FC<Props> = ({}) => {
                 <AppText
                   style={style.description}>{t('Экспертный взгляд на происходящие события от лидеров мнений и ведущих профессионалов.')}</AppText>
               </View>
+              <ScrollView horizontal style={style.authors}>
+                {
+                  authors.map(author => {
+                    return (
+                      <TouchableOpacity onPress={() => navigation.navigate('Authors', { id: author.id })}>
+                        <Image source={{ uri: author.avatar }} style={style.author} />
+                      </TouchableOpacity>
+                    );
+                  })
+                }
+              </ScrollView>
               <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
               <Posts />
               {
@@ -118,5 +132,15 @@ const style = StyleSheet.create({
     fontSize: 14,
 
     lineHeight: 21,
+  },
+  authors: {
+    backgroundColor: '#fff',
+    paddingVertical: 16,
+  },
+  author: {
+    width: 48,
+    height: 48,
+    borderRadius: 56,
+    marginLeft: 10,
   },
 });

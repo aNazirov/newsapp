@@ -10,6 +10,7 @@ import { errorObject } from '../../_data/helpers';
 import { Loader } from '../../components/shared/loader';
 import { useTranslation } from 'react-i18next';
 import NetInfo from '@react-native-community/netinfo';
+import { AxiosError } from 'axios';
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
@@ -64,7 +65,7 @@ export const Home: React.FC<Props> = ({}) => {
     setLoading(true);
     return dispatch(getMainPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = () => {
@@ -73,7 +74,7 @@ export const Home: React.FC<Props> = ({}) => {
     page.current = 1;
     return dispatch(getMainPosts({ page: 1, ...filter }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   return (

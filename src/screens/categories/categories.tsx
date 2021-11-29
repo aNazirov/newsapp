@@ -11,6 +11,7 @@ import { errorObject } from '../../_data/helpers';
 import { AppText } from '../../components/shared';
 import { followToCategory, loginFormOpenSet } from '../../store/global/global.thunks';
 import { Loader } from '../../components/shared/loader';
+import { AxiosError } from 'axios';
 
 interface IFilter {
   fresh?: boolean;
@@ -40,7 +41,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
       .then(() => setLoading(false))
     dispatch(getCategory({ page: 1, ...filter }, route.params?.slug, lang))
       .then(() => page.current = 2)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setFirstLoading(false));
     return () => {
     };
@@ -52,7 +53,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
     setLoading(true);
     return dispatch(getMorePosts('categories', route.params?.slug, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -61,7 +62,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
     setLoading(true);
     dispatch(getMorePosts('categories', category?.slug, { page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const followHandle = () => {
@@ -69,7 +70,7 @@ export const Categories: React.FC<Props> = ({ route }) => {
     const message = user?.follows?.includes(category!.id) ? 'Отписка прошла успешно' : 'Подписка прошла успешно';
     dispatch(followToCategory(category!.id, token))
       .then(() => toastShow({ type: 'success', title: 'Успешно', message }))
-      .catch(() => toastShow(errorObject));
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
   };
   return (
     <Loader loading={firstLoading}>

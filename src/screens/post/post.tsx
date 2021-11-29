@@ -21,6 +21,7 @@ import { Loader } from '../../components/shared/loader';
 import { parseEditor } from '../../helpers/editor';
 import { EditorJs } from '../../helpers/EditorJs';
 import { commentsNull, getPostComments } from '../../store/comments/comments.thunks';
+import { AxiosError } from 'axios';
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -41,7 +42,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
 
     dispatch(getMorePosts('posts', route.params?.slug, { page: page.current }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   useEffect(() => {
@@ -51,9 +52,9 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
     dispatch(getPostComments(route.params?.slug, lang));
     dispatch(getMorePosts('posts', route.params?.slug, { page: 1 }, lang))
       .then(() => page.current = 2)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
     dispatch(getPost(route.params?.slug, lang))
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setFirstLoading(false));
   }, [route.params?.slug]);
   return (

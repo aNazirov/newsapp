@@ -19,6 +19,7 @@ import { getMainCategories } from '../../store/categories/categories.thunks';
 import { AppText } from '../shared';
 import { toastShow } from '../../services/notifications.service';
 import { handleOpenWithWebBrowser, website } from '../../helpers/helpers';
+import { AxiosError } from 'axios';
 
 const navigationTitles = [
   {
@@ -56,7 +57,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
   };
   const getMore = () => {
     dispatch(getMainCategories({ page: 2 }, lang))
-      .catch(() => toastShow(errorObject));
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
   };
 
 

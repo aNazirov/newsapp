@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppCheckbox, AppInput, AppText } from '../../components/shared';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -6,11 +6,13 @@ import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { headerStyles } from '../../styles/header.styles';
-import { userSettings } from '../../services/global.services';
+import { deleteImage, userSettings } from '../../services/global.services';
 import { toastShow } from '../../services/notifications.service';
 import { errorObject } from '../../_data/helpers';
-import { blue } from '../../styles/layout.styles';
+import { blue, red } from '../../styles/layout.styles';
 import { userSet } from '../../store/global/global.thunks';
+import * as ImagePicker from 'expo-image-picker';
+import { AxiosError } from 'axios';
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -60,10 +62,38 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
   const { t } = useTranslation();
   const { control, handleSubmit, formState: { errors }, setError } = useForm();
   const { user, token } = useAppSelector(state => state.global);
+
   const dispatch = useAppDispatch()
   if (!user) return <></>;
+
+  const [avatar, setAvatar] = useState<any>({ uri: user.avatar });
+
+  const imageRemove = () => {
+    deleteImage(token!)
+      .then(() => {
+        setAvatar('');
+        toastShow({type: 'success', title: '', message: 'Изображение удалено'})
+      })
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setAvatar(result);
+    }
+  };
+
   const editUserSettings = (data: any) => {
-    userSettings(data, token!)
+    if (avatar['base64']) data = Object.assign({avatar: avatar['base64']}, data)
+    userSettings({ ...data, is_mobile: true }, token!)
       .then(user => {
         dispatch(userSet(user))
         navigation.navigate('Profile');
@@ -78,14 +108,28 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
             });
           });
         }
-        toastShow(errorObject);
+        return toastShow({ ...errorObject, message: err.response?.data?.result?.message });
       });
 
   };
   return (
     <ScrollView>
       <View style={{ ...style.container, marginBottom: 20 }}>
-        <Image source={{ uri: user?.avatar }} style={style.avatar} />
+        <Image source={{ uri: avatar.uri }} style={style.avatar} />
+        <View style={{flexDirection: 'row', marginTop: 20}}>
+          <TouchableOpacity
+            style={{ ...style.button, backgroundColor: 'rgba(0, 0, 0, .1)', marginRight: 15 }}
+            onPress={pickImage}
+          >
+            <AppText style={{ ...style.buttonText }}>{t('Загрузить')}</AppText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ ...style.button, backgroundColor: red }}
+            onPress={imageRemove}
+          >
+            <AppText style={{ ...style.buttonText, color: '#fff' }}>{t('Удалить')}</AppText>
+          </TouchableOpacity>
+        </View>
         <AppText style={style.name}>{user?.name}</AppText>
       </View>
       <View style={{ ...style.container, paddingVertical: 0 }}>

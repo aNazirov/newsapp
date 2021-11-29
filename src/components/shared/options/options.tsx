@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AppText } from '../appText';
 import { useTranslation } from 'react-i18next';
-import { deleteComment, reportComment } from '../../../services/global.services';
+import { deleteComment } from '../../../services/global.services';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { commentDeleteAction, commentSet } from '../../../store/comments/comments.thunks';
 import { toastShow } from '../../../services/notifications.service';
@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { headerStyles } from '../../../styles/header.styles';
 import { ModalContainer } from '../modal';
 import { IComment } from '../../../interfaces';
+import { AxiosError } from 'axios';
 
 interface Props {
   userId: number,
@@ -30,7 +31,7 @@ export const Options: React.FC<Props> = ({ comment, userId }) => {
         dispatch(commentDeleteAction(comment.id));
         toastShow({ type: 'success', message: 'Сообщение успешно удалено', title: 'Успешно' });
       })
-      .catch(() => toastShow(errorObject));
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
 
   };
   const commentReport = () => {

@@ -13,6 +13,7 @@ import { AppText } from '../../components/shared';
 import { headerStyles } from '../../styles/header.styles';
 import { Loader } from '../../components/shared/loader';
 import NetInfo from '@react-native-community/netinfo';
+import { AxiosError } from 'axios';
 
 interface IFilter {
   fresh?: boolean;
@@ -66,7 +67,7 @@ export const Feed: React.FC<Props> = ({}) => {
     setLoading(true);
     return dispatch(getFeedPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -75,7 +76,7 @@ export const Feed: React.FC<Props> = ({}) => {
     setLoading(true);
     dispatch(getFeedPosts({ page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   return (

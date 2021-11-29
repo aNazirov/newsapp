@@ -1,4 +1,4 @@
-import {api} from "../api";
+import { api } from '../api';
 
 export const getCurrenciesService = () => {
   return api.get('/main/currencies')
@@ -44,6 +44,15 @@ export const userSettings = (data: any, token: string) => {
     },
   })
     .then(res => res.data.result.user);
+};
+export const deleteImage = (token: string) => {
+  return api
+    .post(`/user/remove/avatar`, {}, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+    .then((res) => res);
 };
 export const deleteComment = (id: number, token: string) => {
   return api.post(`/posts/comments/${id}/delete`, {}, {

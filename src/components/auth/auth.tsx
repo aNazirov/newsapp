@@ -80,7 +80,7 @@ export const Auth: React.FC = () => {
             });
           });
         }
-        toastShow(errorObject);
+        toastShow({ ...errorObject, message: err.response?.data?.result?.message })
       });
   };
   return (

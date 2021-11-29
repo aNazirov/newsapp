@@ -11,6 +11,7 @@ import { toastShow } from '../../services/notifications.service';
 import { AppText } from '../../components/shared';
 import { Loader } from '../../components/shared/loader';
 import NetInfo from '@react-native-community/netinfo';
+import { AxiosError } from 'axios';
 
 interface IFilter {
   fresh?: boolean;
@@ -58,7 +59,7 @@ export const SpecialReports: React.FC<Props> = ({}) => {
     setLoading(true);
     return dispatch(getSpecialPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -67,7 +68,7 @@ export const SpecialReports: React.FC<Props> = ({}) => {
     setLoading(true);
     dispatch(getSpecialPosts({ page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   return (

@@ -51,7 +51,7 @@ export const ReportModal: React.FC = () => {
             });
           });
         }
-        toastShow(errorObject);
+        toastShow({ ...errorObject, message: err.response?.data?.result?.message });
       });
   };
   return (

@@ -13,6 +13,7 @@ import { headerStyles } from '../../styles/header.styles';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { getNotifications } from '../../store/notifications/notifications.thunks';
 import { clearStore } from '../../helpers/helpers';
+import { AxiosError } from 'axios';
 
 interface ITab {
   id: number;
@@ -62,7 +63,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
       .then(() => {
         page.current++;
       })
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getMoreComments = () => {
@@ -72,7 +73,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
       .then(() => {
         pageComments.current++;
       })
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
   const getMoreNotifications = () => {
@@ -82,18 +83,19 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
       .then(() => {
         pageNotifications.current++;
       })
-      .catch(() => toastShow(errorObject))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
       .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     clearStore(dispatch)
     dispatch(getUserComments({ page: 1 }, token!))
-      .catch(() => toastShow(errorObject));
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
     dispatch(getNotifications({ page: 1 }, token!))
-      .catch(() => toastShow(errorObject));
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
     if (user?.role.name === 'Автор') {
-      dispatch(getMorePosts('authors', user.id, { page: 1 }, lang));
+      dispatch(getMorePosts('authors', user.id, { page: 1 }, lang))
+        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
     }
   }, []);
   return (
