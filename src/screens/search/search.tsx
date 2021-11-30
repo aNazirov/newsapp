@@ -74,7 +74,7 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
                   value={text}
                 />
               </View>
-              <AppText style={style.description}>{t('Результатов: примерно')} {postsCount}</AppText>
+              <AppText style={style.description}>{t('Результатов')} {postsCount}</AppText>
             </View>
             <Filter filter={filter} setFilter={setFilter} getFilter={getFilter} first='fresh' />
             <Loader loading={firstLoading}>
