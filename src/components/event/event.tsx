@@ -57,7 +57,7 @@ export const Event: React.FC = () => {
             });
           });
         }
-        toastShow({ ...errorObject, message: err.response?.data?.result?.message });
+        toastShow({ ...errorObject, message: err.response?.data?.message });
       });
   };
   return (

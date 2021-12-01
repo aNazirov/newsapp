@@ -60,7 +60,7 @@ export const Opinions: React.FC<Props> = ({ navigation }) => {
     setLoading(true);
     return dispatch(getAuthorsPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -69,7 +69,7 @@ export const Opinions: React.FC<Props> = ({ navigation }) => {
     setLoading(true);
     dispatch(getAuthorsPosts({ page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   return (

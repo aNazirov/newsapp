@@ -28,7 +28,7 @@ export const RatingButton: React.FC<Props> = ({ rating = 0, id, type}) => {
           if (type === 'post') return dispatch(postRatingSet( resRating,rating))
           if (type === 'comment') return dispatch(commentRatingSet(resRating, rating, id))
         })
-        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
+        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
     }
     dispatch(loginFormOpenSet(true))
   };

@@ -42,7 +42,7 @@ export const Tags: React.FC<Props> = ({ route }) => {
     setLoading(true);
     return dispatch(getMorePosts('tags', route.params?.slug, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -51,7 +51,7 @@ export const Tags: React.FC<Props> = ({ route }) => {
     setLoading(true);
     dispatch(getMorePosts('tags', route.params?.slug, { page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   return (

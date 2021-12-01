@@ -65,7 +65,7 @@ export const Home: React.FC<Props> = ({}) => {
     setLoading(true);
     return dispatch(getMainPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = () => {
@@ -74,7 +74,7 @@ export const Home: React.FC<Props> = ({}) => {
     page.current = 1;
     return dispatch(getMainPosts({ page: 1, ...filter }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   return (

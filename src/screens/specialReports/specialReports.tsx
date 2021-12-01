@@ -59,7 +59,7 @@ export const SpecialReports: React.FC<Props> = ({}) => {
     setLoading(true);
     return dispatch(getSpecialPosts({ page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -68,7 +68,7 @@ export const SpecialReports: React.FC<Props> = ({}) => {
     setLoading(true);
     dispatch(getSpecialPosts({ page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   return (

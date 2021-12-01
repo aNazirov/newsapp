@@ -33,7 +33,7 @@ export const Profile = () => {
     if (!alertNotifications.length || notificationsCount) {
       return dispatch(getAlertNotifications(token!))
         .then(() => setLoading(false))
-        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
+        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
     }
     setLoading(false);
   };

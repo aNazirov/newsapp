@@ -74,7 +74,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
         setAvatar('');
         toastShow({type: 'success', title: '', message: 'Изображение удалено'})
       })
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
   };
 
   const pickImage = async () => {
@@ -108,7 +108,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
             });
           });
         }
-        return toastShow({ ...errorObject, message: err.response?.data?.result?.message });
+        return toastShow({ ...errorObject, message: err.response?.data?.message });
       });
 
   };

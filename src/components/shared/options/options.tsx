@@ -31,7 +31,7 @@ export const Options: React.FC<Props> = ({ comment, userId }) => {
         dispatch(commentDeleteAction(comment.id));
         toastShow({ type: 'success', message: 'Сообщение успешно удалено', title: 'Успешно' });
       })
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
 
   };
   const commentReport = () => {

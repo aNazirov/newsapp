@@ -63,7 +63,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
       .then(() => {
         page.current++;
       })
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   const getMoreComments = () => {
@@ -73,7 +73,7 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
       .then(() => {
         pageComments.current++;
       })
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   const getMoreNotifications = () => {
@@ -83,19 +83,19 @@ export const Profile: React.FC<Props> = ({ route, navigation }) => {
       .then(() => {
         pageNotifications.current++;
       })
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     clearStore(dispatch)
     dispatch(getUserComments({ page: 1 }, token!))
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
     dispatch(getNotifications({ page: 1 }, token!))
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
     if (user?.role.name === 'Автор') {
       dispatch(getMorePosts('authors', user.id, { page: 1 }, lang))
-        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
     }
   }, []);
   return (

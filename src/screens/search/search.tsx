@@ -44,7 +44,7 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
     setLoading(true);
     return dispatch(getSearchPosts({ page: page.current, ...filter, text }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -53,7 +53,7 @@ export const Search: React.FC<Props> = ({ route, navigation }) => {
     setLoading(true);
     dispatch(getSearchPosts({ page: 1, ...filters, text }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   return (

@@ -42,7 +42,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
 
     dispatch(getMorePosts('posts', route.params?.slug, { page: page.current }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   useEffect(() => {
@@ -52,9 +52,9 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
     dispatch(getPostComments(route.params?.slug, lang));
     dispatch(getMorePosts('posts', route.params?.slug, { page: 1 }, lang))
       .then(() => page.current = 2)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
     dispatch(getPost(route.params?.slug, lang))
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setFirstLoading(false));
   }, [route.params?.slug]);
   return (

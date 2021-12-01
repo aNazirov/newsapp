@@ -57,7 +57,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
   };
   const getMore = () => {
     dispatch(getMainCategories({ page: 2 }, lang))
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
   };
 
 

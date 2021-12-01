@@ -34,7 +34,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
     clearStore(dispatch);
     dispatch(getAuthor({ page: 1, ...filter }, route.params?.id, lang))
       .then(() => page.current = 2)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setFirstLoading(false));
   }, [lang, route.params?.id]);
   const { pageCount } = useAppSelector(state => state.posts);
@@ -44,7 +44,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
     setLoading(true);
     return dispatch(getMorePosts('authors', route.params?.id, { page: page.current, ...filter }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   const getFilter = (filters: IFilter) => {
@@ -53,7 +53,7 @@ export const Authors: React.FC<Props> = ({ route }) => {
     setLoading(true);
     dispatch(getMorePosts('authors', route.params?.id, { page: 1, ...filters }, lang))
       .then(() => page.current++)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
   return (

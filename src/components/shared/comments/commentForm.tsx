@@ -98,7 +98,7 @@ export const CommentModal: React.FC = () => {
           });
         }
         onClose();
-        return toastShow({ ...errorObject, message: err.response?.data?.result?.message });
+        return toastShow({ ...errorObject, message: err.response?.data?.message });
       })
       .finally(() => setLoading(false));
   };

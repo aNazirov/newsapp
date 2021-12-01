@@ -27,7 +27,7 @@ export const GoogleLogin: React.FC = () => {
         .then(() => {
           dispatch(loginFormOpenSet(false));
         })
-        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.result?.message }));
+        .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
     }
     if (response?.type === 'error') {
       return toastShow(errorObject);
