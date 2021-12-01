@@ -10,7 +10,6 @@ export const getPostCommentsService = (slug: string, lang: string = 'ru', params
     .then(res => res.data.result.comments);
 };
 export const getUserCommentsService = (params: any, token: string) => {
-  console.log(token)
   return api.get(`/user/comments`, {
     params,
     headers: {
