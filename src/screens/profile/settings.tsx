@@ -63,7 +63,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
   const { control, handleSubmit, formState: { errors }, setError } = useForm();
   const { user, token } = useAppSelector(state => state.global);
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   if (!user) return <></>;
 
   const [avatar, setAvatar] = useState<any>({ uri: user.avatar });
@@ -72,9 +72,9 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     deleteImage(token!)
       .then(() => {
         setAvatar('');
-        toastShow({type: 'success', title: '', message: 'Изображение удалено'})
+        toastShow({ type: 'success', title: '', message: 'Изображение удалено' });
       })
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
   };
 
   const pickImage = async () => {
@@ -92,10 +92,10 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
   };
 
   const editUserSettings = (data: any) => {
-    if (avatar['base64']) data = Object.assign({avatar: avatar['base64']}, data)
+    if (avatar['base64']) data = Object.assign({ avatar: avatar['base64'] }, data);
     userSettings({ ...data, is_mobile: true }, token!)
       .then(user => {
-        dispatch(userSet(user))
+        dispatch(userSet(user));
         navigation.navigate('Profile');
         toastShow({ type: 'success', title: 'Успешно', message: 'Изменения успешно сохранены' });
       })
@@ -116,7 +116,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     <ScrollView>
       <View style={{ ...style.container, marginBottom: 20 }}>
         <Image source={{ uri: avatar.uri }} style={style.avatar} />
-        <View style={{flexDirection: 'row', marginTop: 20}}>
+        <View style={{ flexDirection: 'row', marginTop: 20 }}>
           <TouchableOpacity
             style={{ ...style.button, backgroundColor: 'rgba(0, 0, 0, .1)', marginRight: 15 }}
             onPress={pickImage}
@@ -142,14 +142,16 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
               return (
                 <View key={field.name} style={{ flexDirection: 'row' }}>
                   <AppText style={{ flex: 1 }}>{t(field.placeholder)}</AppText>
-                  <AppInput
-                    control={control}
-                    name={field.name}
-                    placeholder={t(field.placeholder)}
-                    defaultValue={user[field.name]}
-                    style={style.textInput}
-                    error={errors[field.name]}
-                  />
+                  <View style={{flexDirection: 'column', flex: 3}}>
+                    <AppInput
+                      control={control}
+                      name={field.name}
+                      placeholder={t(field.placeholder)}
+                      defaultValue={user[field.name]}
+                      style={style.textInput}
+                      error={errors[field.name]}
+                    />
+                  </View>
                 </View>
               );
             })

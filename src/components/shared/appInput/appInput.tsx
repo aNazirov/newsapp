@@ -26,7 +26,7 @@ export const AppInput: React.FC<Props> = ({ control, name, defaultValue = '', st
   return (
     <>
       <TextInput
-        style={style}
+        style={{ ...styles.default, ...style }}
         onBlur={field.onBlur}
         onChangeText={field.onChange}
         value={field.value}
