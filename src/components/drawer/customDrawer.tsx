@@ -178,7 +178,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
           </TouchableOpacity>
         </View>
         <AppText
-          style={{ ...style.information, marginTop: 25, fontWeight: '400' }}>{t('© 2015-2020 «UzNews.uz»')}:</AppText>
+          style={{ ...style.information, marginTop: 25, fontWeight: '400' }}>{t('© 2015-2021 «UzNews.uz»')}:</AppText>
         <AppText style={{ ...style.information, marginTop: 10, fontWeight: '400' }}>{t('Сделано в')}:</AppText>
       </ScrollView>
     </SafeAreaView>

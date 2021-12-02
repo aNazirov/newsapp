@@ -143,9 +143,9 @@ export const Auth: React.FC = () => {
         <GoogleLogin />
       </View>
       <AppText style={{ ...style.text, color: 'rgba(0, 0, 0, .7)', marginBottom: 0, textAlign: 'left' }}>
-        {t('Нажимая “Войти” вы соглашаетесь с ')}
+        {t('Нажимая “Войти” вы соглашаетесь с')}
         <TouchableOpacity onPress={handleOpenWithWebBrowser(`${website}/privacy`)}><AppText
-          style={{ textDecorationLine: 'underline' }}>политикой конфиденциальности</AppText></TouchableOpacity>
+          style={{ textDecorationLine: 'underline' }}>{t('политикой конфиденциальности')}</AppText></TouchableOpacity>
       </AppText>
     </ModalContainer>
   );

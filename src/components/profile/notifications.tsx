@@ -3,12 +3,14 @@ import { Image, StyleSheet, View } from 'react-native';
 import { AppText } from '../shared';
 import { INotification } from '../../interfaces';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   notifications: INotification[];
 }
 
 export const Notifications: React.FC<Props> = ({ notifications }) => {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   return (
     <>
@@ -46,10 +48,10 @@ export const Notifications: React.FC<Props> = ({ notifications }) => {
             <View style={{ ...style.container, alignItems: 'center' }}>
               <Image source={require('../../../assets/images/icons/notFound.png')} style={style.notFoundImage} />
               <AppText style={{ ...style.notFoundText, fontFamily: 'roboto-medium', marginBottom: 4 }}>
-                Уведомлений нет
+                {t('Уведомлений нет')}
               </AppText>
               <AppText style={style.notFoundText}>
-                Начните писать и комментировать, и здесь станет не так пусто
+                {t('Начните писать и комментировать, и здесь станет не так пусто')}
               </AppText>
             </View>
           )

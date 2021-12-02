@@ -5,8 +5,10 @@ import { AppText } from '../shared';
 import { headerStyles } from '../../styles/header.styles';
 import { Options } from '../shared/options';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 export const Comments: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAppSelector(state => state.global);
   const { comments } = useAppSelector(state => state.comments);
   const navigation = useNavigation<any>();
@@ -18,7 +20,7 @@ export const Comments: React.FC = () => {
             return (
               <View style={{ ...style.container, marginBottom: 15 }} key={comment.id}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Posts', {slug: comment.post?.slug})}
+                  onPress={() => navigation.navigate('Posts', { slug: comment.post?.slug })}
                 >
                   <AppText style={{ ...style.title, marginBottom: 8 }}>{comment.post?.title}</AppText>
                 </TouchableOpacity>
@@ -37,7 +39,7 @@ export const Comments: React.FC = () => {
           })
           : (
             <View style={style.container}>
-              <AppText style={style.notFoundText}>Вы еще не оставили ни одного комментария</AppText>
+              <AppText style={style.notFoundText}>{t('Вы еще не оставили ни одного комментария')}</AppText>
             </View>
           )
       }
