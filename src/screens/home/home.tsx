@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, LogBox, StyleSheet, TouchableHighlight, View } from 'react-native';
+import { ActivityIndicator, FlatList, LogBox, StyleSheet, View } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getHotPosts, getMainPosts, postsNull } from '../../store/posts/posts.thunks';
 import { AppText, Filter, HotPost, Posts } from '../../components/shared';
@@ -11,7 +11,6 @@ import { Loader } from '../../components/shared/loader';
 import { useTranslation } from 'react-i18next';
 import NetInfo from '@react-native-community/netinfo';
 import { AxiosError } from 'axios';
-import YandexAds from "react-native-yandex-ads"
 
 LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.']);
 
@@ -78,43 +77,6 @@ export const Home: React.FC<Props> = ({}) => {
       .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
       .finally(() => setLoading(false));
   };
-
-  const showInterstitial = React.useCallback(() => {
-    YandexAds?.showInterstitialAd(
-      "R-M-DEMO-400x240-context",
-      Math.random() + ""
-    )
-  }, [])
-
-  const showRewarded = React.useCallback(() => {
-    YandexAds?.showRewardedAd(
-      "R-M-DEMO-rewarded-client-side-rtb",
-      "some-user-id",
-      Math.random() + ""
-    )
-  }, [])
-
-  const onInterstitialEvent = React.useCallback((event) => {
-    console.log("event", event)
-  }, [])
-
-  const onRewardedEvent = React.useCallback((event) => {
-    console.log("event", event)
-  }, [])
-
-  React.useEffect(() => {
-    const interstitialListener = YandexAds?.addInterstitialEventListener(
-      onInterstitialEvent
-    )
-    const rewardedListener = YandexAds?.addRewardedEventListener(
-      onRewardedEvent
-    )
-    return () => {
-      interstitialListener.remove()
-      rewardedListener.remove()
-    }
-  }, [onInterstitialEvent, onRewardedEvent])
-
   return (
     <Loader loading={firstLoading}>
       <FlatList
@@ -122,18 +84,6 @@ export const Home: React.FC<Props> = ({}) => {
         renderItem={() => {
           return (
             <Fragment key={'home-list'}>
-              <View style={styles.container}>
-                <TouchableHighlight
-                  onPress={showInterstitial}
-                  style={styles.button}
-                >
-                  <AppText>Show interstitial</AppText>
-                </TouchableHighlight>
-
-                <TouchableHighlight onPress={showRewarded} style={styles.button}>
-                  <AppText>Show rewarded</AppText>
-                </TouchableHighlight>
-              </View>
               {
                 hotPosts?.hotPosts.map((post, i) => {
                   if (i > 2) return null;
@@ -159,21 +109,7 @@ export const Home: React.FC<Props> = ({}) => {
     </Loader>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "stretch",
-    justifyContent: "center",
-    marginHorizontal: "5%",
-  },
-  button: {
-    backgroundColor: "cyan",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 10,
-    marginVertical: 10,
-  },
-})
+
 const style = StyleSheet.create({
   container: {},
   containerFilter: {
