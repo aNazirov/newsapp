@@ -24,6 +24,7 @@ import {
   sendPushNotification,
 } from '../../helpers/helpers';
 import * as Notifications from 'expo-notifications';
+import { useTranslation } from 'react-i18next';
 
 const Drawer = createDrawerNavigator();
 
@@ -38,7 +39,8 @@ Notifications.setNotificationHandler({
 export const DrawerNavigation: React.FC = () => {
   const notificationListener = useRef<any>();
   const responseListener = useRef<any>();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { token, lang } = useAppSelector(state => state.global);
 
   useEffect(() => {
@@ -53,36 +55,52 @@ export const DrawerNavigation: React.FC = () => {
         if (!token) {
           registerForPushNotificationsAsync().then(token => {
             sendPushNotification(token);
-          })
+          });
         }
-      })
+      });
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(({ request: { content: { title, body, data} } }) => {
-      if (title || body || data) schedulePushNotification({ title: title || '', body: body || '', data: JSON.stringify(data || '') })
+    notificationListener.current = Notifications.addNotificationReceivedListener(({
+                                                                                    request: {
+                                                                                      content: {
+                                                                                        title,
+                                                                                        body,
+                                                                                        data,
+                                                                                      },
+                                                                                    },
+                                                                                  }) => {
+      if (title || body || data) schedulePushNotification({
+        title: title || '',
+        body: body || '',
+        data: JSON.stringify(data || ''),
+      });
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log('response', response)
+      console.log('response', response);
     });
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(state => {
-      if(state.isConnected) {
+      if (state.isConnected) {
         dispatch(getGlobalData(lang));
       }
       if (!state.isConnected) {
-        toastShow({type: 'error', title: 'Соединение не установлено', message: 'Проверте соединение с интернетом'})
+        toastShow({
+          type: 'error',
+          title: t('Соединение не установлено'),
+          message: t('Проверте соединение с интернетом'),
+        });
       }
     });
     return () => {
-      unsubscribe()
-    }
-  }, [lang])
+      unsubscribe();
+    };
+  }, [lang]);
 
   return (
     <Drawer.Navigator

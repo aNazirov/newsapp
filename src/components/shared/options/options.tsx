@@ -29,7 +29,7 @@ export const Options: React.FC<Props> = ({ comment, userId }) => {
     deleteComment(comment.id, token!)
       .then(() => {
         dispatch(commentDeleteAction(comment.id));
-        toastShow({ type: 'success', message: 'Сообщение успешно удалено', title: 'Успешно' });
+        toastShow({ type: 'success', message: t('Сообщение успешно удалено'), title: 'Успешно' });
       })
       .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
 

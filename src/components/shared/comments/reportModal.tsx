@@ -40,7 +40,7 @@ export const ReportModal: React.FC = () => {
     reportComment(comment?.id, data, token!)
       .then(() => {
         close()
-        toastShow({ message: 'Ваша жалоба принята на рассмотрение', type: 'success', title: '' })
+        toastShow({ message: t('Ваша жалоба принята на рассмотрение'), type: 'success', title: '' })
       })
       .catch(err => {
         if (err.response?.data?.errors) {

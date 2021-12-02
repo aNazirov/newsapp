@@ -48,6 +48,7 @@
     "react-native-web": "0.17.1",
     "react-native-web-swiper": "^2.2.1",
     "react-native-webview": "11.13.0",
+    "react-native-yandex-ads": "^0.2.1",
     "react-redux": "^7.2.6"
   },
   "devDependencies": {

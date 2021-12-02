@@ -48,7 +48,7 @@ export const Opinions: React.FC<Props> = ({ navigation }) => {
           .finally(() => setFirstLoading(false));
       }
       if (!state.isConnected) {
-        toastShow({ type: 'error', title: 'Соединение не установлено', message: 'Проверте соединение с интернетом' });
+        toastShow({ type: 'error', title: t('Соединение не установлено'), message: t('Проверте соединение с интернетом') });
       }
     });
     return () => {

@@ -46,7 +46,7 @@ export const Event: React.FC = () => {
     createEvent({ ...formdata, description: JSON.stringify(description) })
       .then(() => {
         dispatch(eventFormOpenSet(false));
-        toastShow({ type: 'success', title: 'Успешно', message: 'Событие отправлено' });
+        toastShow({ type: 'success', title: '', message: t('Новость отправлена') });
       })
       .catch(err => {
         if (err.response?.data?.errors) {

@@ -72,7 +72,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
     deleteImage(token!)
       .then(() => {
         setAvatar('');
-        toastShow({ type: 'success', title: '', message: 'Изображение удалено' });
+        toastShow({ type: 'success', title: '', message: t('Изображение удалено') });
       })
       .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
   };
@@ -97,7 +97,7 @@ export const Settings: React.FC<Props> = ({ navigation }) => {
       .then(user => {
         dispatch(userSet(user));
         navigation.navigate('Profile');
-        toastShow({ type: 'success', title: 'Успешно', message: 'Изменения успешно сохранены' });
+        toastShow({ type: 'success', title: '', message: t('Изменения успешно сохранены')});
       })
       .catch(err => {
         if (err.response?.data?.errors) {
