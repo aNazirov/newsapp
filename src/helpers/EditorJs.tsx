@@ -9,23 +9,14 @@ interface Props {
   html: string;
   link?: string
 }
-const renderersProps = {
-  img: {
-    enableExperimentalPercentWidth: true
-  }
-};
+
 const renderers = {
   iframe: IframeRenderer
 };
 const customHTMLElementModels = {
   iframe: iframeModel,
 };
-const tagsStyles: any = {
-  img : {
-    alignSelf: 'center',
-    width: '100%',
-  }
-};
+
 const systemFonts = [...defaultSystemFonts, 'roboto-regular', 'roboto-bold', 'roboto-light', 'roboto-regular-italic', 'roboto-medium']
 export const EditorJs: React.FC<Props> = ({ html, link }) => {
   const source = { html };
@@ -40,20 +31,19 @@ export const EditorJs: React.FC<Props> = ({ html, link }) => {
               automaticallyAdjustContentInsets={false}
               source={{ uri: link }}
             />
+            <View style={{ marginBottom: 10 }}/>
           </View>
           )
         : (
             <RenderHTML
               renderers={renderers}
-              contentWidth={width - 30}
+              contentWidth={width}
               customHTMLElementModels={customHTMLElementModels}
               WebView={WebView}
               source={source}
               baseStyle={{fontFamily: 'roboto-regular'}}
               systemFonts={systemFonts}
               enableExperimentalMarginCollapsing={true}
-              tagsStyles={tagsStyles}
-              renderersProps={renderersProps}
             />
           )
       }

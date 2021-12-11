@@ -3,7 +3,9 @@ const edjsParser = require('editorjs-parser');
 const customParsers = {
   image: function(data) {
     return `
+      <div>
         <img src='${data.file.url}' alt='${data.caption}' style='margin-bottom: 10px;'/>
+      </div>
         ${data.caption
       ? `
         <p style='
@@ -43,11 +45,24 @@ const customParsers = {
           font-size: 16px;
         ">`);
     }
-    return `<p style='
+    return `
+      ${
+      data.text
+        ? `<p style='
         font-family: "roboto-regular";
         margin: 0 0 10px;
         font-size: 16px;
-    '>${data.text}</p>`;
+        '>${data.text}</p>`
+        : ''
+    }`;
+  },
+  embed: ({ caption, height, embed }) => {
+    return `
+        <div>
+          <iframe src='${embed}' width='100%' height='${height}' style='margin-bottom: 10px; max-width: 100%'></iframe>
+          ${caption ? `<div>${caption}</div>` : ''}
+        </div>
+    `;
   },
   linkTool: ({ link, meta }) => {
     return `
@@ -113,35 +128,47 @@ const customParsers = {
   },
   warning: (data) => {
     return `
-      <div
-        style='
-          background-color: rgba(255,251,235,1);
-          border-radius: 7px;
-          padding: 10px 0;
-          position: relative;
-        '
-      >
-       <p 
-        style='
-          color: rgba(146,64,14, 1);
-          font-family: "roboto-medium";
-          font-size: 16px;
-          padding: 10px 12px 0;
-          margin: 0;
-       '>
-           ${data.title}
-        </p>
-       <p 
-        style='
-          color: rgba(180,83,9, 1);
-          font-family: "roboto-medium";
-          font-size: .875rem;
-          padding: 10px 12px;
-          margin: 10px 0 0;
-       '>
-          ${data.message}
-        </p>
-      </div>
+      ${
+      data.title || data.message
+        ? <div
+          style='
+            background-color: rgba(255,251,235,1);
+            border-radius: 7px;
+            padding: 10px 0;
+            position: relative;
+          '
+        >
+          ${
+          data.title
+            ? <p
+              style='
+                color: rgba(146,64,14, 1);
+                font-family: "roboto-medium";
+                font-size: 16px;
+                padding: 10px 12px 0;
+                margin: 0;
+             '>
+              ${data.title}
+            </p>
+            : ''
+        }
+          ${
+          data.message
+            ? <p
+              style='
+                color: rgba(180,83,9, 1);
+                font-family: "roboto-medium";
+                font-size: .875rem;
+                padding: 10px 12px;
+                margin: 10px 0 0;
+             '>
+              ${data.message}
+            </p>
+            : ''
+        }
+        </div>
+        : ''
+    }
     `;
   },
 };

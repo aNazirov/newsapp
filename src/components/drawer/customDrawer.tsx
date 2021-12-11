@@ -12,7 +12,7 @@ import { headerStyles } from '../../styles/header.styles';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { eventFormOpenSet, langSet } from '../../store/global/global.thunks';
+import { langSet } from '../../store/global/global.thunks';
 import { errorObject, getActiveRouteState } from '../../_data/helpers';
 import { blue } from '../../styles/layout.styles';
 import { getMainCategories } from '../../store/categories/categories.thunks';
@@ -112,7 +112,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = ({ navigation
         </View>
         <TouchableOpacity
           style={style.event}
-          onPress={() => dispatch(eventFormOpenSet(true))}
+          onPress={() => handleOpenWithWebBrowser('https://t.me/UznewsSendBot')}
         >
           <Image source={require('../../../assets/images/icons/plus.png')}
                  style={{ ...headerStyles.icons, ...style.close }} />

@@ -39,7 +39,7 @@ export const RatingButton: React.FC<Props> = ({ rating = 0, id, type}) => {
       >
         <Image source={require('../../../../assets/images/icons/chevronDown.png')} style={headerStyles.icons} />
       </TouchableOpacity>
-      <AppText style={{ ...style.rating, color: rating < 0 ? red : green}}>{rating}</AppText>
+      <AppText style={{ ...style.rating, color: rating < 0 ? red : green}}>{rating || 0}</AppText>
       <TouchableOpacity
         onPress={() => onSetRating(1)}
       >

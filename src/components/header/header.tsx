@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useNavigation } from '@react-navigation/native';
 import { getNotificationsCount } from '../../store/notifications/notifications.thunks';
 import { getActiveRouteState } from '../../_data/helpers';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   style: any;
@@ -27,17 +28,18 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 export const Header: React.FC<Props> = ({ style }) => {
+  const { t } = useTranslation();
   const navigation = useNavigation<any>();
   const activeRoute = getActiveRouteState(navigation.getState());
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
   const { token } = useAppSelector(state => state.global);
   useEffect(() => {
-    if (token) dispatch(getNotificationsCount(token))
-  }, [])
+    if (token) dispatch(getNotificationsCount(token));
+  }, []);
   return (
-    <SafeAreaView style={{backgroundColor: '#fff'}}>
+    <SafeAreaView style={{ backgroundColor: '#fff' }}>
       <View onTouchStart={e => {
         e.stopPropagation();
         LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
@@ -72,6 +74,7 @@ export const Header: React.FC<Props> = ({ style }) => {
                   onChangeText={val => setText(val)}
                   onSubmitEditing={() => navigation.navigate('Search', { text })}
                   value={text}
+                  placeholder={t('Поиск по новостям и авторам')}
                 />
               </View>
             }

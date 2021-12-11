@@ -20,7 +20,7 @@ export const BasePost: React.FC<Props> = ({ post }) => {
           navigation.navigate('Posts', { slug: post.slug });
         }}
       >
-        <Image source={{ uri: post.image }} style={style.image} />
+        <Image source={{ uri: post.image }} style={style.image} resizeMethod='resize'/>
       </TouchableOpacity>
       <View style={style.head}>
         <View style={style.category}><CategoryTitle category={post.category} /></View>
@@ -43,9 +43,8 @@ export const BasePost: React.FC<Props> = ({ post }) => {
           navigation.navigate('Posts', { slug: post.slug });
         }}
       >
-        <AppText style={style.title} ellipsizeMode='tail' numberOfLines={2}>{post.title}</AppText>
+        <AppText style={style.title} ellipsizeMode='tail' numberOfLines={4}>{post.title}</AppText>
       </TouchableOpacity>
-      <AppText style={style.description} ellipsizeMode='tail' numberOfLines={4}>{post.meta_description}</AppText>
       <View style={style.indicators}>
         <Indicators
           comments={post.comments_count}
@@ -101,15 +100,8 @@ const style = StyleSheet.create({
   title: {
     color: '#000',
     fontFamily: 'roboto-bold',
-    fontSize: 16,
+    fontSize: 20,
     lineHeight: 23,
-    marginTop: 10,
-  },
-  description: {
-    color: '#000',
-
-    fontSize: 14,
-    lineHeight: 21,
     marginVertical: 10,
-  },
+  }
 });

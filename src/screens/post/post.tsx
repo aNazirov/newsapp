@@ -52,11 +52,14 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
     dispatch(getPostComments(route.params?.slug, lang));
     dispatch(getMorePosts('posts', route.params?.slug, { page: 1 }, lang))
       .then(() => page.current = 2)
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
+      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }));
     dispatch(getPost(route.params?.slug, lang))
-      .catch((err: AxiosError) => toastShow({ ...errorObject, message: err.response?.data?.message }))
+      .catch((err: AxiosError) => {
+        toastShow({ ...errorObject, message: err.response?.data?.message });
+        if (err.response?.status === 406) navigation.navigate('Home')
+      })
       .finally(() => setFirstLoading(false));
-  }, [route.params?.slug]);
+  }, [route.params?.slug, lang]);
   return (
     <Loader loading={firstLoading}>
       <ScrollView>
@@ -88,15 +91,17 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
             rating={post?.rating}
             slug={post?.slug}
           />
-          <Image source={{ uri: post?.image }} resizeMode='cover' style={style.mainImage} />
+          <View style={{marginHorizontal: -15}}>
+            <Image source={{ uri: post?.image }} resizeMode='cover' style={style.mainImage} />
+          </View>
           <AppText style={style.caption}>{post?.caption}</AppText>
           {
             post &&
             JSON.parse(post?.description).blocks.map((block: any) => {
               if (block.type === 'instagram' || block.type === 'telegram') {
-                return <EditorJs key={block.id} link={block.data.link} html={parseEditor(block)} />
+                return <EditorJs key={block.id} link={block.data.link} html={parseEditor(block)} />;
               }
-              return <EditorJs key={block.id} html={parseEditor(block)} />
+              return <EditorJs key={block.id} html={parseEditor(block)} />;
             })
           }
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 10 }}>
@@ -160,7 +165,8 @@ const style = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     padding: 15,
-    marginTop: 25,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, .1)',
   },
   head: {
     display: 'flex',
@@ -173,7 +179,7 @@ const style = StyleSheet.create({
   },
   caption: {
     marginTop: 10,
-    fontFamily: 'roboto-regular-italic'
+    fontFamily: 'roboto-regular-italic',
   },
   author: {
     fontSize: 13,
@@ -191,14 +197,13 @@ const style = StyleSheet.create({
   },
   metaDescription: {
     color: '#000',
-    fontSize: 16,
+    fontSize: 20,
     lineHeight: 24,
     marginBottom: 15,
   },
   mainImage: {
     width: '100%',
     height: 250,
-    borderRadius: 7,
     marginTop: 30,
   },
   tag: {

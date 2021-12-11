@@ -10,12 +10,7 @@ import { blue } from '../../../styles/layout.styles';
 import { IComment } from '../../../interfaces';
 import { Options } from '../options';
 import { RatingButton } from '../raiting';
-import { commentFormOpenSet, eventFormOpenSet } from '../../../store/global/global.thunks';
-import { reportComment } from '../../../services/global.services';
-import { toastShow } from '../../../services/notifications.service';
-import { errorObject } from '../../../_data/helpers';
-import { ModalContainer } from '../modal';
-import { AppInput } from '../appInput';
+import { commentFormOpenSet } from '../../../store/global/global.thunks';
 import { ReportModal } from './reportModal';
 
 interface PropsCommentChilds {
@@ -122,7 +117,7 @@ const CommentChilds: React.FC<PropsCommentChilds> = ({ child}) => {
                 <TouchableOpacity
                   onPress={() => setShowComment(false)}
                 >
-                  <Image source={require('../../../../assets/images/icons/hideComments.png')} />
+                  <Image source={require('../../../../assets/images/icons/hideComments.png')} style={{width: 14, height: 14}}/>
                 </TouchableOpacity>
                 <View style={styleCommentChilds.line} />
               </View>
@@ -282,6 +277,7 @@ const style = StyleSheet.create({
   title: {
     fontSize: 20,
     fontFamily: 'roboto-bold',
+    lineHeight: 31,
   },
   more: {
     paddingVertical: 10,

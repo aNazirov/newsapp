@@ -10,7 +10,6 @@ import * as Font from 'expo-font';
 import AppLoadingPlaceholder from 'expo/build/launch/AppLoadingPlaceholder';
 import './i18n';
 import { Auth } from './src/components/auth';
-import { Event } from './src/components/event';
 import { errorObject } from './src/_data/helpers';
 import { toastShow } from './src/services/notifications.service';
 
@@ -47,7 +46,6 @@ export default function App() {
         </View>
         <Toast ref={(ref) => Toast.setRef(ref)} />
         <Auth />
-        <Event />
       </Provider>
     </NavigationContainer>
   );
