@@ -24,6 +24,8 @@ export const Filter: React.FC<Props> = ({ setFilter, getFilter, filter, first })
     setFilter(query);
     getFilter(query);
   };
+  const freshActiveStyle = filter.fresh ? style.active : {}
+  const popularActiveStyle = filter.popular ? style.active : {}
   return (
     <View style={style.container}>
       {
@@ -31,13 +33,13 @@ export const Filter: React.FC<Props> = ({ setFilter, getFilter, filter, first })
         <>
           <TouchableOpacity
             onPress={filterSet(true)}
-            style={{ ...style.button, marginRight: 15, backgroundColor: filter.fresh ? 'transparent' : '#fff' }}
+            style={{ ...style.button, marginRight: 15, ...popularActiveStyle }}
           >
             <AppText style={style.title}>{t('Популярное')}</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={filterSet(false)}
-            style={{ ...style.button, backgroundColor: filter.fresh ? '#fff' : 'transparent' }}
+            style={{ ...style.button, ...freshActiveStyle }}
           >
             <AppText style={style.title}>{t('Свежее')}</AppText>
           </TouchableOpacity>
@@ -48,13 +50,13 @@ export const Filter: React.FC<Props> = ({ setFilter, getFilter, filter, first })
         <>
           <TouchableOpacity
             onPress={filterSet(false)}
-            style={{ ...style.button, marginRight: 15, backgroundColor: filter.fresh ? '#fff' : 'transparent' }}
+            style={{ ...style.button, marginRight: 15, ...freshActiveStyle }}
           >
             <AppText style={style.title}>{t('Свежее')}</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={filterSet(true)}
-            style={{ ...style.button, backgroundColor: filter.fresh ? 'transparent' : '#fff' }}
+            style={{ ...style.button, ...popularActiveStyle }}
           >
             <AppText style={style.title}>{t('Популярное')}</AppText>
           </TouchableOpacity>
@@ -75,9 +77,21 @@ const style = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 4,
     borderRadius: 100,
+    backgroundColor: '#fff'
   },
   title: {
     fontSize: 14,
     lineHeight: 24,
   },
+  active: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -6,
+    },
+    shadowOpacity: .1,
+    shadowRadius: 3,
+
+    elevation: 3,
+  }
 });

@@ -13,6 +13,7 @@ export interface IUser {
   special_report_notification?: boolean;
   created_at: string;
 }
+
 export interface IRole {
   id: number;
   name: string,
@@ -21,6 +22,14 @@ export interface IRole {
   created_at: string;
   updated_at: string | null;
 }
+
+export interface FormatOptionName {
+  value: string,
+  name: string,
+  image: string,
+  type: 'Posts' | 'Categories'
+}
+
 export interface IPost {
   id: number;
   views_count: number;
@@ -41,6 +50,7 @@ export interface IPost {
   updated_at: string;
   published_at: string;
 }
+
 export interface ICategory {
   id: number;
   name: string;
@@ -50,6 +60,7 @@ export interface ICategory {
   meta_description?: string;
   slug: string;
 }
+
 export interface ITag {
   id: number;
   name: string;
@@ -60,6 +71,7 @@ export interface ITag {
   views_count: string;
   created_at: string;
 }
+
 export interface IComment {
   id: number;
   rating: number;
@@ -73,6 +85,7 @@ export interface IComment {
   user: IUser;
   post?: IPost;
 }
+
 export interface INotification {
   id: number;
   notification: string;
@@ -82,11 +95,13 @@ export interface INotification {
   foreign_user: IUser;
   post: IPost;
 }
+
 export interface ICurrency {
   Ccy: 'USD' | 'RUB' | 'EUR';
   Diff: number;
   Rate: number;
 }
+
 export interface IWeather {
   id: string;
   city: string;

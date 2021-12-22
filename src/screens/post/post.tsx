@@ -164,9 +164,7 @@ export const Post: React.FC<Props> = ({ route, navigation }) => {
 const style = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    padding: 15,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 0, 0, .1)',
+    padding: 15
   },
   head: {
     display: 'flex',
@@ -191,13 +189,13 @@ const style = StyleSheet.create({
     color: 'rgba(0, 0, 0, .7)',
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontFamily: 'roboto-bold',
     lineHeight: 31,
   },
   metaDescription: {
     color: '#000',
-    fontSize: 20,
+    fontSize: 18,
     lineHeight: 24,
     marginBottom: 15,
   },

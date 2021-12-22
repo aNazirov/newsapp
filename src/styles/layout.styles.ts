@@ -7,7 +7,7 @@ export const blue = '#0A85FF'
 export const LayoutStyles = StyleSheet.create({
   layoutContainer: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: '#fff',
   },
   header: {
     paddingHorizontal: 18,

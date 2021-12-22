@@ -109,6 +109,7 @@ export const DrawerNavigation: React.FC = () => {
         drawerStyle: {
           backgroundColor: '#f1f1f1',
         },
+        sceneContainerStyle: { backgroundColor: '#fff' },
         unmountOnBlur: true,
       }}
       initialRouteName='Home'

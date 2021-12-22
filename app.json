@@ -34,11 +34,6 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#FFFFFF"
       },
-      "config": {
-        "googleSignIn": {
-          "reservedClientId": "866558658392-uetcis6avp4qt9768s8bfk6hpge942ut.apps.googleusercontent.com"
-        }
-      },
       "googleServicesFile": "./google-services.json",
       "package": "com.uznews",
       "versionCode": 1

@@ -39,6 +39,8 @@ export const headerStyles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 13,
     backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, .1)'
   },
   logo: {
     width: 120,
@@ -64,12 +66,10 @@ export const headerStyles = StyleSheet.create({
     marginRight: 13,
   },
   weatherTemp: {
-
     fontSize: 12,
     marginLeft: 10,
   },
   currencyDiff: {
-
     fontSize: 12,
     marginLeft: 8,
   },
@@ -78,13 +78,11 @@ export const headerStyles = StyleSheet.create({
     width: 10,
   },
   currencyRate: {
-
     fontSize: 12,
     marginRight: 13,
     marginLeft: 8,
   },
   currencyCcy: {
-
     fontSize: 12,
   },
 });

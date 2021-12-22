@@ -4,7 +4,6 @@ import {
   LayoutAnimation,
   Platform,
   SafeAreaView,
-  TextInput,
   TouchableOpacity,
   UIManager,
   View,
@@ -12,12 +11,15 @@ import {
 import { headerStyles } from '../../styles/header.styles';
 import { Weather, Currency, Profile, Sign } from '../shared';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { useNavigation } from '@react-navigation/native';
 import { getNotificationsCount } from '../../store/notifications/notifications.thunks';
 import { getActiveRouteState } from '../../_data/helpers';
 import { useTranslation } from 'react-i18next';
+import { AppSelect } from '../shared/appSelect';
+import { getSearchPostsService } from '../../services/posts.service';
+import { FormatOptionName } from '../../interfaces';
+import { DrawerHeaderProps } from '@react-navigation/drawer';
 
-interface Props {
+interface Props extends DrawerHeaderProps {
   style: any;
 }
 
@@ -27,17 +29,18 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-export const Header: React.FC<Props> = ({ style }) => {
+export const Header: React.FC<Props> = ({ style, navigation }) => {
   const { t } = useTranslation();
-  const navigation = useNavigation<any>();
   const activeRoute = getActiveRouteState(navigation.getState());
   const dispatch = useAppDispatch();
-  const [text, setText] = useState('');
   const [show, setShow] = useState(false);
-  const { token } = useAppSelector(state => state.global);
+  const { token, lang } = useAppSelector(state => state.global);
   useEffect(() => {
     if (token) dispatch(getNotificationsCount(token));
   }, []);
+  const onSelect = (item: FormatOptionName) => {
+    navigation.navigate(item.type, { slug: item.value });
+  };
   return (
     <SafeAreaView style={{ backgroundColor: '#fff' }}>
       <View onTouchStart={e => {
@@ -67,14 +70,29 @@ export const Header: React.FC<Props> = ({ style }) => {
           <View style={headerStyles.inputContainer}>
             {
               show &&
+              // <View onTouchStart={e => e.stopPropagation()}>
+              //   <Image source={require('../../../assets/images/icons/searchL.png')} style={headerStyles.inputIcon} />
+              //   <TextInput
+              //     style={{ ...headerStyles.input, marginRight: token ? 22 : 0 }}
+              //     onChangeText={val => setText(val)}
+              //     onSubmitEditing={() => navigation.navigate('Search', { text })}
+              //     value={text}
+              //     placeholder={t('Поиск по новостям и авторам')}
+              //   />
+              // </View>
               <View onTouchStart={e => e.stopPropagation()}>
-                <Image source={require('../../../assets/images/icons/searchL.png')} style={headerStyles.inputIcon} />
-                <TextInput
-                  style={{ ...headerStyles.input, marginRight: token ? 22 : 0 }}
-                  onChangeText={val => setText(val)}
-                  onSubmitEditing={() => navigation.navigate('Search', { text })}
-                  value={text}
-                  placeholder={t('Поиск по новостям и авторам')}
+                <AppSelect
+                  onSelect={onSelect}
+                  placeholder={t('Поиск')}
+                  getItems={(text: string) => {
+                    return getSearchPostsService({ text }, lang)
+                      .then(res => {
+                        return res.posts.reduce((total: any, item: any) => {
+                          return [...total, ...item.data];
+                        }, []);
+                      });
+                  }
+                  }
                 />
               </View>
             }

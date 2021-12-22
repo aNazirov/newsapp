@@ -83,13 +83,11 @@ const style = StyleSheet.create({
   },
   author: {
     fontSize: 13,
-
     marginRight: 10,
     color: 'rgba(0, 0, 0, .7)',
   },
   date: {
     fontSize: 13,
-
     color: 'rgba(0, 0, 0, .7)',
   },
   indicators: {
